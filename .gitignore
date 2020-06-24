@@ -102,3 +102,9 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Output data for testing
+output/
+
+# Modules containing declaration and documentation data for tables
+module/
