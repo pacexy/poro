@@ -65,16 +65,3 @@ module.exports = {
   USER_PREDICTIONS: 'UserPredictions',
   _PAGE_DATA: '_pageData'
 }
-
-const fs = require('fs')
-const path = require('path')
-let data = ''
-
-for (let key in module.exports) {
-  data += `
-fetch${module.exports[key]}(where, common) {
-  return this._fetch(t.${key}, where, common)
-}
-`
-}
-fs.writeFileSync(path.resolve(__dirname, './f.js'), data)

@@ -38,11 +38,12 @@ function generateWhereParameter(where) {
       throw new Error('where must be String or Array')
   }
 
-  console.log(whereParameter)
   return whereParameter
 }
 
 function generateJoinOnParameter(joinOn) {
+  if (!joinOn) return ''
+
   return `join on=${joinOn}`
 }
 
