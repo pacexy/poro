@@ -106,8 +106,5 @@ dist
 # Output data for testing
 output/
 
-# Modules containing declaration and documentation data for tables
-module/
-
 # Files for testing
 test/

@@ -1,0 +1,15 @@
+module.exports = [
+	{ field: "Player", type: "String", desc: "" },
+	{ field: "Team", type: "String", desc: "" },
+	{ field: "DateJoin", type: "Date", desc: "" },
+	{ field: "DateLeave", type: "Date", desc: "" },
+	{ field: "Duration", type: "Integer", desc: "Number of days on the team" },
+	{ field: "ContractEnd", type: "String", desc: "" },
+	{ field: "RosterChangeIdJoin", type: "String", desc: "For joining to 1 copy of RosterChanges" },
+	{ field: "RosterChangeIdLeave", type: "String", desc: "For joining to 2nd copy of RosterChanges" },
+	{ field: "ResidencyLeave", type: "String", desc: "Residency when leaving the team" },
+	{ field: "NameLeave", type: "String", desc: "(Disambiguated) name when leaving" },
+	{ field: "NextTeam", type: "String", desc: "Highest-importance team they are still on after leaving this team, or next team they join after leaving this team, if none exists" },
+	{ field: "NextIsRetired", type: "Boolean", desc: "Did the player retire without joining another team in between? NextTeam must be NULL if this is true" },
+	{ field: "IsCurrent", type: "Boolean", desc: "Is the player currently on this team" },
+]
