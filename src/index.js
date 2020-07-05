@@ -1,4 +1,4 @@
-(function(){
+;(function () {
   const { to } = require('await-to-js')
 
   const { lp } = require('./request')
@@ -7,281 +7,280 @@
   const t = require('./table_name')
 
   class Poro {
-    constructor() {
-    }
-    
-    async _fetch(table, where, common, callback) {
+    constructor() {}
+
+    async _fetch(table, parameter, callback) {
       const shouldUseCallback = getType(callback) === 'Function'
 
-        const [err, res] = await to(lp.get(generateURL(table, where, common)))
-        if (err) {
-          if (shouldUseCallback) callback(err, null) 
-          throw err
-        }
+      const [err, res] = await to(lp.get(generateURL(table, parameter)))
+      if (err) {
+        if (shouldUseCallback) callback(err, null)
+        throw err
+      }
 
-        if (shouldUseCallback) callback(null, res.data)
+      if (shouldUseCallback) callback(null, res.data)
 
-        return res.data
+      return res.data
     }
 
-    fetchCargoAttachments(where, common, callback) {
-      return this._fetch(t.CARGO_ATTACHMENTS, where, common, callback)
+    fetchCargoAttachments(parameter, callback) {
+      return this._fetch(t.CARGO_ATTACHMENTS, parameter, callback)
     }
 
-    fetchChampionFlashcards(where, common, callback) {
-      return this._fetch(t.CHAMPION_FLASHCARDS, where, common, callback)
+    fetchChampionFlashcards(parameter, callback) {
+      return this._fetch(t.CHAMPION_FLASHCARDS, parameter, callback)
     }
 
-    fetchChampions(where, common, callback) {
-      return this._fetch(t.CHAMPIONS, where, common, callback)
+    fetchChampions(parameter, callback) {
+      return this._fetch(t.CHAMPIONS, parameter, callback)
     }
 
-    fetchChromaSets(where, common, callback) {
-      return this._fetch(t.CHROMA_SETS, where, common, callback)
+    fetchChromaSets(parameter, callback) {
+      return this._fetch(t.CHROMA_SETS, parameter, callback)
     }
 
-    fetchChromas(where, common, callback) {
-      return this._fetch(t.CHROMAS, where, common, callback)
+    fetchChromas(parameter, callback) {
+      return this._fetch(t.CHROMAS, parameter, callback)
     }
 
-    fetchContracts(where, common, callback) {
-      return this._fetch(t.CONTRACTS, where, common, callback)
+    fetchContracts(parameter, callback) {
+      return this._fetch(t.CONTRACTS, parameter, callback)
     }
 
-    fetchCurrentLeagues(where, common, callback) {
-      return this._fetch(t.CURRENT_LEAGUES, where, common, callback)
+    fetchCurrentLeagues(parameter, callback) {
+      return this._fetch(t.CURRENT_LEAGUES, parameter, callback)
     }
 
-    fetchDisambiguations(where, common, callback) {
-      return this._fetch(t.DISAMBIGUATIONS, where, common, callback)
+    fetchDisambiguations(parameter, callback) {
+      return this._fetch(t.DISAMBIGUATIONS, parameter, callback)
     }
 
-    fetchEntities(where, common, callback) {
-      return this._fetch(t.ENTITIES, where, common, callback)
+    fetchEntities(parameter, callback) {
+      return this._fetch(t.ENTITIES, parameter, callback)
     }
 
-    fetchExternalContent(where, common, callback) {
-      return this._fetch(t.EXTERNAL_CONTENT, where, common, callback)
+    fetchExternalContent(parameter, callback) {
+      return this._fetch(t.EXTERNAL_CONTENT, parameter, callback)
     }
 
-    fetchGCDArchive(where, common, callback) {
-      return this._fetch(t.GCD_ARCHIVE, where, common, callback)
+    fetchGCDArchive(parameter, callback) {
+      return this._fetch(t.GCD_ARCHIVE, parameter, callback)
     }
 
-    fetchHooks(where, common, callback) {
-      return this._fetch(t.HOOKS, where, common, callback)
+    fetchHooks(parameter, callback) {
+      return this._fetch(t.HOOKS, parameter, callback)
     }
 
-    fetchIgnorePagedata(where, common, callback) {
-      return this._fetch(t.IGNORE_PAGEDATA, where, common, callback)
+    fetchIgnorePagedata(parameter, callback) {
+      return this._fetch(t.IGNORE_PAGEDATA, parameter, callback)
     }
 
-    fetchIndividualAchievements(where, common, callback) {
-      return this._fetch(t.INDIVIDUAL_ACHIEVEMENTS, where, common, callback)
+    fetchIndividualAchievements(parameter, callback) {
+      return this._fetch(t.INDIVIDUAL_ACHIEVEMENTS, parameter, callback)
     }
 
-    fetchItems(where, common, callback) {
-      return this._fetch(t.ITEMS, where, common, callback)
+    fetchItems(parameter, callback) {
+      return this._fetch(t.ITEMS, parameter, callback)
     }
 
-    fetchLeagueGroups(where, common, callback) {
-      return this._fetch(t.LEAGUE_GROUPS, where, common, callback)
+    fetchLeagueGroups(parameter, callback) {
+      return this._fetch(t.LEAGUE_GROUPS, parameter, callback)
     }
 
-    fetchLeagues(where, common, callback) {
-      return this._fetch(t.LEAGUES, where, common, callback)
+    fetchLeagues(parameter, callback) {
+      return this._fetch(t.LEAGUES, parameter, callback)
     }
 
-    fetchListplayerCurrent(where, common, callback) {
-      return this._fetch(t.LISTPLAYER_CURRENT, where, common, callback)
+    fetchListplayerCurrent(parameter, callback) {
+      return this._fetch(t.LISTPLAYER_CURRENT, parameter, callback)
     }
 
-    fetchMatchSchedule(where, common, callback) {
-      return this._fetch(t.MATCH_SCHEDULE, where, common, callback)
+    fetchMatchSchedule(parameter, callback) {
+      return this._fetch(t.MATCH_SCHEDULE, parameter, callback)
     }
 
-    fetchMatchScheduleGame(where, common, callback) {
-      return this._fetch(t.MATCH_SCHEDULE_GAME, where, common, callback)
+    fetchMatchScheduleGame(parameter, callback) {
+      return this._fetch(t.MATCH_SCHEDULE_GAME, parameter, callback)
     }
 
-    fetchNASGLadder2018(where, common, callback) {
-      return this._fetch(t.NASG_LADDER_2018, where, common, callback)
+    fetchNASGLadder2018(parameter, callback) {
+      return this._fetch(t.NASG_LADDER_2018, parameter, callback)
     }
 
-    fetchNTLGlossary(where, common, callback) {
-      return this._fetch(t.NTL_GLOSSARY, where, common, callback)
+    fetchNTLGlossary(parameter, callback) {
+      return this._fetch(t.NTL_GLOSSARY, parameter, callback)
     }
 
-    fetchNewsItems(where, common, callback) {
-      return this._fetch(t.NEWS_ITEMS, where, common, callback)
+    fetchNewsItems(parameter, callback) {
+      return this._fetch(t.NEWS_ITEMS, parameter, callback)
     }
 
-    fetchOrganizations(where, common, callback) {
-      return this._fetch(t.ORGANIZATIONS, where, common, callback)
+    fetchOrganizations(parameter, callback) {
+      return this._fetch(t.ORGANIZATIONS, parameter, callback)
     }
 
-    fetchParticipantsArgs(where, common, callback) {
-      return this._fetch(t.PARTICIPANTS_ARGS, where, common, callback)
+    fetchParticipantsArgs(parameter, callback) {
+      return this._fetch(t.PARTICIPANTS_ARGS, parameter, callback)
     }
 
-    fetchPatchNotes(where, common, callback) {
-      return this._fetch(t.PATCH_NOTES, where, common, callback)
+    fetchPatchNotes(parameter, callback) {
+      return this._fetch(t.PATCH_NOTES, parameter, callback)
     }
 
-    fetchPentakills(where, common, callback) {
-      return this._fetch(t.PENTAKILLS, where, common, callback)
+    fetchPentakills(parameter, callback) {
+      return this._fetch(t.PENTAKILLS, parameter, callback)
     }
 
-    fetchPicksAndBansS7(where, common, callback) {
-      return this._fetch(t.PICKS_AND_BANS_S7, where, common, callback)
+    fetchPicksAndBansS7(parameter, callback) {
+      return this._fetch(t.PICKS_AND_BANS_S7, parameter, callback)
     }
 
-    fetchPlayerImages(where, common, callback) {
-      return this._fetch(t.PLAYER_IMAGES, where, common, callback)
+    fetchPlayerImages(parameter, callback) {
+      return this._fetch(t.PLAYER_IMAGES, parameter, callback)
     }
 
-    fetchPlayerLeagueHistory(where, common, callback) {
-      return this._fetch(t.PLAYER_LEAGUE_HISTORY, where, common, callback)
+    fetchPlayerLeagueHistory(parameter, callback) {
+      return this._fetch(t.PLAYER_LEAGUE_HISTORY, parameter, callback)
     }
 
-    fetchPlayerPronunciationFiles(where, common, callback) {
-      return this._fetch(t.PLAYER_PRONUNCIATION_FILES, where, common, callback)
+    fetchPlayerPronunciationFiles(parameter, callback) {
+      return this._fetch(t.PLAYER_PRONUNCIATION_FILES, parameter, callback)
     }
 
-    fetchPlayerRedirects(where, common, callback) {
-      return this._fetch(t.PLAYER_REDIRECTS, where, common, callback)
+    fetchPlayerRedirects(parameter, callback) {
+      return this._fetch(t.PLAYER_REDIRECTS, parameter, callback)
     }
 
-    fetchPlayerRenames(where, common, callback) {
-      return this._fetch(t.PLAYER_RENAMES, where, common, callback)
+    fetchPlayerRenames(parameter, callback) {
+      return this._fetch(t.PLAYER_RENAMES, parameter, callback)
     }
 
-    fetchPlayers(where, common, callback) {
-      return this._fetch(t.PLAYERS, where, common, callback)
+    fetchPlayers(parameter, callback) {
+      return this._fetch(t.PLAYERS, parameter, callback)
     }
 
-    fetchRegionStatuses(where, common, callback) {
-      return this._fetch(t.REGION_STATUSES, where, common, callback)
+    fetchRegionStatuses(parameter, callback) {
+      return this._fetch(t.REGION_STATUSES, parameter, callback)
     }
 
-    fetchRegions(where, common, callback) {
-      return this._fetch(t.REGIONS, where, common, callback)
+    fetchRegions(parameter, callback) {
+      return this._fetch(t.REGIONS, parameter, callback)
     }
 
-    fetchResidencyChanges(where, common, callback) {
-      return this._fetch(t.RESIDENCY_CHANGES, where, common, callback)
+    fetchResidencyChanges(parameter, callback) {
+      return this._fetch(t.RESIDENCY_CHANGES, parameter, callback)
     }
 
-    fetchRetirements(where, common, callback) {
-      return this._fetch(t.RETIREMENTS, where, common, callback)
+    fetchRetirements(parameter, callback) {
+      return this._fetch(t.RETIREMENTS, parameter, callback)
     }
 
-    fetchRosterChangePortalDates(where, common, callback) {
-      return this._fetch(t.ROSTER_CHANGE_PORTAL_DATES, where, common, callback)
+    fetchRosterChangePortalDates(parameter, callback) {
+      return this._fetch(t.ROSTER_CHANGE_PORTAL_DATES, parameter, callback)
     }
 
-    fetchRosterChangePortalPages(where, common, callback) {
-      return this._fetch(t.ROSTER_CHANGE_PORTAL_PAGES, where, common, callback)
+    fetchRosterChangePortalPages(parameter, callback) {
+      return this._fetch(t.ROSTER_CHANGE_PORTAL_PAGES, parameter, callback)
     }
 
-    fetchRosterChanges(where, common, callback) {
-      return this._fetch(t.ROSTER_CHANGES, where, common, callback)
+    fetchRosterChanges(parameter, callback) {
+      return this._fetch(t.ROSTER_CHANGES, parameter, callback)
     }
 
-    fetchRosterRumors(where, common, callback) {
-      return this._fetch(t.ROSTER_RUMORS, where, common, callback)
+    fetchRosterRumors(parameter, callback) {
+      return this._fetch(t.ROSTER_RUMORS, parameter, callback)
     }
 
-    fetchScoreboardGames(where, common, callback) {
-      return this._fetch(t.SCOREBOARD_GAMES, where, common, callback)
+    fetchScoreboardGames(parameter, callback) {
+      return this._fetch(t.SCOREBOARD_GAMES, parameter, callback)
     }
 
-    fetchScoreboardPlayers(where, common, callback) {
-      return this._fetch(t.SCOREBOARD_PLAYERS, where, common, callback)
+    fetchScoreboardPlayers(parameter, callback) {
+      return this._fetch(t.SCOREBOARD_PLAYERS, parameter, callback)
     }
 
-    fetchScoreboardTeams(where, common, callback) {
-      return this._fetch(t.SCOREBOARD_TEAMS, where, common, callback)
+    fetchScoreboardTeams(parameter, callback) {
+      return this._fetch(t.SCOREBOARD_TEAMS, parameter, callback)
     }
 
-    fetchSisterTeams(where, common, callback) {
-      return this._fetch(t.SISTER_TEAMS, where, common, callback)
+    fetchSisterTeams(parameter, callback) {
+      return this._fetch(t.SISTER_TEAMS, parameter, callback)
     }
 
-    fetchSkins(where, common, callback) {
-      return this._fetch(t.SKINS, where, common, callback)
+    fetchSkins(parameter, callback) {
+      return this._fetch(t.SKINS, parameter, callback)
     }
 
-    fetchSkinsUsed(where, common, callback) {
-      return this._fetch(t.SKINS_USED, where, common, callback)
+    fetchSkinsUsed(parameter, callback) {
+      return this._fetch(t.SKINS_USED, parameter, callback)
     }
 
-    fetchStandingsArgs(where, common, callback) {
-      return this._fetch(t.STANDINGS_ARGS, where, common, callback)
+    fetchStandingsArgs(parameter, callback) {
+      return this._fetch(t.STANDINGS_ARGS, parameter, callback)
     }
 
-    fetchTeamRedirects(where, common, callback) {
-      return this._fetch(t.TEAM_REDIRECTS, where, common, callback)
+    fetchTeamRedirects(parameter, callback) {
+      return this._fetch(t.TEAM_REDIRECTS, parameter, callback)
     }
 
-    fetchTeamRenames(where, common, callback) {
-      return this._fetch(t.TEAM_RENAMES, where, common, callback)
+    fetchTeamRenames(parameter, callback) {
+      return this._fetch(t.TEAM_RENAMES, parameter, callback)
     }
 
-    fetchTeams(where, common, callback) {
-      return this._fetch(t.TEAMS, where, common, callback)
+    fetchTeams(parameter, callback) {
+      return this._fetch(t.TEAMS, parameter, callback)
     }
 
-    fetchTeamsWithAutoRosters(where, common, callback) {
-      return this._fetch(t.TEAMS_WITH_AUTO_ROSTERS, where, common, callback)
+    fetchTeamsWithAutoRosters(parameter, callback) {
+      return this._fetch(t.TEAMS_WITH_AUTO_ROSTERS, parameter, callback)
     }
 
-    fetchTenures(where, common, callback) {
-      return this._fetch(t.TENURES, where, common, callback)
+    fetchTenures(parameter, callback) {
+      return this._fetch(t.TENURES, parameter, callback)
     }
 
-    fetchTenuresUnbroken(where, common, callback) {
-      return this._fetch(t.TENURES_UNBROKEN, where, common, callback)
+    fetchTenuresUnbroken(parameter, callback) {
+      return this._fetch(t.TENURES_UNBROKEN, parameter, callback)
     }
 
-    fetchTournamentGroups(where, common, callback) {
-      return this._fetch(t.TOURNAMENT_GROUPS, where, common, callback)
+    fetchTournamentGroups(parameter, callback) {
+      return this._fetch(t.TOURNAMENT_GROUPS, parameter, callback)
     }
 
-    fetchTournamentPlayers(where, common, callback) {
-      return this._fetch(t.TOURNAMENT_PLAYERS, where, common, callback)
+    fetchTournamentPlayers(parameter, callback) {
+      return this._fetch(t.TOURNAMENT_PLAYERS, parameter, callback)
     }
 
-    fetchTournamentResults(where, common, callback) {
-      return this._fetch(t.TOURNAMENT_RESULTS, where, common, callback)
+    fetchTournamentResults(parameter, callback) {
+      return this._fetch(t.TOURNAMENT_RESULTS, parameter, callback)
     }
 
-    fetchTournamentResults1v1(where, common, callback) {
-      return this._fetch(t.TOURNAMENT_RESULTS_1V1, where, common, callback)
+    fetchTournamentResults1v1(parameter, callback) {
+      return this._fetch(t.TOURNAMENT_RESULTS_1V1, parameter, callback)
     }
 
-    fetchTournamentRosters(where, common, callback) {
-      return this._fetch(t.TOURNAMENT_ROSTERS, where, common, callback)
+    fetchTournamentRosters(parameter, callback) {
+      return this._fetch(t.TOURNAMENT_ROSTERS, parameter, callback)
     }
 
-    fetchTournamentTabs(where, common, callback) {
-      return this._fetch(t.TOURNAMENT_TABS, where, common, callback)
+    fetchTournamentTabs(parameter, callback) {
+      return this._fetch(t.TOURNAMENT_TABS, parameter, callback)
     }
 
-    fetchTournaments(where, common, callback) {
-      return this._fetch(t.TOURNAMENTS, where, common, callback)
+    fetchTournaments(parameter, callback) {
+      return this._fetch(t.TOURNAMENTS, parameter, callback)
     }
 
-    fetchUserPredictionGroups(where, common, callback) {
-      return this._fetch(t.USER_PREDICTION_GROUPS, where, common, callback)
+    fetchUserPredictionGroups(parameter, callback) {
+      return this._fetch(t.USER_PREDICTION_GROUPS, parameter, callback)
     }
 
-    fetchUserPredictions(where, common, callback) {
-      return this._fetch(t.USER_PREDICTIONS, where, common, callback)
+    fetchUserPredictions(parameter, callback) {
+      return this._fetch(t.USER_PREDICTIONS, parameter, callback)
     }
 
-    fetchPageData(where, common, callback) {
-      return this._fetch(t._PAGE_DATA, where, common, callback)
+    fetchPageData(parameter, callback) {
+      return this._fetch(t._PAGE_DATA, parameter, callback)
     }
   }
 

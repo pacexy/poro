@@ -1,19 +1,24 @@
 # poro
+
 > Integrate official Riot's League of Legends API (not implemented yet) with Leaguepedia API.
 
 ## Install
+
 ```sh
 npm i poro
 ```
 
 ## Usage
+
 ```javascript
 const Poro = require('poro')
 
 const poro = new Poro()
 
 // It is recommended to use await in an async function.
-const matchSchedule = await poro.fetchMatchSchedule([2020, 'LCS', 'Summer'])
+const matchSchedule = await poro.fetchMatchSchedule({
+  where: [2020, 'LCS', 'Summer']
+})
 console.log(matchSchedule)
 
 // You can also use callback instead.
@@ -23,30 +28,32 @@ poro.fetchMatchSchedule(, , (err, data) => {
 ```
 
 ## Parameters
-In [Cargo query](https://lol.gamepedia.com/Special:CargoQuery), 
+
+In [Cargo query](https://lol.gamepedia.com/Special:CargoQuery),
 you can see the parameters needed for a query.
 
-In the implement of Poro, you don't need to specify ``fields``,
-it will always return all fields in a table. 
+In the implement of Poro, you don't need to specify `fields`,
+it will always return all fields in a table.
 If you want to see all fields of a table, go to
 [Cargo tables](https://lol.gamepedia.com/Special:CargoTables),
 
 Every fetcher has the same declaration, just like:
+
 ```javascript
-function fetchSomethingInLeaguepedia(where, common, callback) {
+function fetchSomethingInLeaguepedia(parameter, callback) {
   ...
 }
 ```
-The first parameter is ``where``, it can be a string (should meet SQL syntax)
-or an array of string (means keywords in ``_pageName``). Use string when your
-query condition is complex.
-```typescript
-where: string | string[]
-```
 
-Other query parameters are placed in ``common``:
+All parameters for a query are placed in `parameter`.
+
+`where` can be a string (should meet SQL syntax)
+or an array of string (means keywords in `_pageName`). Use string when your
+query condition is complex.
+
 ```typescript
-common: {
+parameter: {
+  where?: string | string[]
   joinOn?: string
   groupBy?: string | string[]
   having?: string
@@ -58,15 +65,13 @@ common: {
 ```
 
 ## Example
+
 ```javascript
 const matchSchedule = await fetchMatchSchedule(
-  `_pageName LIKE "%2020%" AND Team1 = "G2" OR MatchDay > 10`,
   {
+    where: `_pageName LIKE "%2020%" AND Team1 = "G2" OR MatchDay > 10`,
     groupBy: ['Team1', 'Team2'],
-    orderBy: [
-      { field: 'DateTime_UTC', type: 'DESC' },
-      '_pageName'
-    ],
+    orderBy: [{ field: 'DateTime_UTC', type: 'DESC' }, '_pageName'],
     limit: 100,
     offset: 50,
   }

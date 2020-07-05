@@ -15,7 +15,7 @@ function generateFieldsParameter(table) {
   // _pageName is default field for all tables
   let fields = 'fields=_pageName=_pageName'
   for (let field of module) {
-    fields +=`,${field.field}=${field.field}`
+    fields += `,${field.field}=${field.field}`
   }
 
   return fields
@@ -32,7 +32,9 @@ function generateWhereParameter(where) {
       break
     // specify keywords in _pageName
     case 'Array':
-      whereParameter += where.map(keyword => `_pageName LIKE "%${keyword}%"`).join(' AND ')
+      whereParameter += where
+        .map((keyword) => `_pageName LIKE "%${keyword}%"`)
+        .join(' AND ')
       break
     default:
       throw new Error('where must be String or Array')
@@ -48,7 +50,7 @@ function generateJoinOnParameter(joinOn) {
 }
 
 function generateHavingParameter(having) {
-  return (getType(having) === 'String') ? `having=${having}` : ''
+  return getType(having) === 'String' ? `having=${having}` : ''
 }
 
 function generateGroupByAndHavingParameter(groupBy, having) {
@@ -68,7 +70,7 @@ function generateGroupByAndHavingParameter(groupBy, having) {
   }
   groupByAndHavingParamter = [
     groupByParameter,
-    generateHavingParameter(having)
+    generateHavingParameter(having),
   ].join('&')
 
   return groupByAndHavingParamter
@@ -89,14 +91,16 @@ function generateOrderByParameter(orderBy) {
   if (!orderBy) return ''
 
   let orderByParameter = 'order by='
-  
+
   switch (getType(orderBy)) {
     case 'String':
     case 'Object':
       orderByParameter += generateItemInOrderByParameter(orderBy)
-      break;
+      break
     case 'Array':
-      orderByParameter += orderBy.map(item => generateItemInOrderByParameter(item)).join(',')
+      orderByParameter += orderBy
+        .map((item) => generateItemInOrderByParameter(item))
+        .join(',')
       break
     default:
       throw new Error('orderBy must be String, Object or Array')
@@ -117,19 +121,23 @@ function generateFormatbyParameter(format = 'json') {
   return `format=${format}`
 }
 
-exports.generateURL = function (table, where, common = {}) {
-  const url = 'index.php?' + [
-    generateTitleParameter(),
-    generateTableParameter(table),
-    generateFieldsParameter(table),
-    generateWhereParameter(where),
-    generateJoinOnParameter(common.joinOn),
-    generateGroupByAndHavingParameter(common.groupBy, common.having),
-    generateOrderByParameter(common.orderBy),
-    generateLimitParameter(common.limit),
-    generateOffsetbyParameter(common.offset),
-    generateFormatbyParameter(common.format)
-  ].filter(str => str).join('&')
+exports.generateURL = function (table, parameter = {}) {
+  const url =
+    'index.php?' +
+    [
+      generateTitleParameter(),
+      generateTableParameter(table),
+      generateFieldsParameter(table),
+      generateWhereParameter(parameter.where),
+      generateJoinOnParameter(parameter.joinOn),
+      generateGroupByAndHavingParameter(parameter.groupBy, parameter.having),
+      generateOrderByParameter(parameter.orderBy),
+      generateLimitParameter(parameter.limit),
+      generateOffsetbyParameter(parameter.offset),
+      generateFormatbyParameter(parameter.format),
+    ]
+      .filter((str) => str)
+      .join('&')
 
   return encodeURI(url)
 }
