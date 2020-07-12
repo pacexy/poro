@@ -67,7 +67,7 @@ parameter: {
 ## Example
 
 ```javascript
-const matchSchedule = await fetchMatchSchedule(
+const matchSchedule = await poro.fetchMatchSchedule(
   {
     where: `_pageName LIKE "%2020%" AND Team1 = "G2" OR MatchDay > 10`,
     groupBy: ['Team1', 'Team2'],

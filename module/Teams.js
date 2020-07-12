@@ -1,5 +1,6 @@
 module.exports = [
 	{ field: "Name", type: "String", desc: "" },
+	{ field: "Short", type: "String", desc: "The short name of the team. This should agree with Riot always, if not please report it to us!!!" },
 	{ field: "Location", type: "String", desc: "" },
 	{ field: "TeamLocation", type: "String", desc: "" },
 	{ field: "Region", type: "String", desc: "" },
