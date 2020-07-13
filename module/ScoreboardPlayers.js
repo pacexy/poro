@@ -17,7 +17,7 @@ module.exports = [
 	{ field: "TeamKills", type: "Integer", desc: "" },
 	{ field: "TeamGold", type: "Integer", desc: "" },
 
-	-- Game Info
+	// Game Info
 	{ field: "Team ", type: " String", desc: "" },
 	{ field: "TeamVs ", type: " String", desc: "" },
 	{ field: "Time ", type: " Datetime", desc: "" },
@@ -26,7 +26,7 @@ module.exports = [
 	{ field: "DateTime_UTC ", type: " Datetime", desc: "" },
 	{ field: "DST ", type: " String", desc: "" },
 
-	-- Object Metadata
+	// Object Metadata
 	{ field: "Tournament ", type: " String", desc: "this is the name entered to the scoreboard and should not be used if possible" },
 	{ field: "Role ", type: " String", desc: "" },
 	{ field: "Role_Number ", type: " Integer", desc: "" },
