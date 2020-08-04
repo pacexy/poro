@@ -47,6 +47,7 @@ module.exports = {
   SISTER_TEAMS: 'SisterTeams',
   SKINS: 'Skins',
   SKINS_USED: 'SkinsUsed',
+  STANDINGS: 'Standings',
   STANDINGS_ARGS: 'StandingsArgs',
   TEAM_REDIRECTS: 'TeamRedirects',
   TEAM_RENAMES: 'TeamRenames',

@@ -1,0 +1,16 @@
+module.exports = [
+	{ field: "OverviewPage", type: "String", desc: "Join to Tournaments" },
+	{ field: "Team", type: "String", desc: "Join to Teams" },
+	{ field: "PageAndTeam", type: "String", desc: "Join to TournamentRosters etc" },
+	{ field: "N", type: "Integer", desc: "Order by this" },
+	{ field: "Place", type: "Integer", desc: "Respects tiebreakers" },
+	{ field: "WinSeries", type: "Integer", desc: "" },
+	{ field: "LossSeries", type: "Integer", desc: "" },
+	{ field: "TieSeries", type: "Integer", desc: "" },
+	{ field: "WinGames", type: "Integer", desc: "" },
+	{ field: "LossGames", type: "Integer", desc: "" },
+	{ field: "Points", type: "Integer", desc: "" },
+	{ field: "PointsTiebreaker", type: "Float", desc: "" },
+	{ field: "Streak", type: "Integer", desc: "" },
+	{ field: "StreakDirection", type: "String", desc: "W, L, or D" },
+]

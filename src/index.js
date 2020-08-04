@@ -215,6 +215,10 @@
       return this._fetch(t.SKINS_USED, parameter, callback)
     }
 
+    fetchStandings(parameter, callback) {
+      return this._fetch(t.STANDINGS, parameter, callback)
+    }
+
     fetchStandingsArgs(parameter, callback) {
       return this._fetch(t.STANDINGS_ARGS, parameter, callback)
     }
