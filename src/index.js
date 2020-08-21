@@ -1,7 +1,7 @@
 ;(function () {
   const { to } = require('await-to-js')
 
-  const { lp } = require('./request')
+  const { axios } = require('./request')
   const { generateURL } = require('./leaguepedia')
   const { getType } = require('./util')
   const t = require('./table_name')
@@ -12,7 +12,7 @@
     async _fetch(table, parameter, callback) {
       const shouldUseCallback = getType(callback) === 'Function'
 
-      const [err, res] = await to(lp.get(generateURL(table, parameter)))
+      const [err, res] = await to(axios.get(generateURL(table, parameter)))
       if (err) {
         if (shouldUseCallback) callback(err, null)
         throw err
