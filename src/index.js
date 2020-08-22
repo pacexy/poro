@@ -17,8 +17,8 @@
       return res.data
     }
 
-    setAxiosRequestInterceptor
-    setAxiosResponseInterceptor
+    static setAxiosRequestInterceptor = setAxiosRequestInterceptor
+    static setAxiosResponseInterceptor = setAxiosResponseInterceptor
 
     fetchCargoAttachments(parameter, callback) {
       return this._fetch(t.CARGO_ATTACHMENTS, parameter, callback)
