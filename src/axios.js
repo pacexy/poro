@@ -1,7 +1,9 @@
-const leaguepediaUrl = `https://lol.gamepedia.com`
+const { leaguepediaLogger } = require('./utils/log')
+
+const LEAGUEPEDIA_BASE_URL = `https://lol.gamepedia.com`
 
 const axios = require('axios').create({
-  baseURL: leaguepediaUrl
+  baseURL: LEAGUEPEDIA_BASE_URL
 })
 
 axios.interceptors.request.use(
@@ -21,9 +23,9 @@ axios.interceptors.response.use(
     return response
   },
   (error) => {
-    console.log(error.response.data)
+    leaguepediaLogger.error(error)
     return Promise.reject(error)
   },
 )
 
-exports.axios = axios
+module.exports = axios
