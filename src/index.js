@@ -1,24 +1,28 @@
-;(function () {
-  const { axios, setAxiosRequestInterceptor, setAxiosResponseInterceptor } = require('./axios')
+(function () {
+  const axios = require('./axios')
   const { generateURL } = require('./leaguepedia')
   const { getType } = require('./util')
   const t = require('./table_name')
 
   class Poro {
-    constructor() {}
-
     async _fetch(table, parameter, callback) {
       const shouldUseCallback = getType(callback) === 'Function'
 
-      const res = await axios.get(generateURL(table, parameter))
+      const url = await generateURL(table, parameter)
+      const res = await axios.get(url)
 
       if (shouldUseCallback) callback(null, res.data)
 
       return res.data
     }
 
-    static setAxiosRequestInterceptor = setAxiosRequestInterceptor
-    static setAxiosResponseInterceptor = setAxiosResponseInterceptor
+    static setAxiosRequestInterceptor(fulfilled, rejected) {
+      axios.interceptors.request.use(fulfilled, rejected)
+    }
+
+    static setAxiosResponseInterceptor(fulfilled, rejected) {
+      axios.interceptors.response.use(fulfilled, rejected)
+    }
 
     fetchCargoAttachments(parameter, callback) {
       return this._fetch(t.CARGO_ATTACHMENTS, parameter, callback)

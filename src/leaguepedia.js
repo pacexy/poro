@@ -1,24 +1,23 @@
-const { getType } = require('./util')
+const { getType, fetchModule } = require('./util')
 
 function generateTitleParameter() {
-  return `title=Special:CargoExport`
+  return 'title=Special:CargoExport'
 }
 
 function generateTableParameter(table) {
   return `tables=${table}`
 }
 
-function generateFieldsParameter(table) {
-  const correspondingModulePath = `../module/${table}`
-  const module = require(correspondingModulePath)
+async function generateFieldsParameter(table) {
+  const module = await fetchModule(table)
 
   // _pageName is default field for all tables
-  let fields = 'fields=_pageName=_pageName'
-  for (let field of module) {
-    fields += `,${field.field}=${field.field}`
+  let fieldsParameter = 'fields=_pageName=_pageName'
+  for (const { field } of module) {
+    fieldsParameter += `,${field}=${field}`
   }
 
-  return fields
+  return fieldsParameter
 }
 
 function generateWhereParameter(where) {
@@ -80,9 +79,10 @@ function generateItemInOrderByParameter(item) {
   switch (getType(item)) {
     case 'String':
       return `\`${item}\``
-    case 'Object':
+    case 'Object': {
       const type = item.type === 'desc' ? ' DESC' : ''
       return `\`${item.field}\`${type}`
+    }
     default:
   }
 }
@@ -121,13 +121,13 @@ function generateFormatbyParameter(format = 'json') {
   return `format=${format}`
 }
 
-exports.generateURL = function (table, parameter = {}) {
+exports.generateURL = async function (table, parameter = {}) {
   const url =
     'index.php?' +
     [
       generateTitleParameter(),
       generateTableParameter(table),
-      generateFieldsParameter(table),
+      await generateFieldsParameter(table),
       generateWhereParameter(parameter.where),
       generateJoinOnParameter(parameter.joinOn),
       generateGroupByAndHavingParameter(parameter.groupBy, parameter.having),
