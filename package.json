@@ -4,7 +4,20 @@
   "description": "Integrate official Riot's League of Legends API with Leaguepedia API.",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "prettier --write src/**/*.{js}"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**": [
+      "prettier --write",
+      "eslint --fix",
+      "git add"
+    ]
   },
   "keywords": [
     "api",
@@ -24,6 +37,13 @@
     "url": "https://github.com/pacexy/poro/issues"
   },
   "dependencies": {
-    "axios": "^0.19.2"
+    "axios": "^0.19.2",
+    "jsdom": "^16.4.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.7.0",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.11",
+    "prettier": "^2.0.5"
   }
 }
