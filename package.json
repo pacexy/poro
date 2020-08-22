@@ -24,7 +24,6 @@
     "url": "https://github.com/pacexy/poro/issues"
   },
   "dependencies": {
-    "axios": "^0.19.2",
-    "log4js": "^6.3.0"
+    "axios": "^0.19.2"
   }
 }

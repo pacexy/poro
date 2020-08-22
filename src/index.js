@@ -1,5 +1,5 @@
 ;(function () {
-  const axios = require('./axios')
+  const { axios, setAxiosRequestInterceptor, setAxiosResponseInterceptor } = require('./axios')
   const { generateURL } = require('./leaguepedia')
   const { getType } = require('./util')
   const t = require('./table_name')
@@ -16,6 +16,9 @@
 
       return res.data
     }
+
+    setAxiosRequestInterceptor
+    setAxiosResponseInterceptor
 
     fetchCargoAttachments(parameter, callback) {
       return this._fetch(t.CARGO_ATTACHMENTS, parameter, callback)
