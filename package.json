@@ -1,6 +1,6 @@
 {
   "name": "poro",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Integrate official Riot's League of Legends API with Leaguepedia API.",
   "main": "src/index.js",
   "scripts": {
