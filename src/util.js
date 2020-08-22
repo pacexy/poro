@@ -12,27 +12,23 @@ function getType(value) {
   return /\[object (.+)\]/.exec(tag)[1]
 }
 
-function cargo2JSON(cargoStr) {
-  return cargoStr
-    .replace(/^./, '[')
-    .replace(/,\n\}\n/, '\n]')
-    .replace(/field =/g, '"field":')
-    .replace(/type =/g, '"type":')
-    .replace(/desc =/g, '"desc":')
+async function fetchFields(table) {
+  try {
+    const { window } = await JSDOM.fromURL(`${BASE_URL}${table}`)
+    const moduleInCargo = window.document.querySelector('.mw-highlight')
+      .textContent
+    const capturedGroups = Array.from(
+      moduleInCargo.matchAll(/field = .(\w+?).,/g),
+    )
+    const fields = capturedGroups.map((capturedGroup) => capturedGroup[1])
+
+    return fields
+  } catch (e) {
+    console.log(table, e)
+  }
 }
-
-async function fetchModule(table) {
-  const { window } = await JSDOM.fromURL(`${BASE_URL}${table}`)
-  const moduleInCargo = window.document.querySelector('.mw-highlight')
-    .textContent
-  const moduleInJson = cargo2JSON(moduleInCargo.replace('return ', ''))
-
-  return JSON.parse(moduleInJson)
-}
-
-fetchModule('ScoreboardGames')
 
 module.exports = {
   getType,
-  fetchModule,
+  fetchFields,
 }

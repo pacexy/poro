@@ -1,4 +1,4 @@
-const { getType, fetchModule } = require('./util')
+const { getType, fetchFields } = require('./util')
 
 function generateTitleParameter() {
   return 'title=Special:CargoExport'
@@ -9,11 +9,11 @@ function generateTableParameter(table) {
 }
 
 async function generateFieldsParameter(table) {
-  const module = await fetchModule(table)
+  const fields = await fetchFields(table)
 
   // _pageName is default field for all tables
   let fieldsParameter = 'fields=_pageName=_pageName'
-  for (const { field } of module) {
+  for (const field of fields) {
     fieldsParameter += `,${field}=${field}`
   }
 

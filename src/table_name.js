@@ -64,5 +64,4 @@ module.exports = {
   TOURNAMENTS: 'Tournaments',
   USER_PREDICTION_GROUPS: 'UserPredictionGroups',
   USER_PREDICTIONS: 'UserPredictions',
-  _PAGE_DATA: '_pageData'
 }
