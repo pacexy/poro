@@ -1,4 +1,25 @@
-const { getType, fetchFields } = require('./util')
+const { JSDOM } = require('jsdom')
+
+const { LEAGUEPEDIA_CARGO_DECLARE_BASE_URL } = require('./config')
+const { getType } = require('./util')
+
+async function fetchFields(table) {
+  try {
+    const { window } = await JSDOM.fromURL(
+      `${LEAGUEPEDIA_CARGO_DECLARE_BASE_URL}${table}`,
+    )
+    const moduleInCargo = window.document.querySelector('.mw-highlight')
+      .textContent
+    const capturedGroups = Array.from(
+      moduleInCargo.matchAll(/field = .(\w+?).,/g),
+    )
+    const fields = capturedGroups.map((capturedGroup) => capturedGroup[1])
+
+    return fields
+  } catch (e) {
+    console.log(table, e)
+  }
+}
 
 function generateTitleParameter() {
   return 'title=Special:CargoExport'

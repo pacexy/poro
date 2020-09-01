@@ -1,4 +1,4 @@
-const LEAGUEPEDIA_BASE_URL = 'https://lol.gamepedia.com'
+const { LEAGUEPEDIA_BASE_URL } = require('./config')
 
 const axios = require('axios').create({
   baseURL: LEAGUEPEDIA_BASE_URL,
