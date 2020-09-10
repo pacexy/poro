@@ -4,6 +4,7 @@
         "node": true
     },
     "extends": "eslint:recommended",
+    "parser": "babel-eslint",
     "parserOptions": {
         "sourceType": "script",
         "ecmaVersion": 2020
@@ -54,10 +55,6 @@
         "key-spacing": [
             "error", 
             { "beforeColon": false, "afterColon": true }
-        ],
-        "lines-around-comment": [
-            "error",
-            { "beforeBlockComment": true }
         ],
         "no-multi-assign": "error",
         "max-params": [1, 3],

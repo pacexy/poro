@@ -41,7 +41,8 @@
     "jsdom": "^16.4.0"
   },
   "devDependencies": {
-    "eslint": "^7.7.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.8.1",
     "husky": "^4.2.5",
     "lint-staged": "^10.2.11",
     "prettier": "^2.0.5"

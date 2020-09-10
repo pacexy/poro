@@ -108,3 +108,6 @@ output/
 
 # Files for testing
 test/
+
+# vscode
+.vscode/
