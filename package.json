@@ -5,7 +5,8 @@
   "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "format": "prettier --write src/**/*.{js}"
+    "format": "prettier --write src/**/*.{js}",
+    "generate": "node src/generator/generator.js"
   },
   "husky": {
     "hooks": {
@@ -13,10 +14,9 @@
     }
   },
   "lint-staged": {
-    "src/**": [
+    "src/**/*.{js}": [
       "prettier --write",
-      "eslint --fix",
-      "git add"
+      "eslint --fix"
     ]
   },
   "keywords": [
@@ -38,13 +38,15 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
-    "jsdom": "^16.4.0"
+    "jsdom": "^16.4.0",
+    "lodash": "^4.17.20"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
     "eslint": "^7.8.1",
     "husky": "^4.2.5",
     "lint-staged": "^10.2.11",
+    "nunjucks": "^3.2.2",
     "prettier": "^2.0.5"
   }
 }
