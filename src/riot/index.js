@@ -20,6 +20,12 @@ const riot = {
   setAuth(auth) {
     axios.defaults.headers.common['X-Riot-Token'] = auth
   },
+  setAxiosRequestInterceptor(fulfilled, rejected) {
+    axios.interceptors.request.use(fulfilled, rejected)
+  },
+  setAxiosResponseInterceptor(fulfilled, rejected) {
+    axios.interceptors.response.use(fulfilled, rejected)
+  },
   Account,
   ChampionMastery,
   Summoner,

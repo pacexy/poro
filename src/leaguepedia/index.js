@@ -16,11 +16,11 @@ const leaguepedia = {
     return res.data
   },
 
-  setLeaguePediaRequestInterceptor(fulfilled, rejected) {
+  setAxiosRequestInterceptor(fulfilled, rejected) {
     axios.interceptors.request.use(fulfilled, rejected)
   },
 
-  setLeaguePediaResponseInterceptor(fulfilled, rejected) {
+  setAxiosResponseInterceptor(fulfilled, rejected) {
     axios.interceptors.response.use(fulfilled, rejected)
   },
 
