@@ -11,6 +11,7 @@
     },
     "rules": {
         "no-console": 0,
+        "no-extra-semi": "off",
         "no-unused-vars": "error",
         "no-use-before-define": "off",
         "quotes": [

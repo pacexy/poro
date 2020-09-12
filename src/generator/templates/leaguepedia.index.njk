@@ -1,0 +1,35 @@
+/*! THIS FILE IS AUTO-GENERATED */
+
+const axios = require('./axios')
+const { generateURL } = require('./generate_url')
+const { getType } = require('./util')
+
+const leaguepedia = {
+  async _fetch(table, parameter, callback) {
+    const shouldUseCallback = getType(callback) === 'Function'
+
+    const url = await generateURL(table, parameter)
+    const res = await axios.get(url)
+
+    if (shouldUseCallback) callback(null, res.data)
+
+    return res.data
+  },
+
+  setLeaguePediaRequestInterceptor(fulfilled, rejected) {
+    axios.interceptors.request.use(fulfilled, rejected)
+  },
+
+  setLeaguePediaResponseInterceptor(fulfilled, rejected) {
+    axios.interceptors.response.use(fulfilled, rejected)
+  },
+
+  {% for table in tables %}
+    fetch{{ table }}(parameter, callback) {
+      return this._fetch('{{ table }}', parameter, callback)
+    },
+
+  {% endfor %}
+}
+
+module.exports = leaguepedia

@@ -1,292 +1,288 @@
+/*! THIS FILE IS AUTO-GENERATED */
+
 const axios = require('./axios')
 const { generateURL } = require('./generate_url')
 const { getType } = require('./util')
-const t = require('./table_name')
 
-const LeaguePediaMixin = (superclass) =>
-  class extends superclass {
-    async _fetch(table, parameter, callback) {
-      const shouldUseCallback = getType(callback) === 'Function'
+const leaguepedia = {
+  async _fetch(table, parameter, callback) {
+    const shouldUseCallback = getType(callback) === 'Function'
 
-      const url = await generateURL(table, parameter)
-      const res = await axios.get(url)
+    const url = await generateURL(table, parameter)
+    const res = await axios.get(url)
 
-      if (shouldUseCallback) callback(null, res.data)
+    if (shouldUseCallback) callback(null, res.data)
 
-      return res.data
-    }
+    return res.data
+  },
 
-    static setAxiosRequestInterceptor(fulfilled, rejected) {
-      axios.interceptors.request.use(fulfilled, rejected)
-    }
+  setLeaguePediaRequestInterceptor(fulfilled, rejected) {
+    axios.interceptors.request.use(fulfilled, rejected)
+  },
 
-    static setAxiosResponseInterceptor(fulfilled, rejected) {
-      axios.interceptors.response.use(fulfilled, rejected)
-    }
+  setLeaguePediaResponseInterceptor(fulfilled, rejected) {
+    axios.interceptors.response.use(fulfilled, rejected)
+  },
 
-    fetchCargoAttachments(parameter, callback) {
-      return this._fetch(t.CARGO_ATTACHMENTS, parameter, callback)
-    }
+  fetchCargoAttachments(parameter, callback) {
+    return this._fetch('CargoAttachments', parameter, callback)
+  },
 
-    fetchChampionFlashcards(parameter, callback) {
-      return this._fetch(t.CHAMPION_FLASHCARDS, parameter, callback)
-    }
+  fetchChampionFlashcards(parameter, callback) {
+    return this._fetch('ChampionFlashcards', parameter, callback)
+  },
 
-    fetchChampions(parameter, callback) {
-      return this._fetch(t.CHAMPIONS, parameter, callback)
-    }
+  fetchChampions(parameter, callback) {
+    return this._fetch('Champions', parameter, callback)
+  },
 
-    fetchChromaSets(parameter, callback) {
-      return this._fetch(t.CHROMA_SETS, parameter, callback)
-    }
+  fetchChromaSets(parameter, callback) {
+    return this._fetch('ChromaSets', parameter, callback)
+  },
 
-    fetchChromas(parameter, callback) {
-      return this._fetch(t.CHROMAS, parameter, callback)
-    }
+  fetchChromas(parameter, callback) {
+    return this._fetch('Chromas', parameter, callback)
+  },
 
-    fetchContracts(parameter, callback) {
-      return this._fetch(t.CONTRACTS, parameter, callback)
-    }
+  fetchContracts(parameter, callback) {
+    return this._fetch('Contracts', parameter, callback)
+  },
 
-    fetchCurrentLeagues(parameter, callback) {
-      return this._fetch(t.CURRENT_LEAGUES, parameter, callback)
-    }
+  fetchCurrentLeagues(parameter, callback) {
+    return this._fetch('CurrentLeagues', parameter, callback)
+  },
 
-    fetchDisambiguations(parameter, callback) {
-      return this._fetch(t.DISAMBIGUATIONS, parameter, callback)
-    }
+  fetchDisambiguations(parameter, callback) {
+    return this._fetch('Disambiguations', parameter, callback)
+  },
 
-    fetchEntities(parameter, callback) {
-      return this._fetch(t.ENTITIES, parameter, callback)
-    }
+  fetchEntities(parameter, callback) {
+    return this._fetch('Entities', parameter, callback)
+  },
 
-    fetchExternalContent(parameter, callback) {
-      return this._fetch(t.EXTERNAL_CONTENT, parameter, callback)
-    }
+  fetchExternalContent(parameter, callback) {
+    return this._fetch('ExternalContent', parameter, callback)
+  },
 
-    fetchGCDArchive(parameter, callback) {
-      return this._fetch(t.GCD_ARCHIVE, parameter, callback)
-    }
+  fetchGCDArchive(parameter, callback) {
+    return this._fetch('GCDArchive', parameter, callback)
+  },
 
-    fetchHooks(parameter, callback) {
-      return this._fetch(t.HOOKS, parameter, callback)
-    }
+  fetchHooks(parameter, callback) {
+    return this._fetch('Hooks', parameter, callback)
+  },
 
-    fetchIgnorePagedata(parameter, callback) {
-      return this._fetch(t.IGNORE_PAGEDATA, parameter, callback)
-    }
+  fetchIgnorePagedata(parameter, callback) {
+    return this._fetch('IgnorePagedata', parameter, callback)
+  },
 
-    fetchIndividualAchievements(parameter, callback) {
-      return this._fetch(t.INDIVIDUAL_ACHIEVEMENTS, parameter, callback)
-    }
+  fetchIndividualAchievements(parameter, callback) {
+    return this._fetch('IndividualAchievements', parameter, callback)
+  },
 
-    fetchItems(parameter, callback) {
-      return this._fetch(t.ITEMS, parameter, callback)
-    }
+  fetchItems(parameter, callback) {
+    return this._fetch('Items', parameter, callback)
+  },
 
-    fetchLeagueGroups(parameter, callback) {
-      return this._fetch(t.LEAGUE_GROUPS, parameter, callback)
-    }
+  fetchLeagueGroups(parameter, callback) {
+    return this._fetch('LeagueGroups', parameter, callback)
+  },
 
-    fetchLeagues(parameter, callback) {
-      return this._fetch(t.LEAGUES, parameter, callback)
-    }
+  fetchLeagues(parameter, callback) {
+    return this._fetch('Leagues', parameter, callback)
+  },
 
-    fetchListplayerCurrent(parameter, callback) {
-      return this._fetch(t.LISTPLAYER_CURRENT, parameter, callback)
-    }
+  fetchListplayerCurrent(parameter, callback) {
+    return this._fetch('ListplayerCurrent', parameter, callback)
+  },
 
-    fetchMatchSchedule(parameter, callback) {
-      return this._fetch(t.MATCH_SCHEDULE, parameter, callback)
-    }
+  fetchMatchSchedule(parameter, callback) {
+    return this._fetch('MatchSchedule', parameter, callback)
+  },
 
-    fetchMatchScheduleGame(parameter, callback) {
-      return this._fetch(t.MATCH_SCHEDULE_GAME, parameter, callback)
-    }
-
-    fetchNASGLadder2018(parameter, callback) {
-      return this._fetch(t.NASG_LADDER_2018, parameter, callback)
-    }
-
-    fetchNTLGlossary(parameter, callback) {
-      return this._fetch(t.NTL_GLOSSARY, parameter, callback)
-    }
-
-    fetchNewsItems(parameter, callback) {
-      return this._fetch(t.NEWS_ITEMS, parameter, callback)
-    }
-
-    fetchOrganizations(parameter, callback) {
-      return this._fetch(t.ORGANIZATIONS, parameter, callback)
-    }
-
-    fetchParticipantsArgs(parameter, callback) {
-      return this._fetch(t.PARTICIPANTS_ARGS, parameter, callback)
-    }
-
-    fetchPatchNotes(parameter, callback) {
-      return this._fetch(t.PATCH_NOTES, parameter, callback)
-    }
-
-    fetchPentakills(parameter, callback) {
-      return this._fetch(t.PENTAKILLS, parameter, callback)
-    }
-
-    fetchPicksAndBansS7(parameter, callback) {
-      return this._fetch(t.PICKS_AND_BANS_S7, parameter, callback)
-    }
-
-    fetchPlayerImages(parameter, callback) {
-      return this._fetch(t.PLAYER_IMAGES, parameter, callback)
-    }
-
-    fetchPlayerLeagueHistory(parameter, callback) {
-      return this._fetch(t.PLAYER_LEAGUE_HISTORY, parameter, callback)
-    }
-
-    fetchPlayerPronunciationFiles(parameter, callback) {
-      return this._fetch(t.PLAYER_PRONUNCIATION_FILES, parameter, callback)
-    }
-
-    fetchPlayerRedirects(parameter, callback) {
-      return this._fetch(t.PLAYER_REDIRECTS, parameter, callback)
-    }
-
-    fetchPlayerRenames(parameter, callback) {
-      return this._fetch(t.PLAYER_RENAMES, parameter, callback)
-    }
-
-    fetchPlayers(parameter, callback) {
-      return this._fetch(t.PLAYERS, parameter, callback)
-    }
-
-    fetchRegionStatuses(parameter, callback) {
-      return this._fetch(t.REGION_STATUSES, parameter, callback)
-    }
-
-    fetchRegions(parameter, callback) {
-      return this._fetch(t.REGIONS, parameter, callback)
-    }
-
-    fetchResidencyChanges(parameter, callback) {
-      return this._fetch(t.RESIDENCY_CHANGES, parameter, callback)
-    }
-
-    fetchRetirements(parameter, callback) {
-      return this._fetch(t.RETIREMENTS, parameter, callback)
-    }
-
-    fetchRosterChangePortalDates(parameter, callback) {
-      return this._fetch(t.ROSTER_CHANGE_PORTAL_DATES, parameter, callback)
-    }
-
-    fetchRosterChangePortalPages(parameter, callback) {
-      return this._fetch(t.ROSTER_CHANGE_PORTAL_PAGES, parameter, callback)
-    }
-
-    fetchRosterChanges(parameter, callback) {
-      return this._fetch(t.ROSTER_CHANGES, parameter, callback)
-    }
-
-    fetchRosterRumors(parameter, callback) {
-      return this._fetch(t.ROSTER_RUMORS, parameter, callback)
-    }
-
-    fetchScoreboardGames(parameter, callback) {
-      return this._fetch(t.SCOREBOARD_GAMES, parameter, callback)
-    }
-
-    fetchScoreboardPlayers(parameter, callback) {
-      return this._fetch(t.SCOREBOARD_PLAYERS, parameter, callback)
-    }
-
-    fetchScoreboardTeams(parameter, callback) {
-      return this._fetch(t.SCOREBOARD_TEAMS, parameter, callback)
-    }
-
-    fetchSisterTeams(parameter, callback) {
-      return this._fetch(t.SISTER_TEAMS, parameter, callback)
-    }
-
-    fetchSkins(parameter, callback) {
-      return this._fetch(t.SKINS, parameter, callback)
-    }
-
-    fetchSkinsUsed(parameter, callback) {
-      return this._fetch(t.SKINS_USED, parameter, callback)
-    }
-
-    fetchStandings(parameter, callback) {
-      return this._fetch(t.STANDINGS, parameter, callback)
-    }
-
-    fetchStandingsArgs(parameter, callback) {
-      return this._fetch(t.STANDINGS_ARGS, parameter, callback)
-    }
-
-    fetchTeamRedirects(parameter, callback) {
-      return this._fetch(t.TEAM_REDIRECTS, parameter, callback)
-    }
-
-    fetchTeamRenames(parameter, callback) {
-      return this._fetch(t.TEAM_RENAMES, parameter, callback)
-    }
-
-    fetchTeams(parameter, callback) {
-      return this._fetch(t.TEAMS, parameter, callback)
-    }
-
-    fetchTeamsWithAutoRosters(parameter, callback) {
-      return this._fetch(t.TEAMS_WITH_AUTO_ROSTERS, parameter, callback)
-    }
-
-    fetchTenures(parameter, callback) {
-      return this._fetch(t.TENURES, parameter, callback)
-    }
-
-    fetchTenuresUnbroken(parameter, callback) {
-      return this._fetch(t.TENURES_UNBROKEN, parameter, callback)
-    }
-
-    fetchTournamentGroups(parameter, callback) {
-      return this._fetch(t.TOURNAMENT_GROUPS, parameter, callback)
-    }
-
-    fetchTournamentPlayers(parameter, callback) {
-      return this._fetch(t.TOURNAMENT_PLAYERS, parameter, callback)
-    }
-
-    fetchTournamentResults(parameter, callback) {
-      return this._fetch(t.TOURNAMENT_RESULTS, parameter, callback)
-    }
-
-    fetchTournamentResults1v1(parameter, callback) {
-      return this._fetch(t.TOURNAMENT_RESULTS_1V1, parameter, callback)
-    }
-
-    fetchTournamentRosters(parameter, callback) {
-      return this._fetch(t.TOURNAMENT_ROSTERS, parameter, callback)
-    }
-
-    fetchTournamentTabs(parameter, callback) {
-      return this._fetch(t.TOURNAMENT_TABS, parameter, callback)
-    }
-
-    fetchTournaments(parameter, callback) {
-      return this._fetch(t.TOURNAMENTS, parameter, callback)
-    }
-
-    fetchUserPredictionGroups(parameter, callback) {
-      return this._fetch(t.USER_PREDICTION_GROUPS, parameter, callback)
-    }
-
-    fetchUserPredictions(parameter, callback) {
-      return this._fetch(t.USER_PREDICTIONS, parameter, callback)
-    }
-
-    fetchPageData(parameter, callback) {
-      return this._fetch(t._PAGE_DATA, parameter, callback)
-    }
-  }
-
-module.exports = LeaguePediaMixin
+  fetchMatchScheduleGame(parameter, callback) {
+    return this._fetch('MatchScheduleGame', parameter, callback)
+  },
+
+  fetchNASGLadder2018(parameter, callback) {
+    return this._fetch('NASGLadder2018', parameter, callback)
+  },
+
+  fetchNTLGlossary(parameter, callback) {
+    return this._fetch('NTLGlossary', parameter, callback)
+  },
+
+  fetchNewsItems(parameter, callback) {
+    return this._fetch('NewsItems', parameter, callback)
+  },
+
+  fetchOrganizations(parameter, callback) {
+    return this._fetch('Organizations', parameter, callback)
+  },
+
+  fetchParticipantsArgs(parameter, callback) {
+    return this._fetch('ParticipantsArgs', parameter, callback)
+  },
+
+  fetchPatchNotes(parameter, callback) {
+    return this._fetch('PatchNotes', parameter, callback)
+  },
+
+  fetchPentakills(parameter, callback) {
+    return this._fetch('Pentakills', parameter, callback)
+  },
+
+  fetchPicksAndBansS7(parameter, callback) {
+    return this._fetch('PicksAndBansS7', parameter, callback)
+  },
+
+  fetchPlayerImages(parameter, callback) {
+    return this._fetch('PlayerImages', parameter, callback)
+  },
+
+  fetchPlayerLeagueHistory(parameter, callback) {
+    return this._fetch('PlayerLeagueHistory', parameter, callback)
+  },
+
+  fetchPlayerPronunciationFiles(parameter, callback) {
+    return this._fetch('PlayerPronunciationFiles', parameter, callback)
+  },
+
+  fetchPlayerRedirects(parameter, callback) {
+    return this._fetch('PlayerRedirects', parameter, callback)
+  },
+
+  fetchPlayerRenames(parameter, callback) {
+    return this._fetch('PlayerRenames', parameter, callback)
+  },
+
+  fetchPlayers(parameter, callback) {
+    return this._fetch('Players', parameter, callback)
+  },
+
+  fetchRegionStatuses(parameter, callback) {
+    return this._fetch('RegionStatuses', parameter, callback)
+  },
+
+  fetchRegions(parameter, callback) {
+    return this._fetch('Regions', parameter, callback)
+  },
+
+  fetchResidencyChanges(parameter, callback) {
+    return this._fetch('ResidencyChanges', parameter, callback)
+  },
+
+  fetchRetirements(parameter, callback) {
+    return this._fetch('Retirements', parameter, callback)
+  },
+
+  fetchRosterChangePortalDates(parameter, callback) {
+    return this._fetch('RosterChangePortalDates', parameter, callback)
+  },
+
+  fetchRosterChangePortalPages(parameter, callback) {
+    return this._fetch('RosterChangePortalPages', parameter, callback)
+  },
+
+  fetchRosterChanges(parameter, callback) {
+    return this._fetch('RosterChanges', parameter, callback)
+  },
+
+  fetchRosterRumors(parameter, callback) {
+    return this._fetch('RosterRumors', parameter, callback)
+  },
+
+  fetchScoreboardGames(parameter, callback) {
+    return this._fetch('ScoreboardGames', parameter, callback)
+  },
+
+  fetchScoreboardPlayers(parameter, callback) {
+    return this._fetch('ScoreboardPlayers', parameter, callback)
+  },
+
+  fetchScoreboardTeams(parameter, callback) {
+    return this._fetch('ScoreboardTeams', parameter, callback)
+  },
+
+  fetchSisterTeams(parameter, callback) {
+    return this._fetch('SisterTeams', parameter, callback)
+  },
+
+  fetchSkins(parameter, callback) {
+    return this._fetch('Skins', parameter, callback)
+  },
+
+  fetchSkinsUsed(parameter, callback) {
+    return this._fetch('SkinsUsed', parameter, callback)
+  },
+
+  fetchStandings(parameter, callback) {
+    return this._fetch('Standings', parameter, callback)
+  },
+
+  fetchStandingsArgs(parameter, callback) {
+    return this._fetch('StandingsArgs', parameter, callback)
+  },
+
+  fetchTeamRedirects(parameter, callback) {
+    return this._fetch('TeamRedirects', parameter, callback)
+  },
+
+  fetchTeamRenames(parameter, callback) {
+    return this._fetch('TeamRenames', parameter, callback)
+  },
+
+  fetchTeams(parameter, callback) {
+    return this._fetch('Teams', parameter, callback)
+  },
+
+  fetchTeamsWithAutoRosters(parameter, callback) {
+    return this._fetch('TeamsWithAutoRosters', parameter, callback)
+  },
+
+  fetchTenures(parameter, callback) {
+    return this._fetch('Tenures', parameter, callback)
+  },
+
+  fetchTenuresUnbroken(parameter, callback) {
+    return this._fetch('TenuresUnbroken', parameter, callback)
+  },
+
+  fetchTournamentGroups(parameter, callback) {
+    return this._fetch('TournamentGroups', parameter, callback)
+  },
+
+  fetchTournamentPlayers(parameter, callback) {
+    return this._fetch('TournamentPlayers', parameter, callback)
+  },
+
+  fetchTournamentResults(parameter, callback) {
+    return this._fetch('TournamentResults', parameter, callback)
+  },
+
+  fetchTournamentResults1v1(parameter, callback) {
+    return this._fetch('TournamentResults1v1', parameter, callback)
+  },
+
+  fetchTournamentRosters(parameter, callback) {
+    return this._fetch('TournamentRosters', parameter, callback)
+  },
+
+  fetchTournamentTabs(parameter, callback) {
+    return this._fetch('TournamentTabs', parameter, callback)
+  },
+
+  fetchTournaments(parameter, callback) {
+    return this._fetch('Tournaments', parameter, callback)
+  },
+
+  fetchUserPredictionGroups(parameter, callback) {
+    return this._fetch('UserPredictionGroups', parameter, callback)
+  },
+
+  fetchUserPredictions(parameter, callback) {
+    return this._fetch('UserPredictions', parameter, callback)
+  },
+}
+
+module.exports = leaguepedia

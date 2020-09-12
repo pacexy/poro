@@ -1,6 +1,11 @@
-(function () {
-  const LeaguePediaMixin = require('./leaguepedia')
+/*! THIS FILE IS AUTO-GENERATED */
 
-  class Poro {}
-  module.exports = LeaguePediaMixin(Poro)
+;(function () {
+  const riot = require('./riot')
+  const leaguepedia = require('./leaguepedia')
+
+  module.exports = {
+    riot,
+    leaguepedia,
+  }
 })()

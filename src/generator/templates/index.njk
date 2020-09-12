@@ -1,0 +1,13 @@
+/*! THIS FILE IS AUTO-GENERATED */
+
+;(function () {
+  {% for vender in venders %}
+    const {{ vender }} = require('./{{ vender }}')
+  {% endfor %}
+
+  module.exports = {
+    {% for vender in venders %}
+      {{ vender }},
+    {% endfor %}
+  }
+})()
