@@ -26,7 +26,7 @@ const Account = {
   /**
    * Get active shard for a player
    */
-  activeShards$Game_Puuid({ game, puuid }) {
+  activeShards$game_puuid({ game, puuid }) {
     return axios.get(`/active-shards/by-game/${game}/by-puuid/${puuid}`)
   },
 }
