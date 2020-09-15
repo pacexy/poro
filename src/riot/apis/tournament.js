@@ -1,9 +1,9 @@
 // v4
 
-const axios = require('../axios')
+const { generateRequestMethods } = require('../utils/request')
 const { PLATFORM_BASE_URL, TOURNAMENT } = require('../config')
 
-axios.defaults.baseURL = PLATFORM_BASE_URL + TOURNAMENT
+const r = generateRequestMethods(PLATFORM_BASE_URL + TOURNAMENT)
 
 /**
  * SUMMONER-V4
@@ -30,7 +30,7 @@ const Tournament = {
       teamSize,
     },
   }) {
-    return axios.post('/codes', {
+    return r.post('/codes', {
       params: { count, tournamentId },
       data: {
         allowedSummonerIds,
@@ -46,7 +46,7 @@ const Tournament = {
    * Returns the tournament code DTO associated with a tournament code string
    */
   tournamentCodeDTO$tournamentCode({ tournamentCode }) {
-    return axios.get(`/codes/${tournamentCode}`)
+    return r.get(`/codes/${tournamentCode}`)
   },
   /**
    * Update the pick type, map, spectator type, or allowed summoners for a code
@@ -60,7 +60,7 @@ const Tournament = {
       spectatorType,
     },
   }) {
-    return axios.put(`/codes/${tournamentCode}`, {
+    return r.put(`/codes/${tournamentCode}`, {
       data: {
         allowedSummonerIds,
         mapType,
@@ -73,13 +73,13 @@ const Tournament = {
    * Gets a list of lobby events by tournament code
    */
   lobbyEvents$tournamentCode({ tournamentCode }) {
-    return axios.get(`/lobby-events/by-code/${tournamentCode}`)
+    return r.get(`/lobby-events/by-code/${tournamentCode}`)
   },
   /**
    * Creates a tournament provider and returns its ID
    */
   _tournamentProvider({ ProviderRegistrationParameters: { region, url } }) {
-    return axios.post('/providers', {
+    return r.post('/providers', {
       data: {
         region,
         url,
@@ -90,7 +90,7 @@ const Tournament = {
    * Creates a tournament and returns its ID
    */
   _tournament({ TournamentRegistrationParameters: { name, providerId } }) {
-    return axios.post('/tournaments', {
+    return r.post('/tournaments', {
       data: {
         name,
         providerId,

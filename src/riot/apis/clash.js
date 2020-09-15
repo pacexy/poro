@@ -1,9 +1,9 @@
 // v1
 
-const axios = require('../axios')
+const { generateRequestMethods } = require('../utils/request')
 const { PLATFORM_BASE_URL, CLASH } = require('../config')
 
-axios.defaults.baseURL = PLATFORM_BASE_URL + CLASH
+const r = generateRequestMethods(PLATFORM_BASE_URL + CLASH)
 
 /**
  * CLASH-V1
@@ -13,31 +13,31 @@ const Clash = {
    * Get players by summoner ID
    */
   players$summonerId({ summonerId }) {
-    return axios.get(`/players/by-summoner/${summonerId}`)
+    return r.get(`/players/by-summoner/${summonerId}`)
   },
   /**
    * Get team by ID
    */
   team$teamId({ teamId }) {
-    return axios.get(`/teams/${teamId}`)
+    return r.get(`/teams/${teamId}`)
   },
   /**
    * Get all active or upcoming tournaments
    */
   tournaments() {
-    return axios.get('/tournaments')
+    return r.get('/tournaments')
   },
   /**
    * Get tournament by team ID
    */
   tournament$teamId({ teamId }) {
-    return axios.get(`/tournaments/by-team/${teamId}`)
+    return r.get(`/tournaments/by-team/${teamId}`)
   },
   /**
    * Get tournament by ID
    */
   tournament$tournamentId({ tournamentId }) {
-    return axios.get(`/tournaments/${tournamentId}`)
+    return r.get(`/tournaments/${tournamentId}`)
   },
 }
 
