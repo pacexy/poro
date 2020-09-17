@@ -39,15 +39,19 @@ function renderRootIndex() {
   render('index.njk', { venders }, rootIndexPath)
 }
 
+function ignoreConfiguration(files) {
+  return files.filter((file) => file !== 'config.js')
+}
+
 function renderRiotIndex() {
   const riotApisPath = path.join(RIOT_DIR, 'apis')
   const riotIndexPath = path.join(RIOT_DIR, 'index.js')
 
-  const riotApis = {}
-  const files = fs.readdirSync(riotApisPath)
-  for (const file of files) {
+  const riotApis = []
+  const apiFiles = ignoreConfiguration(fs.readdirSync(riotApisPath))
+  for (const file of apiFiles) {
     const basename = path.basename(file, '.js')
-    riotApis[basename] = {}
+    riotApis.push(basename)
   }
   render('riot.index.njk', { apis: riotApis }, riotIndexPath)
 }
@@ -55,7 +59,7 @@ function renderRiotIndex() {
 function renderLeaguePediaIndex() {
   const leaguepediaIndexPath = path.join(LEAGUEPEDIA_DIR, 'index.js')
 
-  render('leaguepedia.index.njk', {tables}, leaguepediaIndexPath)
+  render('leaguepedia.index.njk', { tables }, leaguepediaIndexPath)
 }
 
 function main() {

@@ -34,6 +34,7 @@ async function generateFieldsParameter(table) {
 
   // _pageName is default field for all tables
   let fieldsParameter = 'fields=_pageName=_pageName'
+  // TODO: UnhandledPromiseRejectionWarning: TypeError: fields is not iterable
   for (const field of fields) {
     fieldsParameter += `,${field}=${field}`
   }

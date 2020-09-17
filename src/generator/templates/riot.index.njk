@@ -2,17 +2,34 @@
 
 const axios = require('./axios')
 
-{% for apiName, api in apis %}
-  const {{ apiName|PascalCase }} = require('./apis/{{ apiName }}')
+// General
+  const General = require('./general/general.js')
+
+// Data Dragon
+  const DDragon = require('./ddragon/ddragon.js')
+
+// APIs
+{% for api in apis %}
+  const {{ api|PascalCase }} = require('./apis/{{ api }}')
 {% endfor %}
 
 const riot = {
   setAuth(auth) {
     axios.defaults.headers.common['X-Riot-Token'] = auth
   },
-  {% for apiName, api in apis %}
-    {{ apiName|PascalCase }},
-  {% endfor %}
+  setAxiosRequestInterceptor(fulfilled, rejected) {
+    axios.interceptors.request.use(fulfilled, rejected)
+  },
+  setAxiosResponseInterceptor(fulfilled, rejected) {
+    axios.interceptors.response.use(fulfilled, rejected)
+  },
+  General,
+  DDragon,
+  API: {
+    {% for api in apis %}
+      {{ api|PascalCase }},
+    {% endfor %}
+  }
 }
 
 module.exports = riot

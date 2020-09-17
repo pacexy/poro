@@ -1,14 +1,16 @@
 // v1
 
 const { generateRequestMethods } = require('../utils/request')
-const { REGION_BASE_URL, ACCOUNT } = require('../config')
+const { REGION_BASE_URL, ACCOUNT } = require('./config')
 
 const r = generateRequestMethods(REGION_BASE_URL + ACCOUNT)
 
 /**
  * ACCOUNT-V1
  *
- * There are three routing values for account-v1; americas, asia, and europe. You can query for any account in any region. We recommend using the nearest cluster.
+ * There are three routing values for account-v1; americas, asia,
+ * and europe. You can query for any account in any region.
+ * We recommend using the nearest cluster.
  */
 const Account = {
   /**

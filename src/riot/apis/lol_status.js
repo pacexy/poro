@@ -1,7 +1,7 @@
 // v3
 
 const { generateRequestMethods } = require('../utils/request')
-const { PLATFORM_BASE_URL, LOL_STATUS } = require('../config')
+const { PLATFORM_BASE_URL, LOL_STATUS } = require('./config')
 
 const r = generateRequestMethods(PLATFORM_BASE_URL + LOL_STATUS)
 

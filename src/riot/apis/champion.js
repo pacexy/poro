@@ -1,7 +1,7 @@
 // v3
 
 const { generateRequestMethods } = require('../utils/request')
-const { PLATFORM_BASE_URL, CHAMPION } = require('../config')
+const { PLATFORM_BASE_URL, CHAMPION } = require('./config')
 
 const r = generateRequestMethods(PLATFORM_BASE_URL + CHAMPION)
 

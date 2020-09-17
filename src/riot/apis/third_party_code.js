@@ -1,7 +1,7 @@
 // v4
 
 const { generateRequestMethods } = require('../utils/request')
-const { PLATFORM_BASE_URL, THIRD_PARTY_CODE } = require('../config')
+const { PLATFORM_BASE_URL, THIRD_PARTY_CODE } = require('./config')
 
 const r = generateRequestMethods(PLATFORM_BASE_URL + THIRD_PARTY_CODE)
 
