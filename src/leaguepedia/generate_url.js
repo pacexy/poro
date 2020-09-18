@@ -1,15 +1,15 @@
-const { JSDOM } = require('jsdom')
+const axios = require('axios')
+const cheerio = require('cheerio')
 
 const { LEAGUEPEDIA_CARGO_DECLARE_BASE_URL } = require('./config')
 const { getType } = require('./util')
 
+// TODO: interceptor
 async function fetchFields(table) {
   try {
-    const { window } = await JSDOM.fromURL(
-      `${LEAGUEPEDIA_CARGO_DECLARE_BASE_URL}${table}`,
-    )
-    const moduleInCargo = window.document.querySelector('.mw-highlight')
-      .textContent
+    const res = await axios.get(`${LEAGUEPEDIA_CARGO_DECLARE_BASE_URL}${table}`)
+    const $ = cheerio.load(res.data)
+    const moduleInCargo = $('.mw-highlight').text()
     const capturedGroups = Array.from(
       moduleInCargo.matchAll(/field = .(\w+?).,/g),
     )
