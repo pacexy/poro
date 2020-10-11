@@ -3,10 +3,10 @@
 const axios = require('./axios')
 
 // General
-const General = require('./general/general.js')
+const General = require('./general/general')
 
 // Data Dragon
-const DDragon = require('./ddragon/ddragon.js')
+const DDragon = require('./ddragon/ddragon')
 
 // APIs
 const Account = require('./apis/account')

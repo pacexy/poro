@@ -6,7 +6,7 @@ const prettier = require('prettier')
 const { PascalCase } = require('./filters')
 
 const tables = require('../leaguepedia/tables')
-const prettierrc = require('../../.prettierrc.js')
+const prettierrc = require('../../.prettierrc')
 
 const srcPath = path.join(__dirname, '../../src')
 const TEMPLATES_DIR = path.join(srcPath, 'generator/templates')

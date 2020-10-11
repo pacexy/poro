@@ -5,6 +5,7 @@ const { LEAGUEPEDIA_CARGO_DECLARE_BASE_URL } = require('./config')
 const { getType } = require('./util')
 
 // TODO: interceptor
+// TODO: remove cheerio by writing an element parser
 async function fetchFields(table) {
   try {
     const res = await axios.get(`${LEAGUEPEDIA_CARGO_DECLARE_BASE_URL}${table}`)
@@ -34,7 +35,7 @@ async function generateFieldsParameter(table) {
 
   // _pageName is default field for all tables
   let fieldsParameter = 'fields=_pageName=_pageName'
-  // TODO: UnhandledPromiseRejectionWarning: TypeError: fields is not iterable
+  // FIXME: UnhandledPromiseRejectionWarning: TypeError: fields is not iterable
   for (const field of fields) {
     fieldsParameter += `,${field}=${field}`
   }
