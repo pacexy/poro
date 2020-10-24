@@ -3,6 +3,7 @@ const path = require('path')
 const njk = require('nunjucks')
 const prettier = require('prettier')
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PascalCase... Remove this comment to see the full error message
 const { PascalCase } = require('./filters')
 
 const tables = require('../leaguepedia/tables')
@@ -19,7 +20,7 @@ env.addFilter('PascalCase', PascalCase)
 /**
  * Render a nunjucks template, format it, and write to disk
  */
-function render(templatePath, data, outputPath) {
+function render(templatePath: any, data: any, outputPath: any) {
   let output = env.render(templatePath, data)
   output = prettier.format(output, prettierrc)
   fs.writeFileSync(outputPath, output)
@@ -39,8 +40,8 @@ function renderRootIndex() {
   render('index.njk', { venders }, rootIndexPath)
 }
 
-function ignoreConfiguration(files) {
-  return files.filter((file) => file !== 'config.js')
+function ignoreConfiguration(files: any) {
+  return files.filter((file: any) => file !== 'config.js')
 }
 
 function renderRiotIndex() {

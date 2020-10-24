@@ -1,6 +1,8 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'generateRe... Remove this comment to see the full error message
 const { generateRequestMethods } = require('../utils/request')
 const { DDRAGON_BASE_URL } = require('./config')
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'r'.
 const r = generateRequestMethods(DDRAGON_BASE_URL)
 
 /**
@@ -14,6 +16,7 @@ const r = generateRequestMethods(DDRAGON_BASE_URL)
  * of Legends patch is a manual process, so it is not always updated immediately
  * after a patch.
  */
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'DDragon'.
 const DDragon = {
   /**
    * You can find all valid Data Dragon versions in the versions file.
@@ -31,7 +34,7 @@ const DDragon = {
    * client version in a region. You can find the version each region is using
    * via the realms files.
    */
-  realm$region({ region }) {
+  realm$region({ region }: any) {
     return r.get(`/realms/${region}.json`)
   },
   /**
@@ -46,13 +49,17 @@ const DDragon = {
   /**
    * The `champion.json` data file returns a list of champions with a brief summary.
    */
-  champions$version_language({ version, language }) {
+  champions$version_language({ version, language }: any) {
     return r.get(`/cdn/${version}/data/${language}/champion.json`)
   },
   /**
    * The individual champion JSON files contain additional data for each champion.
    */
-  champion$version_language_championName({ version, language, championName }) {
+  champion$version_language_championName({
+    version,
+    language,
+    championName,
+  }: any) {
     return r.get(
       `/cdn/${version}/data/${language}/champion/${championName}.json`,
     )
@@ -63,19 +70,19 @@ const DDragon = {
    * purchase value, sell value, items it builds from, items it builds into,
    * and stats granted from the item.
    */
-  items$version_language({ version, language }) {
+  items$version_language({ version, language }: any) {
     return r.get(`/cdn/${version}/data/${language}/item.json`)
   },
 
-  summonerSpells$version_language({ version, language }) {
+  summonerSpells$version_language({ version, language }: any) {
     return r.get(`/cdn/${version}/data/${language}/summoner.json`)
   },
 
-  profileicons$version_language({ version, language }) {
+  profileicons$version_language({ version, language }: any) {
     return r.get(`/cdn/${version}/data/${language}/profileicon.json`)
   },
 
-  runesReforged$version_language({ version, language }) {
+  runesReforged$version_language({ version, language }: any) {
     return r.get(`/cdn/${version}/data/${language}/runesReforged.json`)
   },
 }

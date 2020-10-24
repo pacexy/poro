@@ -1,12 +1,14 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'axios'.
 const axios = require('axios')
 const cheerio = require('cheerio')
 
 const { LEAGUEPEDIA_CARGO_DECLARE_BASE_URL } = require('./config')
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'getType'.
 const { getType } = require('./util')
 
 // TODO: interceptor
 // TODO: remove cheerio by writing an element parser
-async function fetchFields(table) {
+async function fetchFields(table: any) {
   try {
     const res = await axios.get(`${LEAGUEPEDIA_CARGO_DECLARE_BASE_URL}${table}`)
     const $ = cheerio.load(res.data)
@@ -14,6 +16,7 @@ async function fetchFields(table) {
     const capturedGroups = Array.from(
       moduleInCargo.matchAll(/field = .(\w+?).,/g),
     )
+    // @ts-expect-error ts-migrate(2571) FIXME: Object is of type 'unknown'.
     const fields = capturedGroups.map((capturedGroup) => capturedGroup[1])
 
     return fields
@@ -26,16 +29,17 @@ function generateTitleParameter() {
   return 'title=Special:CargoExport'
 }
 
-function generateTableParameter(table) {
+function generateTableParameter(table: any) {
   return `tables=${table}`
 }
 
-async function generateFieldsParameter(table) {
+async function generateFieldsParameter(table: any) {
   const fields = await fetchFields(table)
 
   // _pageName is default field for all tables
   let fieldsParameter = 'fields=_pageName=_pageName'
   // FIXME: UnhandledPromiseRejectionWarning: TypeError: fields is not iterable
+  // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
   for (const field of fields) {
     fieldsParameter += `,${field}=${field}`
   }
@@ -43,7 +47,7 @@ async function generateFieldsParameter(table) {
   return fieldsParameter
 }
 
-function generateWhereParameter(where) {
+function generateWhereParameter(where: any) {
   if (!where) return ''
 
   let whereParameter = 'where='
@@ -55,7 +59,7 @@ function generateWhereParameter(where) {
     // specify keywords in _pageName
     case 'Array':
       whereParameter += where
-        .map((keyword) => `_pageName LIKE "%${keyword}%"`)
+        .map((keyword: any) => `_pageName LIKE "%${keyword}%"`)
         .join(' AND ')
       break
     default:
@@ -65,17 +69,17 @@ function generateWhereParameter(where) {
   return whereParameter
 }
 
-function generateJoinOnParameter(joinOn) {
+function generateJoinOnParameter(joinOn: any) {
   if (!joinOn) return ''
 
   return `join on=${joinOn}`
 }
 
-function generateHavingParameter(having) {
+function generateHavingParameter(having: any) {
   return getType(having) === 'String' ? `having=${having}` : ''
 }
 
-function generateGroupByAndHavingParameter(groupBy, having) {
+function generateGroupByAndHavingParameter(groupBy: any, having: any) {
   if (!groupBy) return ''
 
   let groupByParameter = 'group by='
@@ -98,7 +102,7 @@ function generateGroupByAndHavingParameter(groupBy, having) {
   return groupByAndHavingParamter
 }
 
-function generateItemInOrderByParameter(item) {
+function generateItemInOrderByParameter(item: any) {
   switch (getType(item)) {
     case 'String':
       return `\`${item}\``
@@ -110,7 +114,7 @@ function generateItemInOrderByParameter(item) {
   }
 }
 
-function generateOrderByParameter(orderBy) {
+function generateOrderByParameter(orderBy: any) {
   if (!orderBy) return ''
 
   let orderByParameter = 'order by='
@@ -122,7 +126,7 @@ function generateOrderByParameter(orderBy) {
       break
     case 'Array':
       orderByParameter += orderBy
-        .map((item) => generateItemInOrderByParameter(item))
+        .map((item: any) => generateItemInOrderByParameter(item))
         .join(',')
       break
     default:
@@ -144,19 +148,26 @@ function generateFormatbyParameter(format = 'json') {
   return `format=${format}`
 }
 
-exports.generateURL = async function (table, parameter = {}) {
+exports.generateURL = async function (table: any, parameter = {}) {
   const url =
     'index.php?' +
     [
       generateTitleParameter(),
       generateTableParameter(table),
       await generateFieldsParameter(table),
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'where' does not exist on type '{}'.
       generateWhereParameter(parameter.where),
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'joinOn' does not exist on type '{}'.
       generateJoinOnParameter(parameter.joinOn),
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'groupBy' does not exist on type '{}'.
       generateGroupByAndHavingParameter(parameter.groupBy, parameter.having),
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'orderBy' does not exist on type '{}'.
       generateOrderByParameter(parameter.orderBy),
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'limit' does not exist on type '{}'.
       generateLimitParameter(parameter.limit),
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'offset' does not exist on type '{}'.
       generateOffsetbyParameter(parameter.offset),
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'format' does not exist on type '{}'.
       generateFormatbyParameter(parameter.format),
     ]
       .filter((str) => str)

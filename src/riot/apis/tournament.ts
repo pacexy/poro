@@ -1,8 +1,11 @@
 // v4
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'generateRe... Remove this comment to see the full error message
 const { generateRequestMethods } = require('../utils/request')
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PLATFORM_B... Remove this comment to see the full error message
 const { PLATFORM_BASE_URL, TOURNAMENT } = require('./config')
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'r'.
 const r = generateRequestMethods(PLATFORM_BASE_URL + TOURNAMENT)
 
 /**
@@ -13,6 +16,7 @@ const r = generateRequestMethods(PLATFORM_BASE_URL + TOURNAMENT)
  * API access should use the stub to mock their implementation before
  * applying for a production key.
  */
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Tournament... Remove this comment to see the full error message
 const Tournament = {
   /**
    * Create a mock tournament code for the given tournament
@@ -21,6 +25,7 @@ const Tournament = {
   _tournamentCode({
     count,
     tournamentId,
+
     TournamentCodeParameters: {
       allowedSummonerIds,
       mapType,
@@ -29,7 +34,7 @@ const Tournament = {
       spectatorType,
       teamSize,
     },
-  }) {
+  }: any) {
     return r.post('/codes', {
       params: { count, tournamentId },
       data: {
@@ -45,7 +50,7 @@ const Tournament = {
   /**
    * Returns the tournament code DTO associated with a tournament code string
    */
-  tournamentCodeDTO$tournamentCode({ tournamentCode }) {
+  tournamentCodeDTO$tournamentCode({ tournamentCode }: any) {
     return r.get(`/codes/${tournamentCode}`)
   },
   /**
@@ -53,13 +58,14 @@ const Tournament = {
    */
   $_tournamentCode({
     tournamentCode,
+
     TournamentCodeUpdateParameters: {
       allowedSummonerIds,
       mapType,
       pickType,
       spectatorType,
     },
-  }) {
+  }: any) {
     return r.put(`/codes/${tournamentCode}`, {
       data: {
         allowedSummonerIds,
@@ -72,13 +78,15 @@ const Tournament = {
   /**
    * Gets a list of lobby events by tournament code
    */
-  lobbyEvents$tournamentCode({ tournamentCode }) {
+  lobbyEvents$tournamentCode({ tournamentCode }: any) {
     return r.get(`/lobby-events/by-code/${tournamentCode}`)
   },
   /**
    * Creates a tournament provider and returns its ID
    */
-  _tournamentProvider({ ProviderRegistrationParameters: { region, url } }) {
+  _tournamentProvider({
+    ProviderRegistrationParameters: { region, url },
+  }: any) {
     return r.post('/providers', {
       data: {
         region,
@@ -89,7 +97,7 @@ const Tournament = {
   /**
    * Creates a tournament and returns its ID
    */
-  _tournament({ TournamentRegistrationParameters: { name, providerId } }) {
+  _tournament({ TournamentRegistrationParameters: { name, providerId } }: any) {
     return r.post('/tournaments', {
       data: {
         name,
