@@ -1,20 +1,18 @@
 // v4
 
-const { generateRequestMethods } = require('../utils/request')
-const { PLATFORM_BASE_URL, THIRD_PARTY_CODE } = require('./config')
+import { generateRequestMethods } from '../utils/request'
+import { PLATFORM_BASE_URL, THIRD_PARTY_CODE } from './config'
 
 const r = generateRequestMethods(PLATFORM_BASE_URL + THIRD_PARTY_CODE)
 
 /**
  * THIRD-PARTY-CODE-V4
  */
-const ThirdPartyCode = {
+export default {
   /**
    * Get third party code for a given summoner ID
    */
-  thirdPartyCode$encryptedSummonerId({ encryptedSummonerId }) {
+  thirdPartyCode$encryptedSummonerId({ encryptedSummonerId }: any) {
     return r.get(`/third-party-code/by-summoner/${encryptedSummonerId}`)
   },
 }
-
-module.exports = ThirdPartyCode

@@ -1,12 +1,18 @@
-const fs = require('fs')
-const path = require('path')
-const njk = require('nunjucks')
-const prettier = require('prettier')
+import fs from 'fs'
+import path from 'path'
+import njk = require('nunjucks')
+import prettier = require('prettier')
 
-const { PascalCase } = require('./filters')
+import { PascalCase } from './filters'
 
-const tables = require('../leaguepedia/tables')
-const prettierrc = require('../../.prettierrc.js')
+import tables from '../leaguepedia/tables'
+
+const prettierrc = {
+  singleQuote: true,
+  semi: false,
+  htmlWhitespaceSensitivity: 'ignore' as const,
+  trailingComma: 'all' as const,
+}
 
 const srcPath = path.join(__dirname, '../../src')
 const TEMPLATES_DIR = path.join(srcPath, 'generator/templates')
@@ -19,7 +25,7 @@ env.addFilter('PascalCase', PascalCase)
 /**
  * Render a nunjucks template, format it, and write to disk
  */
-function render(templatePath, data, outputPath) {
+function render(templatePath: any, data: any, outputPath: any) {
   let output = env.render(templatePath, data)
   output = prettier.format(output, prettierrc)
   fs.writeFileSync(outputPath, output)
@@ -39,8 +45,8 @@ function renderRootIndex() {
   render('index.njk', { venders }, rootIndexPath)
 }
 
-function ignoreConfiguration(files) {
-  return files.filter((file) => file !== 'config.js')
+function ignoreConfiguration(files: any) {
+  return files.filter((file: any) => file !== 'config.js')
 }
 
 function renderRiotIndex() {

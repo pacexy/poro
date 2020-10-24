@@ -1,18 +1,18 @@
 // v4
 
-const { generateRequestMethods } = require('../utils/request')
-const { PLATFORM_BASE_URL, SPECTATOR } = require('./config')
+import { generateRequestMethods } from '../utils/request'
+import { PLATFORM_BASE_URL, SPECTATOR } from './config'
 
 const r = generateRequestMethods(PLATFORM_BASE_URL + SPECTATOR)
 
 /**
  * SPECTATOR-V4
  */
-const Spectator = {
+export default {
   /**
    * Get current game information for the given summoner ID
    */
-  currentGame$encryptedSummonerId({ encryptedSummonerId }) {
+  currentGame$encryptedSummonerId({ encryptedSummonerId }: any) {
     return r.get(`/active-games/by-summoner/${encryptedSummonerId}`)
   },
   /**
@@ -22,5 +22,3 @@ const Spectator = {
     return r.get('/featured-games')
   },
 }
-
-module.exports = Spectator

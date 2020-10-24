@@ -1,7 +1,7 @@
 // v4
 
-const { generateRequestMethods } = require('../utils/request')
-const { PLATFORM_BASE_URL, TOURNAMENT_STUB } = require('./config')
+import { generateRequestMethods } from '../utils/request'
+import { PLATFORM_BASE_URL, TOURNAMENT_STUB } from './config'
 
 const r = generateRequestMethods(PLATFORM_BASE_URL + TOURNAMENT_STUB)
 
@@ -13,7 +13,7 @@ const r = generateRequestMethods(PLATFORM_BASE_URL + TOURNAMENT_STUB)
  * API access should use the stub to mock their implementation before
  * applying for a production key.
  */
-const TournamentStub = {
+export default {
   /**
    * Create a mock tournament code for the given tournament
    */
@@ -21,6 +21,7 @@ const TournamentStub = {
   _tournamentCode({
     count,
     tournamentId,
+
     TournamentCodeParameters: {
       allowedSummonerIds,
       mapType,
@@ -29,7 +30,7 @@ const TournamentStub = {
       spectatorType,
       teamSize,
     },
-  }) {
+  }: any) {
     return r.post('/codes', {
       params: { count, tournamentId },
       data: {
@@ -45,13 +46,15 @@ const TournamentStub = {
   /**
    * Gets a mock list of lobby events by tournament code
    */
-  lobbyEvents$tournamentCode({ tournamentCode }) {
+  lobbyEvents$tournamentCode({ tournamentCode }: any) {
     return r.get(`/lobby-events/by-code/${tournamentCode}`)
   },
   /**
    * Creates a mock tournament provider and returns its ID
    */
-  _tournamentProvider({ ProviderRegistrationParameters: { region, url } }) {
+  _tournamentProvider({
+    ProviderRegistrationParameters: { region, url },
+  }: any) {
     return r.post('/providers', {
       data: {
         region,
@@ -62,7 +65,7 @@ const TournamentStub = {
   /**
    * Creates a mock tournament and returns its ID
    */
-  _tournament({ TournamentRegistrationParameters: { name, providerId } }) {
+  _tournament({ TournamentRegistrationParameters: { name, providerId } }: any) {
     return r.post('/tournaments', {
       data: {
         name,
@@ -71,5 +74,3 @@ const TournamentStub = {
     })
   },
 }
-
-module.exports = TournamentStub

@@ -2,7 +2,7 @@
 
 ;(function () {
   {% for vender in venders %}
-    const {{ vender }} = require('./{{ vender }}')
+    import {{ vender }} from './{{ vender }}'
   {% endfor %}
 
   module.exports = {

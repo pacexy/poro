@@ -1,5 +1,5 @@
-const { generateRequestMethods } = require('../utils/request')
-const { GENERAL_BASE_URL } = require('./config')
+import { generateRequestMethods } from '../utils/request'
+import { GENERAL_BASE_URL } from './config'
 
 const r = generateRequestMethods(GENERAL_BASE_URL)
 
@@ -7,7 +7,7 @@ const r = generateRequestMethods(GENERAL_BASE_URL)
  * When looking up specific seasons, queues, maps and modes it is important
  * to use the correct ids.
  */
-const General = {
+export default {
   /**
    * Season ids are used in match history to indicate which season a match
    * was played. A full list of season ids can be found in the file below.
@@ -43,5 +43,3 @@ const General = {
     return r.get('/docs/lol/gameTypes.json')
   },
 }
-
-module.exports = General

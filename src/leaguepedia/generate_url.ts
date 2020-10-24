@@ -1,11 +1,12 @@
-const axios = require('axios')
-const cheerio = require('cheerio')
+import axios from 'axios'
+import cheerio from 'cheerio'
 
-const { LEAGUEPEDIA_CARGO_DECLARE_BASE_URL } = require('./config')
-const { getType } = require('./util')
+import { LEAGUEPEDIA_CARGO_DECLARE_BASE_URL } from './config'
+import { getType } from './util'
 
 // TODO: interceptor
-async function fetchFields(table) {
+// TODO: remove cheerio by writing an element parser
+async function fetchFields(table: any) {
   try {
     const res = await axios.get(`${LEAGUEPEDIA_CARGO_DECLARE_BASE_URL}${table}`)
     const $ = cheerio.load(res.data)
@@ -25,16 +26,16 @@ function generateTitleParameter() {
   return 'title=Special:CargoExport'
 }
 
-function generateTableParameter(table) {
+function generateTableParameter(table: any) {
   return `tables=${table}`
 }
 
-async function generateFieldsParameter(table) {
+async function generateFieldsParameter(table: any) {
   const fields = await fetchFields(table)
+  if (!fields) throw new Error(`${table} - fetch fields failed...`)
 
   // _pageName is default field for all tables
   let fieldsParameter = 'fields=_pageName=_pageName'
-  // TODO: UnhandledPromiseRejectionWarning: TypeError: fields is not iterable
   for (const field of fields) {
     fieldsParameter += `,${field}=${field}`
   }
@@ -42,7 +43,7 @@ async function generateFieldsParameter(table) {
   return fieldsParameter
 }
 
-function generateWhereParameter(where) {
+function generateWhereParameter(where: any) {
   if (!where) return ''
 
   let whereParameter = 'where='
@@ -54,7 +55,7 @@ function generateWhereParameter(where) {
     // specify keywords in _pageName
     case 'Array':
       whereParameter += where
-        .map((keyword) => `_pageName LIKE "%${keyword}%"`)
+        .map((keyword: any) => `_pageName LIKE "%${keyword}%"`)
         .join(' AND ')
       break
     default:
@@ -64,17 +65,17 @@ function generateWhereParameter(where) {
   return whereParameter
 }
 
-function generateJoinOnParameter(joinOn) {
+function generateJoinOnParameter(joinOn: any) {
   if (!joinOn) return ''
 
   return `join on=${joinOn}`
 }
 
-function generateHavingParameter(having) {
+function generateHavingParameter(having: any) {
   return getType(having) === 'String' ? `having=${having}` : ''
 }
 
-function generateGroupByAndHavingParameter(groupBy, having) {
+function generateGroupByAndHavingParameter(groupBy: any, having: any) {
   if (!groupBy) return ''
 
   let groupByParameter = 'group by='
@@ -97,7 +98,7 @@ function generateGroupByAndHavingParameter(groupBy, having) {
   return groupByAndHavingParamter
 }
 
-function generateItemInOrderByParameter(item) {
+function generateItemInOrderByParameter(item: any) {
   switch (getType(item)) {
     case 'String':
       return `\`${item}\``
@@ -109,7 +110,7 @@ function generateItemInOrderByParameter(item) {
   }
 }
 
-function generateOrderByParameter(orderBy) {
+function generateOrderByParameter(orderBy: any) {
   if (!orderBy) return ''
 
   let orderByParameter = 'order by='
@@ -121,7 +122,7 @@ function generateOrderByParameter(orderBy) {
       break
     case 'Array':
       orderByParameter += orderBy
-        .map((item) => generateItemInOrderByParameter(item))
+        .map((item: any) => generateItemInOrderByParameter(item))
         .join(',')
       break
     default:
@@ -143,7 +144,18 @@ function generateFormatbyParameter(format = 'json') {
   return `format=${format}`
 }
 
-exports.generateURL = async function (table, parameter = {}) {
+interface Parameter {
+  where?: any
+  joinOn?: any
+  groupBy?: any
+  having?: any
+  orderBy?: any
+  limit?: number
+  offset?: number
+  format?: string
+}
+
+export async function generateURL(table: any, parameter: Parameter = {}) {
   const url =
     'index.php?' +
     [

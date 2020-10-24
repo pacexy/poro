@@ -1,7 +1,7 @@
 // v1
 
-const { generateRequestMethods } = require('../utils/request')
-const { REGION_BASE_URL, ACCOUNT } = require('./config')
+import { generateRequestMethods } from '../utils/request'
+import { REGION_BASE_URL, ACCOUNT } from './config'
 
 const r = generateRequestMethods(REGION_BASE_URL + ACCOUNT)
 
@@ -12,25 +12,23 @@ const r = generateRequestMethods(REGION_BASE_URL + ACCOUNT)
  * and europe. You can query for any account in any region.
  * We recommend using the nearest cluster.
  */
-const Account = {
+export default {
   /**
    * Get account by puuid
    */
-  account$puuid({ puuid }) {
+  account$puuid({ puuid }: any) {
     return r.get(`/accounts/by-puuid/${puuid}`)
   },
   /**
    * Get account by riot id
    */
-  account$gameName_tagLine({ gameName, tagLine }) {
+  account$gameName_tagLine({ gameName, tagLine }: any) {
     return r.get(`/accounts/by-riot-id/${gameName}/${tagLine}`)
   },
   /**
    * Get active shard for a player
    */
-  activeShards$game_puuid({ game, puuid }) {
+  activeShards$game_puuid({ game, puuid }: any) {
     return r.get(`/active-shards/by-game/${game}/by-puuid/${puuid}`)
   },
 }
-
-module.exports = Account

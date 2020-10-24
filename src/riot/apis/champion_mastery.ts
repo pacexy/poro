@@ -1,18 +1,18 @@
 // v4
 
-const { generateRequestMethods } = require('../utils/request')
-const { PLATFORM_BASE_URL, CHAMPION_MASTERY } = require('./config')
+import { generateRequestMethods } from '../utils/request'
+import { PLATFORM_BASE_URL, CHAMPION_MASTERY } from './config'
 
 const r = generateRequestMethods(PLATFORM_BASE_URL + CHAMPION_MASTERY)
 
 /**
  * CHAMPION-MASTERY-V4
  */
-const ChampionMastery = {
+export default {
   /**
    * Get all champion mastery entries sorted by number of champion points descending
    */
-  championMasteries$encryptedSummonerId({ encryptedSummonerId }) {
+  championMasteries$encryptedSummonerId({ encryptedSummonerId }: any) {
     return r.get(`/champion-masteries/by-summoner/${encryptedSummonerId}`)
   },
   /**
@@ -21,7 +21,7 @@ const ChampionMastery = {
   championMastery$encryptedSummonerId_championId({
     encryptedSummonerId,
     championId,
-  }) {
+  }: any) {
     return r.get(
       `/champion-masteries/by-summoner/${encryptedSummonerId}/by-champion/${championId}`,
     )
@@ -29,9 +29,7 @@ const ChampionMastery = {
   /**
    * Get a player's total champion mastery score, which is the sum of individual champion mastery levels
    */
-  championMasteryScore$encryptedSummonerId({ encryptedSummonerId }) {
+  championMasteryScore$encryptedSummonerId({ encryptedSummonerId }: any) {
     return r.get(`/scores/by-summoner/${encryptedSummonerId}`)
   },
 }
-
-module.exports = ChampionMastery

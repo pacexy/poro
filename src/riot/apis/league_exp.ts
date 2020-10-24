@@ -1,7 +1,7 @@
 // v4
 
-const { generateRequestMethods } = require('../utils/request')
-const { PLATFORM_BASE_URL, LEAGUE_EXP } = require('./config')
+import { generateRequestMethods } from '../utils/request'
+import { PLATFORM_BASE_URL, LEAGUE_EXP } from './config'
 
 const r = generateRequestMethods(PLATFORM_BASE_URL + LEAGUE_EXP)
 
@@ -15,13 +15,11 @@ const r = generateRequestMethods(PLATFORM_BASE_URL + LEAGUE_EXP)
  * and Master). In November we'll evaluate whether this endpoint
  * delivers enough value to merit its continual support.
  */
-const LeagueExp = {
+export default {
   /**
    * Get all the league entries
    */
-  leagueEntries$queue_tier_division({ queue, tier, division }) {
+  leagueEntries$queue_tier_division({ queue, tier, division }: any) {
     return r.get(`/entries/${queue}/${tier}/${division}`)
   },
 }
-
-module.exports = LeagueExp

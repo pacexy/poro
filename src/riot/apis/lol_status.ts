@@ -1,14 +1,14 @@
 // v3
 
-const { generateRequestMethods } = require('../utils/request')
-const { PLATFORM_BASE_URL, LOL_STATUS } = require('./config')
+import { generateRequestMethods } from '../utils/request'
+import { PLATFORM_BASE_URL, LOL_STATUS } from './config'
 
 const r = generateRequestMethods(PLATFORM_BASE_URL + LOL_STATUS)
 
 /**
  * LOL-STATUS-V3
  */
-const LolStatus = {
+export default {
   /**
    * Get League of Legends status for the given shard
    */
@@ -16,5 +16,3 @@ const LolStatus = {
     return r.get('/shard-data')
   },
 }
-
-module.exports = LolStatus

@@ -1,50 +1,48 @@
 // v4
 
-const { generateRequestMethods } = require('../utils/request')
-const { PLATFORM_BASE_URL, LEAGUE } = require('./config')
+import { generateRequestMethods } from '../utils/request'
+import { PLATFORM_BASE_URL, LEAGUE } from './config'
 
 const r = generateRequestMethods(PLATFORM_BASE_URL + LEAGUE)
 
 /**
  * LEAGUE-V4
  */
-const League = {
+export default {
   /**
    * Get the challenger league for given queue
    */
-  challengerLeague$queue({ queue }) {
+  challengerLeague$queue({ queue }: any) {
     return r.get(`/challengerleagues/by-queue/${queue}`)
   },
   /**
    * Get league entries in all queues for a given summoner ID
    */
-  leagueEntries$encryptedSummonerId({ encryptedSummonerId }) {
+  leagueEntries$encryptedSummonerId({ encryptedSummonerId }: any) {
     return r.get(`/entries/by-summoner/${encryptedSummonerId}`)
   },
   /**
    * Get all the league entries
    */
-  leagueEntries$queue_tier_division({ queue, tier, division }) {
+  leagueEntries$queue_tier_division({ queue, tier, division }: any) {
     return r.get(`/entries/${queue}/${tier}/${division}`)
   },
   /**
    * Get the grandmaster league of a specific queue
    */
-  grandmasterLeague$queue({ queue }) {
+  grandmasterLeague$queue({ queue }: any) {
     return r.get(`/grandmasterleagues/by-queue/${queue}`)
   },
   /**
    * Get league with given ID, including inactive entries
    */
-  league$leagueId({ leagueId }) {
+  league$leagueId({ leagueId }: any) {
     return r.get(`/leagues/${leagueId}`)
   },
   /**
    * Get the master league for given queue
    */
-  masterLeague$queue({ queue }) {
+  masterLeague$queue({ queue }: any) {
     return r.get(`/masterleagues/by-queue/${queue}`)
   },
 }
-
-module.exports = League
