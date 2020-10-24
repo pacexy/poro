@@ -1,6 +1,7 @@
 # poro
 
-> Integrate official Riot's League of Legends API (not implemented yet) with Leaguepedia API.
+# **The Document Will Be Rewrited!**
+> Integrate official Riot's League of Legends API with Leaguepedia API.
 
 ## Install
 
@@ -11,18 +12,16 @@ npm i poro
 ## Usage
 
 ```javascript
-const Poro = require('poro')
-
-const poro = new Poro()
+const { leaguepedia, riot } = require('poro')
 
 // It is recommended to use await in an async function.
-const matchSchedule = await poro.fetchMatchSchedule({
+const matchSchedule = await leaguepedia.fetchMatchSchedule({
   where: [2020, 'LCS', 'Summer']
 })
 console.log(matchSchedule)
 
 // You can also use callback instead.
-poro.fetchMatchSchedule(, , (err, data) => {
+leaguepedia.fetchMatchSchedule(, , (err, data) => {
   console.log(data)
 })
 ```
@@ -67,13 +66,11 @@ parameter: {
 ## Example
 
 ```javascript
-const matchSchedule = await poro.fetchMatchSchedule(
-  {
-    where: `_pageName LIKE "%2020%" AND Team1 = "G2" OR MatchDay > 10`,
-    groupBy: ['Team1', 'Team2'],
-    orderBy: [{ field: 'DateTime_UTC', type: 'DESC' }, '_pageName'],
-    limit: 100,
-    offset: 50,
-  }
-)
+const matchSchedule = await leaguepedia.fetchMatchSchedule({
+  where: `_pageName LIKE "%2020%" AND Team1 = "G2" OR MatchDay > 10`,
+  groupBy: ['Team1', 'Team2'],
+  orderBy: [{ field: 'DateTime_UTC', type: 'DESC' }, '_pageName'],
+  limit: 100,
+  offset: 50,
+})
 ```
