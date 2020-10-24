@@ -1,5 +1,4 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'axios'.
-const axios = require('../axios')
+import axios from '../axios'
 
 function generateGet(baseURL: any) {
   return async function (path: any) {
@@ -22,15 +21,10 @@ function generatePut(baseURL: any) {
   }
 }
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'generateRe... Remove this comment to see the full error message
-function generateRequestMethods(baseURL: any) {
+export function generateRequestMethods(baseURL: any) {
   return {
     get: generateGet(baseURL),
     post: generatePost(baseURL),
     put: generatePut(baseURL),
   }
-}
-
-module.exports = {
-  generateRequestMethods,
 }

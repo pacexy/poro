@@ -1,12 +1,10 @@
 /*! THIS FILE IS AUTO-GENERATED */
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'axios'.
-const axios = require('./axios')
-const { generateURL } = require('./generate_url')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'getType'.
-const { getType } = require('./util')
+import axios from './axios'
+import { generateURL } from './generate_url'
+import { getType } from './util'
 
-const leaguepedia = {
+export default {
   async _fetch(table: any, parameter: any, callback: any) {
     const shouldUseCallback = getType(callback) === 'Function'
 
@@ -286,5 +284,3 @@ const leaguepedia = {
     return this._fetch('UserPredictions', parameter, callback)
   },
 }
-
-module.exports = leaguepedia

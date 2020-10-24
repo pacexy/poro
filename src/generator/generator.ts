@@ -1,13 +1,18 @@
-const fs = require('fs')
-const path = require('path')
-const njk = require('nunjucks')
-const prettier = require('prettier')
+import fs from 'fs'
+import path from 'path'
+import njk = require('nunjucks')
+import prettier = require('prettier')
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PascalCase... Remove this comment to see the full error message
-const { PascalCase } = require('./filters')
+import { PascalCase } from './filters'
 
-const tables = require('../leaguepedia/tables')
-const prettierrc = require('../../.prettierrc')
+import tables from '../leaguepedia/tables'
+
+const prettierrc = {
+  singleQuote: true,
+  semi: false,
+  htmlWhitespaceSensitivity: 'ignore' as const,
+  trailingComma: 'all' as const,
+}
 
 const srcPath = path.join(__dirname, '../../src')
 const TEMPLATES_DIR = path.join(srcPath, 'generator/templates')

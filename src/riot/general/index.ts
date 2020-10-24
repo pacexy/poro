@@ -1,16 +1,13 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'generateRe... Remove this comment to see the full error message
-const { generateRequestMethods } = require('../utils/request')
-const { GENERAL_BASE_URL } = require('./config')
+import { generateRequestMethods } from '../utils/request'
+import { GENERAL_BASE_URL } from './config'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'r'.
 const r = generateRequestMethods(GENERAL_BASE_URL)
 
 /**
  * When looking up specific seasons, queues, maps and modes it is important
  * to use the correct ids.
  */
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'General'.
-const General = {
+export default {
   /**
    * Season ids are used in match history to indicate which season a match
    * was played. A full list of season ids can be found in the file below.
@@ -46,5 +43,3 @@ const General = {
     return r.get('/docs/lol/gameTypes.json')
   },
 }
-
-module.exports = General

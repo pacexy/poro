@@ -1,8 +1,6 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'generateRe... Remove this comment to see the full error message
-const { generateRequestMethods } = require('../utils/request')
-const { DDRAGON_BASE_URL } = require('./config')
+import { generateRequestMethods } from '../utils/request'
+import { DDRAGON_BASE_URL } from './config'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'r'.
 const r = generateRequestMethods(DDRAGON_BASE_URL)
 
 /**
@@ -16,8 +14,7 @@ const r = generateRequestMethods(DDRAGON_BASE_URL)
  * of Legends patch is a manual process, so it is not always updated immediately
  * after a patch.
  */
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'DDragon'.
-const DDragon = {
+export default {
   /**
    * You can find all valid Data Dragon versions in the versions file.
    * Typically there's only a single build of Data Dragon for a given patch,
@@ -86,5 +83,3 @@ const DDragon = {
     return r.get(`/cdn/${version}/data/${language}/runesReforged.json`)
   },
 }
-
-module.exports = DDragon

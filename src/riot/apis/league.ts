@@ -1,18 +1,14 @@
 // v4
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'generateRe... Remove this comment to see the full error message
-const { generateRequestMethods } = require('../utils/request')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PLATFORM_B... Remove this comment to see the full error message
-const { PLATFORM_BASE_URL, LEAGUE } = require('./config')
+import { generateRequestMethods } from '../utils/request'
+import { PLATFORM_BASE_URL, LEAGUE } from './config'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'r'.
 const r = generateRequestMethods(PLATFORM_BASE_URL + LEAGUE)
 
 /**
  * LEAGUE-V4
  */
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'League'.
-const League = {
+export default {
   /**
    * Get the challenger league for given queue
    */
@@ -50,5 +46,3 @@ const League = {
     return r.get(`/masterleagues/by-queue/${queue}`)
   },
 }
-
-module.exports = League

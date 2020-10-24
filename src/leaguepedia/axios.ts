@@ -1,8 +1,6 @@
-const { LEAGUEPEDIA_BASE_URL } = require('./config')
+import axios from 'axios'
+import { LEAGUEPEDIA_BASE_URL } from './config'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'axios'.
-const axios = require('axios').create({
+export default axios.create({
   baseURL: LEAGUEPEDIA_BASE_URL,
 })
-
-module.exports = axios

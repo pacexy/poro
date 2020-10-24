@@ -111,3 +111,5 @@ test/
 
 # vscode
 .vscode/
+
+build

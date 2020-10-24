@@ -1,11 +1,8 @@
 // v4
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'generateRe... Remove this comment to see the full error message
-const { generateRequestMethods } = require('../utils/request')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PLATFORM_B... Remove this comment to see the full error message
-const { PLATFORM_BASE_URL, TOURNAMENT } = require('./config')
+import { generateRequestMethods } from '../utils/request'
+import { PLATFORM_BASE_URL, TOURNAMENT } from './config'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'r'.
 const r = generateRequestMethods(PLATFORM_BASE_URL + TOURNAMENT)
 
 /**
@@ -16,8 +13,7 @@ const r = generateRequestMethods(PLATFORM_BASE_URL + TOURNAMENT)
  * API access should use the stub to mock their implementation before
  * applying for a production key.
  */
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Tournament... Remove this comment to see the full error message
-const Tournament = {
+export default {
   /**
    * Create a mock tournament code for the given tournament
    */
@@ -106,5 +102,3 @@ const Tournament = {
     })
   },
 }
-
-module.exports = Tournament

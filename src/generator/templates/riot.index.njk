@@ -1,16 +1,16 @@
 /*! THIS FILE IS AUTO-GENERATED */
 
-const axios = require('./axios')
+import axios from './axios'
 
 // General
-  const General = require('./general/general.js')
+  import General from './general'
 
 // Data Dragon
-  const DDragon = require('./ddragon/ddragon.js')
+  import DDragon from './ddragon'
 
 // APIs
 {% for api in apis %}
-  const {{ api|PascalCase }} = require('./apis/{{ api }}')
+  import {{ api|PascalCase }} from './apis/{{ api }}'
 {% endfor %}
 
 const riot = {

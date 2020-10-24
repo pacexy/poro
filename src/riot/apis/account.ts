@@ -1,10 +1,8 @@
 // v1
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'generateRe... Remove this comment to see the full error message
-const { generateRequestMethods } = require('../utils/request')
-const { REGION_BASE_URL, ACCOUNT } = require('./config')
+import { generateRequestMethods } from '../utils/request'
+import { REGION_BASE_URL, ACCOUNT } from './config'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'r'.
 const r = generateRequestMethods(REGION_BASE_URL + ACCOUNT)
 
 /**
@@ -14,8 +12,7 @@ const r = generateRequestMethods(REGION_BASE_URL + ACCOUNT)
  * and europe. You can query for any account in any region.
  * We recommend using the nearest cluster.
  */
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Account'.
-const Account = {
+export default {
   /**
    * Get account by puuid
    */
@@ -35,5 +32,3 @@ const Account = {
     return r.get(`/active-shards/by-game/${game}/by-puuid/${puuid}`)
   },
 }
-
-module.exports = Account

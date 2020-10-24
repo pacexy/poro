@@ -1,11 +1,8 @@
 /*! THIS FILE IS AUTO-GENERATED */
+import riot from './riot'
+import leaguepedia from './leaguepedia'
 
-;(function () {
-  const riot = require('./riot')
-  const leaguepedia = require('./leaguepedia')
-
-  module.exports = {
-    riot,
-    leaguepedia,
-  }
-})()
+export default {
+  riot,
+  leaguepedia,
+}

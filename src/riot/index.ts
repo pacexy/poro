@@ -1,45 +1,29 @@
 /*! THIS FILE IS AUTO-GENERATED */
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'axios'.
-const axios = require('./axios')
+import axios from './axios'
 
 // General
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'General'.
-const General = require('./general/general')
+import General from './general'
 
 // Data Dragon
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'DDragon'.
-const DDragon = require('./ddragon/ddragon')
+import DDragon from './ddragon'
 
 // APIs
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Account'.
-const Account = require('./apis/account')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Champion'.
-const Champion = require('./apis/champion')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'ChampionMa... Remove this comment to see the full error message
-const ChampionMastery = require('./apis/champion_mastery')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Clash'.
-const Clash = require('./apis/clash')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'League'.
-const League = require('./apis/league')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'LeagueExp'... Remove this comment to see the full error message
-const LeagueExp = require('./apis/league_exp')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'LolStatus'... Remove this comment to see the full error message
-const LolStatus = require('./apis/lol_status')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Match'.
-const Match = require('./apis/match')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Spectator'... Remove this comment to see the full error message
-const Spectator = require('./apis/spectator')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Summoner'.
-const Summoner = require('./apis/summoner')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'ThirdParty... Remove this comment to see the full error message
-const ThirdPartyCode = require('./apis/third_party_code')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Tournament... Remove this comment to see the full error message
-const Tournament = require('./apis/tournament')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Tournament... Remove this comment to see the full error message
-const TournamentStub = require('./apis/tournament_stub')
+import Account from './apis/account'
+import Champion from './apis/champion'
+import ChampionMastery from './apis/champion_mastery'
+import Clash from './apis/clash'
+import League from './apis/league'
+import LeagueExp from './apis/league_exp'
+import LolStatus from './apis/lol_status'
+import Match from './apis/match'
+import Spectator from './apis/spectator'
+import Summoner from './apis/summoner'
+import ThirdPartyCode from './apis/third_party_code'
+import Tournament from './apis/tournament'
+import TournamentStub from './apis/tournament_stub'
 
-const riot = {
+export default {
   setAuth(auth: any) {
     axios.defaults.headers.common['X-Riot-Token'] = auth
   },
@@ -67,5 +51,3 @@ const riot = {
     TournamentStub,
   },
 }
-
-module.exports = riot

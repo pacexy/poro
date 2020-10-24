@@ -2,11 +2,10 @@
 	"name": "poro",
 	"version": "0.4.1",
 	"description": "Integrate official Riot's League of Legends API with Leaguepedia API.",
-	"main": "src/index.js",
+	"main": "build/src/index.js",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
-		"format": "prettier --write src/**/*.{js}",
-		"generate": "node src/generator/generator.js",
+		"format": "prettier --write src/**/*.ts",
+		"generate": "ts-node src/generator/generator.ts",
 		"build": "tsc",
 		"prepare": "npm run build"
 	},
@@ -16,7 +15,7 @@
 		}
 	},
 	"lint-staged": {
-		"src/**/*.{js}": [
+		"src/**/*.ts": [
 			"prettier --write",
 			"eslint --fix"
 		]
@@ -44,12 +43,18 @@
 		"lodash": "^4.17.20"
 	},
 	"devDependencies": {
+		"@types/cheerio": "^0.22.22",
+		"@types/lodash": "^4.14.162",
 		"@types/node": "^14.11.8",
+		"@types/nunjucks": "^3.1.3",
+		"@types/prettier": "^2.1.5",
 		"hitoka": "^0.3.0",
 		"husky": "^4.2.5",
 		"lint-staged": "^10.2.11",
 		"nunjucks": "^3.2.2",
+		"prettier": "^2.1.2",
 		"ts-migrate": "^0.1.7",
+		"ts-node": "^9.0.0",
 		"typescript": "^4.0.3"
 	}
 }
