@@ -4,7 +4,7 @@ import axios from './axios'
 import { generateURL } from './generate_url'
 import { getType } from './util'
 
-export default {
+export const leaguepedia = {
   async _fetch(table: any, parameter: any, callback: any) {
     const shouldUseCallback = getType(callback) === 'Function'
 

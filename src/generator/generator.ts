@@ -31,20 +31,6 @@ function render(templatePath: any, data: any, outputPath: any) {
   fs.writeFileSync(outputPath, output)
 }
 
-function renderRootIndex() {
-  const rootIndexPath = path.join(srcPath, 'index.js')
-
-  const venders = []
-  const files = fs.readdirSync(srcPath)
-  for (const file of files) {
-    const filePath = path.join(srcPath, file)
-    if (fs.statSync(filePath).isDirectory() && file !== 'generator') {
-      venders.push(file)
-    }
-  }
-  render('index.njk', { venders }, rootIndexPath)
-}
-
 function ignoreConfiguration(files: any) {
   return files.filter((file: any) => file !== 'config.js')
 }
@@ -69,7 +55,6 @@ function renderLeaguePediaIndex() {
 }
 
 function main() {
-  renderRootIndex()
   renderRiotIndex()
   renderLeaguePediaIndex()
 }

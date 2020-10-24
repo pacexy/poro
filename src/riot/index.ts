@@ -23,7 +23,7 @@ import ThirdPartyCode from './apis/third_party_code'
 import Tournament from './apis/tournament'
 import TournamentStub from './apis/tournament_stub'
 
-export default {
+export const riot = {
   setAuth(auth: any) {
     axios.defaults.headers.common['X-Riot-Token'] = auth
   },
