@@ -27,11 +27,11 @@ export const riot = {
   setAuth(auth: any) {
     axios.defaults.headers.common['X-Riot-Token'] = auth
   },
-  setAxiosRequestInterceptor(fulfilled: any, rejected: any) {
-    axios.interceptors.request.use(fulfilled, rejected)
+  setAxiosRequestInterceptor(onFulfilled: any, onRejected: any) {
+    axios.interceptors.request.use(onFulfilled, onRejected)
   },
-  setAxiosResponseInterceptor(fulfilled: any, rejected: any) {
-    axios.interceptors.response.use(fulfilled, rejected)
+  setAxiosResponseInterceptor(onFulfilled: any, onRejected: any) {
+    axios.interceptors.response.use(onFulfilled, onRejected)
   },
   General,
   DDragon,

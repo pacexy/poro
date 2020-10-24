@@ -4,8 +4,8 @@ import axios from './axios'
 import { generateURL } from './generate_url'
 import { getType } from './util'
 
-const leaguepedia = {
-  async _fetch(table, parameter, callback) {
+export const leaguepedia = {
+  async _fetch(table: any, parameter?: any, callback?: any) {
     const shouldUseCallback = getType(callback) === 'Function'
 
     const url = await generateURL(table, parameter)
@@ -16,20 +16,18 @@ const leaguepedia = {
     return res.data
   },
 
-  setAxiosRequestInterceptor(fulfilled, rejected) {
-    axios.interceptors.request.use(fulfilled, rejected)
+  setAxiosRequestInterceptor(onFulfilled: any, onRejected: any) {
+    axios.interceptors.request.use(onFulfilled, onRejected)
   },
 
-  setAxiosResponseInterceptor(fulfilled, rejected) {
-    axios.interceptors.response.use(fulfilled, rejected)
+  setAxiosResponseInterceptor(onFulfilled: any, onRejected: any) {
+    axios.interceptors.response.use(onFulfilled, onRejected)
   },
 
   {% for table in tables %}
-    fetch{{ table }}(parameter, callback) {
+    fetch{{ table }}(parameter?: any, callback?: any) {
       return this._fetch('{{ table }}', parameter, callback)
     },
 
   {% endfor %}
 }
-
-module.exports = leaguepedia

@@ -13,15 +13,15 @@ import axios from './axios'
   import {{ api|PascalCase }} from './apis/{{ api }}'
 {% endfor %}
 
-const riot = {
-  setAuth(auth) {
+export const riot = {
+  setAuth(auth: any) {
     axios.defaults.headers.common['X-Riot-Token'] = auth
   },
-  setAxiosRequestInterceptor(fulfilled, rejected) {
-    axios.interceptors.request.use(fulfilled, rejected)
+  setAxiosRequestInterceptor(onFulfilled: any, onRejected: any) {
+    axios.interceptors.request.use(onFulfilled, onRejected)
   },
-  setAxiosResponseInterceptor(fulfilled, rejected) {
-    axios.interceptors.response.use(fulfilled, rejected)
+  setAxiosResponseInterceptor(onFulfilled: any, onRejected: any) {
+    axios.interceptors.response.use(onFulfilled, onRejected)
   },
   General,
   DDragon,
@@ -31,5 +31,3 @@ const riot = {
     {% endfor %}
   }
 }
-
-module.exports = riot
