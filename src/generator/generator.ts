@@ -32,24 +32,24 @@ function render(templatePath: any, data: any, outputPath: any) {
 }
 
 function ignoreConfiguration(files: any) {
-  return files.filter((file: any) => file !== 'config.js')
+  return files.filter((file: any) => file !== 'config.ts')
 }
 
 function renderRiotIndex() {
   const riotApisPath = path.join(RIOT_DIR, 'apis')
-  const riotIndexPath = path.join(RIOT_DIR, 'index.js')
+  const riotIndexPath = path.join(RIOT_DIR, 'index.ts')
 
   const riotApis = []
   const apiFiles = ignoreConfiguration(fs.readdirSync(riotApisPath))
   for (const file of apiFiles) {
-    const basename = path.basename(file, '.js')
+    const basename = path.basename(file, '.ts')
     riotApis.push(basename)
   }
   render('riot.index.njk', { apis: riotApis }, riotIndexPath)
 }
 
 function renderLeaguePediaIndex() {
-  const leaguepediaIndexPath = path.join(LEAGUEPEDIA_DIR, 'index.js')
+  const leaguepediaIndexPath = path.join(LEAGUEPEDIA_DIR, 'index.ts')
 
   render('leaguepedia.index.njk', { tables }, leaguepediaIndexPath)
 }

@@ -1,6 +1,6 @@
 {
 	"name": "poro",
-	"version": "0.5.2",
+	"version": "0.5.3",
 	"description": "Integrate official Riot's League of Legends API with Leaguepedia API.",
 	"main": "build/src/index.js",
 	"scripts": {
@@ -9,6 +9,10 @@
 		"build": "tsc",
 		"prepare": "npm run build"
 	},
+	"files": [
+    "build/src",
+    "!build/src/**/*.map"
+  ],
 	"husky": {
 		"hooks": {
 			"pre-commit": "lint-staged"
