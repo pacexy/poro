@@ -1,6 +1,6 @@
 # poro
 
-# **The Document Will Be Rewrited!**
+# **I will continue to develop this repo next month:)**
 > Integrate official Riot's League of Legends API with Leaguepedia API.
 
 ## Install
