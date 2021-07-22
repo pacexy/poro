@@ -5,8 +5,6 @@ import prettier = require('prettier')
 
 import { PascalCase } from './filters'
 
-import tables from '../leaguepedia/tables'
-
 const prettierrc = {
   singleQuote: true,
   semi: false,
@@ -17,7 +15,6 @@ const prettierrc = {
 const srcPath = path.join(__dirname, '../../src')
 const TEMPLATES_DIR = path.join(srcPath, 'generator/templates')
 const RIOT_DIR = path.join(srcPath, 'riot')
-const LEAGUEPEDIA_DIR = path.join(srcPath, 'leaguepedia')
 
 const env = njk.configure(TEMPLATES_DIR, { trimBlocks: true })
 env.addFilter('PascalCase', PascalCase)
@@ -48,15 +45,8 @@ function renderRiotIndex() {
   render('riot.index.njk', { apis: riotApis }, riotIndexPath)
 }
 
-function renderLeaguePediaIndex() {
-  const leaguepediaIndexPath = path.join(LEAGUEPEDIA_DIR, 'index.ts')
-
-  render('leaguepedia.index.njk', { tables }, leaguepediaIndexPath)
-}
-
 function main() {
   renderRiotIndex()
-  renderLeaguePediaIndex()
 }
 
 if (require.main === module) {
