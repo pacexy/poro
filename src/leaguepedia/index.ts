@@ -1,12 +1,12 @@
 import axios from './axios'
 import { generateURL } from './generate_url'
-import { Parameter, Table } from './types'
+import { Parameter } from './types'
 
 export const leaguepedia = {
   axiosInstance: axios,
 
-  async fetch(table: Table, parameter?: Parameter) {
-    const url = await generateURL(table, parameter)
+  async fetch(parameter: Parameter) {
+    const url = await generateURL(parameter)
     const res = await axios.get(url)
     return res.data
   },

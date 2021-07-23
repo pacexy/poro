@@ -1,10 +1,21 @@
+type FieldName = string
+export type Field = `${Table}.${FieldName}`
+
+export type JoinOn = `${Field}=${Field}`
+
+export interface OrderBy {
+  field: Field
+  desc?: boolean
+}
+
 export interface Parameter {
-  fields?: string
+  tables: Table[]
+  fields?: Field[]
   where?: string
-  joinOn?: string
-  groupBy?: string
+  joinOn?: JoinOn[]
+  groupBy?: Field[]
   having?: string
-  orderBy?: string
+  orderBy?: OrderBy[]
   limit?: number
   offset?: number
   format?: string

@@ -14,11 +14,11 @@ npm i poro
 import { leaguepedia, riot } from 'poro'
 
 const matchSchedule = await leaguepedia.fetch('MatchSchedule', {
-  where: `_pageName LIKE "%2020%" AND Team1 = "G2" OR MatchDay > 10`,
-  groupBy: 'Team1, Team2',
-  orderBy: '_pageName DESC, Winner',
-  limit: 100,
-  offset: 50,
+  where: `MatchSchedule._pageName LIKE "%2020%" AND MatchSchedule.Team1 = "G2" OR MatchSchedule.MatchDay > 10`,
+  groupBy: ['MatchSchedule.Team1'],
+  orderBy: [
+    { field: 'MatchSchedule._pageName', desc: true },
+  ],
 })
 ```
 
@@ -31,16 +31,24 @@ If you want to see all fields of a table, go to
 [Cargo tables](https://lol.fandom.com/wiki/Special:CargoTables).
 
 ```typescript
+type JoinOn = `${Field}=${Field}`
+
+interface OrderBy {
+  field: Field
+  desc?: boolean
+}
+
 interface Parameter {
-  fields?: string // defaults to all
+  tables: Table[]
+  fields?: Field[]    // defaults to all
   where?: string
-  joinOn?: string
-  groupBy?: string
+  joinOn?: JoinOn[]
+  groupBy?: Field[]
   having?: string
-  orderBy?: string
-  limit?: number // defaults to Number.MAX_SAFE_INTEGER
-  offset?: number // defaults to 0
-  format?: string // defaults to 'json'
+  orderBy?: OrderBy[]
+  limit?: number      // defaults to Number.MAX_SAFE_INTEGER
+  offset?: number     // defaults to 0
+  format?: string     // defaults to 'json'
 }
 ```
 
