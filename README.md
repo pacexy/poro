@@ -31,7 +31,10 @@ If you want to see all fields of a table, go to
 [Cargo tables](https://lol.fandom.com/wiki/Special:CargoTables).
 
 ```typescript
-type JoinOn = `${Field}=${Field}`
+interface JoinOn {
+  left: Field
+  right: Field
+}
 
 interface OrderBy {
   field: Field

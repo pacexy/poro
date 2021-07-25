@@ -1,19 +1,5 @@
 import { URLSearchParams } from 'url'
-import axios from './axios'
-import { Field, Parameter, Table } from './types'
-
-// TODO: interceptor
-function fetchFields(table: Table) {
-  return axios
-    .get<{ cargoqueryautocomplete: Field[] }>(
-      `/api.php?action=cargoqueryautocomplete&format=json&tables=${table}`,
-    )
-    .then(({ data }) => data.cargoqueryautocomplete)
-    .catch((err) => {
-      console.log(table, err)
-      throw err
-    })
-}
+import { Field, fieldMap, Parameter, Table } from './types'
 
 function removeUndefinedProperty(obj: Record<string, any>) {
   Object.keys(obj).forEach((key) => {
@@ -25,7 +11,7 @@ function removeUndefinedProperty(obj: Record<string, any>) {
   return obj
 }
 
-export async function generateURL({
+export async function generateURL<T extends Table, F extends Field<T>>({
   tables,
   fields,
   where,
@@ -36,11 +22,11 @@ export async function generateURL({
   limit = Number.MAX_SAFE_INTEGER,
   offset = 0,
   format = 'json',
-}: Parameter) {
+}: Parameter<T, F>) {
   if (!fields) {
     fields = []
     for (const table of tables) {
-      fields.concat(await fetchFields(table))
+      fields.concat(fieldMap[table])
     }
   }
 

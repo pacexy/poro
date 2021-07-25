@@ -4,5 +4,5 @@
     "rootDir": ".",
     "outDir": "build"
   },
-  "include": ["src/**/*.ts", "scripts/**/*.ts", "test/**/*.ts"]
+  "include": ["src/**/*.ts", "bin/**/*.ts", "test/**/*.ts"]
 }

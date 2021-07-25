@@ -3,6 +3,7 @@
 	"version": "0.5.3",
 	"description": "Integrate official Riot's League of Legends API with Leaguepedia API.",
 	"main": "build/src/index.js",
+	"bin": "build/bin/poro.js",
 	"scripts": {
 		"format": "prettier --write src/**/*.ts",
 		"generate": "ts-node src/generator/generator.ts",
@@ -43,7 +44,8 @@
 	},
 	"dependencies": {
 		"axios": "^0.21.1",
-		"lodash": "^4.17.21"
+		"lodash": "^4.17.21",
+		"ts-morph": "^11.0.3"
 	},
 	"devDependencies": {
 		"@types/cheerio": "^0.22.30",

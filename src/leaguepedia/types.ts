@@ -1,97 +1,41 @@
-type FieldName = string
-export type Field = `${Table}.${FieldName}`
+// THIS WILL BE AUTO-GENERATED.
+export type Table = string
 
-export type JoinOn = `${Field}=${Field}`
+// THIS WILL BE AUTO-GENERATED.
+interface FieldMap {
+  [key: string]: string
+}
 
-export interface OrderBy {
-  field: Field
+// THIS WILL BE AUTO-GENERATED.
+export const fieldMap: {
+  [key: string]: string[]
+} = {}
+
+export type Field<T extends Table> = FieldMap[T]
+
+export interface JoinOn<T extends Table, LeftField extends Field<T>> {
+  // use type argument inference
+  left: LeftField
+  // infer left table with template literal type
+  right: LeftField extends `${infer LeftTable}.${string}`
+    ? Field<Exclude<T, LeftTable>>
+    : never
+}
+
+export interface OrderBy<T extends Table> {
+  field: Field<T>
   desc?: boolean
 }
 
-export interface Parameter {
-  tables: Table[]
-  fields?: Field[]
+export interface Parameter<T extends Table, F extends Field<T>> {
+  tables: T[]
+  fields?: Field<T>[]
   where?: string
-  joinOn?: JoinOn[]
-  groupBy?: Field[]
+  joinOn?: JoinOn<T, F>[]
+  groupBy?: Field<T>[]
   having?: string
-  orderBy?: OrderBy[]
+  orderBy?: OrderBy<T>[]
   limit?: number
   offset?: number
   format?: string
 }
-
-export type Table =
-  | 'Alphabets'
-  | 'BroadcastMusicTrackTypes'
-  | 'BroadcastMusicTracks'
-  | 'BroadcastMusicUsages'
-  | 'CargoAttachments'
-  | 'ChampionFlashcards'
-  | 'Champions'
-  | 'ChromaSets'
-  | 'Chromas'
-  | 'Contracts'
-  | 'CurrentLeagues'
-  | 'Disambiguations'
-  | 'Entities'
-  | 'ExternalContent'
-  | 'GCDArchive'
-  | 'Hooks'
-  | 'IgnorePagedata'
-  | 'IndividualAchievements'
-  | 'Items'
-  | 'LeagueGroups'
-  | 'Leagues'
-  | 'ListplayerCurrent'
-  | 'LowPriorityRedirects'
-  | 'MatchSchedule'
-  | 'MatchScheduleGame'
-  | 'NASGLadder2018'
-  | 'NASGLadder7Cycles'
-  | 'NTLGlossary'
-  | 'NewsItems'
-  | 'Organizations'
-  | 'ParticipantsArgs'
-  | 'PatchNotes'
-  | 'Pentakills'
-  | 'PicksAndBansS7'
-  | 'PlayerImages'
-  | 'PlayerLeagueHistory'
-  | 'PlayerPronunciationFiles'
-  | 'PlayerRedirects'
-  | 'PlayerRenames'
-  | 'Players'
-  | 'RegionStatuses'
-  | 'Regions'
-  | 'ResidencyChanges'
-  | 'Retirements'
-  | 'RosterChangePortalDates'
-  | 'RosterChangePortalPages'
-  | 'RosterChanges'
-  | 'RosterRumors'
-  | 'ScoreboardGames'
-  | 'ScoreboardPlayers'
-  | 'ScoreboardTeams'
-  | 'SisterTeams'
-  | 'Skins'
-  | 'SkinsUsed'
-  | 'Standings'
-  | 'StandingsArgs'
-  | 'TeamRedirects'
-  | 'TeamRenames'
-  | 'TeamRosterPhotos'
-  | 'Teams'
-  | 'TeamsWithAutoRosters'
-  | 'Tenures'
-  | 'TenuresUnbroken'
-  | 'TournamentGroups'
-  | 'TournamentPlayers'
-  | 'TournamentResults'
-  | 'TournamentResults1v1'
-  | 'TournamentRosters'
-  | 'TournamentTabs'
-  | 'Tournaments'
-  | 'UserPredictionGroups'
-  | 'UserPredictions'
-  | '_pageData'
