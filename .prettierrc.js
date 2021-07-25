@@ -1,3 +1,6 @@
 module.exports = {
-  ...require('hitoka/.prettierrc.js'),
+  singleQuote: true,
+  semi: false,
+  htmlWhitespaceSensitivity: 'ignore',
+  trailingComma: 'all',
 }

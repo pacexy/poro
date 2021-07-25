@@ -112,4 +112,4 @@ test/
 # vscode
 .vscode/
 
-build
+out/
