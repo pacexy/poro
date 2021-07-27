@@ -8,12 +8,12 @@
     "format": "prettier --write src/**/*.ts",
     "generate": "ts-node src/generator/generator.ts",
     "build": "tsc",
-    "prepare": "npm run build",
+    "test": "jest",
     "lint": "eslint src/**/*.{ts,tsx}  --fix"
   },
   "files": [
-    "/out/src",
-    "!/out/src/**/*.map"
+    "/out/bin",
+    "/out/src"
   ],
   "keywords": [
     "api",

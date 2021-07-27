@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
+import fs from 'fs'
+import path from 'path'
+
 import * as cheerio from 'cheerio'
 import { isString } from 'lodash'
-import ts from 'typescript'
-import path from 'path'
-import fs from 'fs'
 import { Project } from 'ts-morph'
+import ts from 'typescript'
 
 import axios from '../src/leaguepedia/axios'
 
@@ -25,7 +26,7 @@ const jsSourceFile = project.createSourceFile(
 )
 
 let tableUnionTypes: ts.LiteralTypeNode[]
-const fieldMapInterfaceMembers: ts.PropertySignature[] = []
+const fieldMapTypeMembers: ts.PropertySignature[] = []
 const fieldMapObjectProperties: ts.PropertyAssignment[] = []
 
 function generateTables() {
@@ -59,15 +60,18 @@ function generateFields(table: string) {
     )
     .then(({ data }) => {
       const fields = data.cargoqueryautocomplete
-      fieldMapInterfaceMembers.push(
+      fieldMapTypeMembers.push(
         ts.factory.createPropertySignature(
-          undefined,
+          [ts.factory.createModifier(ts.SyntaxKind.ReadonlyKeyword)],
           ts.factory.createIdentifier(table),
           undefined,
-          ts.factory.createUnionTypeNode(
-            fields.map((field) =>
-              ts.factory.createLiteralTypeNode(
-                ts.factory.createStringLiteral(field),
+          ts.factory.createTypeOperatorNode(
+            ts.SyntaxKind.ReadonlyKeyword,
+            ts.factory.createTupleTypeNode(
+              fields.map((field) =>
+                ts.factory.createLiteralTypeNode(
+                  ts.factory.createStringLiteral(field),
+                ),
               ),
             ),
           ),
@@ -86,12 +90,14 @@ function generateFields(table: string) {
 }
 
 async function generate() {
+  // eslint-disable-next-line no-console
   console.log('Generating leaguepedia schema...')
 
   const tables = await generateTables()
 
   for (const [i, table] of tables.entries()) {
     await generateFields(table)
+    // eslint-disable-next-line no-console
     console.log(i, table, 'completed.')
   }
 
@@ -101,26 +107,35 @@ async function generate() {
       return ts.factory.updateTypeAliasDeclaration(
         node,
         undefined,
-        undefined,
+        node.modifiers,
         node.name,
         undefined,
         ts.factory.createUnionTypeNode(tableUnionTypes),
       )
     }
 
-    if (
-      ts.isInterfaceDeclaration(node) &&
-      node.name.escapedText === 'FieldMap'
-    ) {
-      return ts.factory.updateInterfaceDeclaration(
-        node,
-        undefined,
-        undefined,
-        node.name,
-        undefined,
-        undefined,
-        fieldMapInterfaceMembers,
-      )
+    if (ts.isVariableStatement(node)) {
+      const [variableDeclarationNode] = node.declarationList.declarations
+      const variableName = variableDeclarationNode.name
+
+      if (
+        ts.isIdentifier(variableName) &&
+        variableName.escapedText === 'fieldMap'
+      ) {
+        return ts.factory.updateVariableStatement(
+          node,
+          node.modifiers,
+          ts.factory.updateVariableDeclarationList(node.declarationList, [
+            ts.factory.updateVariableDeclaration(
+              variableDeclarationNode,
+              variableName,
+              undefined,
+              ts.factory.createTypeLiteralNode(fieldMapTypeMembers),
+              undefined,
+            ),
+          ]),
+        )
+      }
     }
     return node
   })

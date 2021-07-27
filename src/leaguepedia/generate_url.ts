@@ -1,4 +1,5 @@
 import { URLSearchParams } from 'url'
+
 import { Field, fieldMap, Parameter, Table } from './types'
 
 function removeUndefinedProperty(obj: Record<string, any>) {
@@ -11,22 +12,22 @@ function removeUndefinedProperty(obj: Record<string, any>) {
   return obj
 }
 
-export async function generateURL<T extends Table, F extends Field<T>>({
+export async function generateURL<T extends Table, LeftField extends Field<T>>({
   tables,
   fields,
   where,
   joinOn,
   groupBy,
   having,
-  orderBy,
+  orderBy = [{ field: `${tables[0]}._pageName` }],
   limit = Number.MAX_SAFE_INTEGER,
   offset = 0,
   format = 'json',
-}: Parameter<T, F>) {
+}: Parameter<T, LeftField>) {
   if (!fields) {
     fields = []
     for (const table of tables) {
-      fields.concat(fieldMap[table])
+      fields = fields.concat(fieldMap[table])
     }
   }
 
@@ -35,10 +36,10 @@ export async function generateURL<T extends Table, F extends Field<T>>({
       tables,
       fields,
       where,
-      'join on': joinOn,
+      'join on': joinOn?.map((item) => `${item.left}=${item.right}`),
       'group by': groupBy,
       having,
-      'order by': orderBy?.map(
+      'order by': orderBy.map(
         (item) => `${item.field}${item.desc ? ' DESC' : ''}`,
       ),
       limit: limit.toString(),
@@ -47,6 +48,5 @@ export async function generateURL<T extends Table, F extends Field<T>>({
     }),
   )
 
-  const url = '/wiki/Special:CargoExport?' + searchParams.toString()
-  return encodeURIComponent(url)
+  return '/wiki/Special:CargoExport?' + searchParams.toString()
 }
