@@ -23,7 +23,9 @@ export async function generateURL<T extends Table, LeftField extends Field<T>>({
   limit = Number.MAX_SAFE_INTEGER,
   offset = 0,
   format = 'json',
-}: Parameter<T, LeftField>) {
+}: // to make assignment work, specify fields to Field<T>
+// cause there is no need to infer what fields exactly is
+Parameter<T, Field<T>, LeftField>) {
   if (!fields) {
     fields = []
     for (const table of tables) {

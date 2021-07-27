@@ -30,9 +30,13 @@ export interface OrderBy<T extends Table> {
   desc?: boolean
 }
 
-export interface Parameter<T extends Table, LeftField extends Field<T>> {
+export interface Parameter<
+  T extends Table,
+  Fields extends Field<T>,
+  LeftField extends Field<T>,
+> {
   tables: T[]
-  fields?: Field<T>[]
+  fields?: Fields[]
   where?: string
   joinOn?: JoinOn<T, LeftField>[]
   groupBy?: Field<T>[]
