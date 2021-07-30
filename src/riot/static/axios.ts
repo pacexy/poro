@@ -5,7 +5,7 @@ export const axios = _axios.create()
 
 export function generateRequestMethods(baseURL: string) {
   return {
-    get<T>(path: string) {
+    get<T = any>(path: string) {
       return axios.get<T>(`${baseURL}${path}`)
     },
   }
