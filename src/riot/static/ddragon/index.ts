@@ -1,6 +1,6 @@
-import { generateRequestMethods } from '../utils/request'
-import { DDRAGON_BASE_URL } from './config'
+import { generateRequestMethods } from '../axios'
 
+const DDRAGON_BASE_URL = 'https://ddragon.leagueoflegends.com'
 const r = generateRequestMethods(DDRAGON_BASE_URL)
 
 /**
@@ -31,7 +31,7 @@ export default {
    * client version in a region. You can find the version each region is using
    * via the realms files.
    */
-  realm$region({ region }: any) {
+  realm(region: string) {
     return r.get(`/realms/${region}.json`)
   },
   /**
@@ -46,20 +46,14 @@ export default {
   /**
    * The `champion.json` data file returns a list of champions with a brief summary.
    */
-  champions$version_language({ version, language }: any) {
+  champions(version: string, language: string) {
     return r.get(`/cdn/${version}/data/${language}/champion.json`)
   },
   /**
    * The individual champion JSON files contain additional data for each champion.
    */
-  champion$version_language_championName({
-    version,
-    language,
-    championName,
-  }: any) {
-    return r.get(
-      `/cdn/${version}/data/${language}/champion/${championName}.json`,
-    )
+  champion(version: string, language: string, championId: string) {
+    return r.get(`/cdn/${version}/data/${language}/champion/${championId}.json`)
   },
   /**
    * Data Dragon also provides the same level of detail for every item in the
@@ -67,19 +61,19 @@ export default {
    * purchase value, sell value, items it builds from, items it builds into,
    * and stats granted from the item.
    */
-  items$version_language({ version, language }: any) {
+  items(version: string, language: string) {
     return r.get(`/cdn/${version}/data/${language}/item.json`)
   },
 
-  summonerSpells$version_language({ version, language }: any) {
+  summonerSpells(version: string, language: string) {
     return r.get(`/cdn/${version}/data/${language}/summoner.json`)
   },
 
-  profileicons$version_language({ version, language }: any) {
+  profileicons(version: string, language: string) {
     return r.get(`/cdn/${version}/data/${language}/profileicon.json`)
   },
 
-  runesReforged$version_language({ version, language }: any) {
+  runesReforged(version: string, language: string) {
     return r.get(`/cdn/${version}/data/${language}/runesReforged.json`)
   },
 }

@@ -1,6 +1,6 @@
-import { generateRequestMethods } from '../utils/request'
-import { GENERAL_BASE_URL } from './config'
+import { generateRequestMethods } from '../axios'
 
+export const GENERAL_BASE_URL = 'https://static.developer.riotgames.com'
 const r = generateRequestMethods(GENERAL_BASE_URL)
 
 /**
