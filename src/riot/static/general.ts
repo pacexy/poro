@@ -1,13 +1,13 @@
-import { generateRequestMethods } from '../axios'
+import { generateRequestMethods } from './axios'
 
-export const GENERAL_BASE_URL = 'https://static.developer.riotgames.com'
+const GENERAL_BASE_URL = 'https://static.developer.riotgames.com'
 const r = generateRequestMethods(GENERAL_BASE_URL)
 
 /**
  * When looking up specific seasons, queues, maps and modes it is important
  * to use the correct ids.
  */
-export default {
+export const general = {
   /**
    * Season ids are used in match history to indicate which season a match
    * was played. A full list of season ids can be found in the file below.

@@ -8,7 +8,7 @@ import { isString } from 'lodash'
 import { Project } from 'ts-morph'
 import ts from 'typescript'
 
-import axios from '../src/leaguepedia/axios'
+import { axiosInstance } from '../src/leaguepedia'
 
 const DIR_PATH = path.join(__dirname, '../src/leaguepedia')
 const DTS_FILE_PATH = path.join(DIR_PATH, 'types.d.ts')
@@ -30,7 +30,7 @@ const fieldMapTypeMembers: ts.PropertySignature[] = []
 const fieldMapObjectProperties: ts.PropertyAssignment[] = []
 
 function generateTables() {
-  return axios.get('/wiki/Special:CargoTables').then(({ data }) => {
+  return axiosInstance.get('/wiki/Special:CargoTables').then(({ data }) => {
     const $ = cheerio.load(data)
 
     const cargoTableList = $('#mw-content-text > ul').children().toArray()
@@ -54,7 +54,7 @@ function generateTables() {
 }
 
 function generateFields(table: string) {
-  return axios
+  return axiosInstance
     .get<{ cargoqueryautocomplete: string[] }>(
       `/api.php?action=cargoqueryautocomplete&format=json&tables=${table}`,
     )

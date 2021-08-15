@@ -1,4 +1,4 @@
-import { generateRequestMethods } from '../axios'
+import { generateRequestMethods } from './axios'
 
 const DDRAGON_BASE_URL = 'https://ddragon.leagueoflegends.com'
 const r = generateRequestMethods(DDRAGON_BASE_URL)
@@ -14,7 +14,7 @@ const r = generateRequestMethods(DDRAGON_BASE_URL)
  * of Legends patch is a manual process, so it is not always updated immediately
  * after a patch.
  */
-export default {
+export const ddragon = {
   /**
    * You can find all valid Data Dragon versions in the versions file.
    * Typically there's only a single build of Data Dragon for a given patch,

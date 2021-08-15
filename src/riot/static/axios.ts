@@ -1,12 +1,12 @@
-import _axios from 'axios'
+import axios from 'axios'
 
 // singleton
-export const axios = _axios.create()
+export const axiosInstance = axios.create()
 
 export function generateRequestMethods(baseURL: string) {
   return {
     get<T = any>(path: string) {
-      return axios.get<T>(`${baseURL}${path}`)
+      return axiosInstance.get<T>(`${baseURL}${path}`)
     },
   }
 }

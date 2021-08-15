@@ -1,17 +1,22 @@
-import axios from './axios'
-import { generateURL } from './generate_url'
+import axios from 'axios'
+
+import { generateUrl } from './generateUrl'
 import { Field, Item, Parameter, Table } from './types'
 
-export const leaguepedia = {
-  axiosInstance: axios,
+const LEAGUEPEDIA_BASE_URL = 'https://lol.fandom.com'
 
-  async fetch<
-    T extends Table,
-    Fields extends Field<T>,
-    LeftField extends Field<T>,
-  >(parameter: Parameter<T, Fields, LeftField>) {
-    const url = await generateURL(parameter)
-    const res = await axios.get<Item<Fields>[]>(url)
-    return res.data
-  },
+export const axiosInstance = axios.create({
+  baseURL: LEAGUEPEDIA_BASE_URL,
+})
+
+export async function cargoQuery<
+  T extends Table,
+  Fields extends Field<T>,
+  LeftField extends Field<T>,
+>(parameter: Parameter<T, Fields, LeftField>) {
+  const url = await generateUrl(parameter)
+  const res = await axiosInstance.get<Item<Fields>[]>(url)
+  return res.data
 }
+
+cargoQuery.axiosInstance = axiosInstance
