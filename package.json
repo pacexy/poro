@@ -2,18 +2,26 @@
   "name": "poro",
   "version": "1.0.2",
   "description": "Leaguepedia API & Riot League of Legends API & CommunityDragon & Data Dragon",
-  "main": "out/src/index.js",
-  "bin": "out/bin/poro.js",
+  "bin": "./dist/bin/poro.js",
+  "main": "./dist/cjs/src/index.js",
+  "module": "./dist/esm/src/index.js",
+  "types": "./dist/esm/src/index.d.ts",
+  "exports": {
+    "require": "./dist/cjs/src/index.js",
+    "import": "./dist/esm/src/index.js"
+  },
+  "sideEffects": false,
   "scripts": {
     "format": "prettier --write src/**/*.ts",
     "generate": "ts-node src/generator/generator.ts",
-    "build": "tsc",
+    "build": "tsc -p tsconfig.esm.json && tsc",
     "test": "jest",
     "lint": "eslint src/**/*.{ts,tsx}  --fix"
   },
   "files": [
-    "/out/bin",
-    "/out/src"
+    "/dist/cjs/bin",
+    "/dist/cjs/src",
+    "/dist/esm/src"
   ],
   "keywords": [
     "api",
@@ -37,7 +45,8 @@
   "dependencies": {
     "axios": "^0.21.1",
     "lodash": "^4.17.21",
-    "ts-morph": "^11.0.3"
+    "ts-morph": "^11.0.3",
+    "tslib": "^2.3.1"
   },
   "devDependencies": {
     "@types/cheerio": "^0.22.30",
