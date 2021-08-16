@@ -1,6 +1,6 @@
-import { generateRequestMethods } from '../axios'
+import { generateRequestMethods } from './axios'
 
-export const CDRAGON_BASE_URL = `https://cdn.communitydragon.org`
+const CDRAGON_BASE_URL = 'https://cdn.communitydragon.org'
 const r = generateRequestMethods(CDRAGON_BASE_URL)
 
 type ChampionId = string
@@ -11,7 +11,7 @@ type HonorId = number | string
 type ProfileIconId = number | string
 type WardId = number | string
 
-export default {
+export const cdragon = {
   champion: {
     squareIconPlaceholder(patch: string) {
       return `/${patch}/champion/generic/square`

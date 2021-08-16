@@ -12,7 +12,7 @@ function removeUndefinedProperty(obj: Record<string, any>) {
   return obj
 }
 
-export async function generateURL<T extends Table, LeftField extends Field<T>>({
+export async function generateUrl<T extends Table, LeftField extends Field<T>>({
   tables,
   fields,
   where,

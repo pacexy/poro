@@ -22,21 +22,21 @@ npm run poro
 ### Leaguepedia
 
 ```ts
-import { leaguepedia } from 'poro'
+import { cargoQuery } from 'poro'
 
 async function doSomething() {
   // specify fields
-  const teams = await leaguepedia.fetch({
+  const teams = await cargoQuery({
     tables: ['Teams'],
     fields: ['Teams.Name', 'Teams.Region'],
   })
   // filter
-  const g2 = await leaguepedia.fetch({
+  const g2 = await cargoQuery({
     tables: ['Teams'],
     where: 'Teams.Name = "G2 Esports"',
   })
   // join on
-  const broadcastMusicUsages = await leaguepedia.fetch({
+  const broadcastMusicUsages = await cargoQuery({
     tables: ['BroadcastMusicUsages', 'BroadcastMusicTracks'],
     joinOn: [
       {
@@ -46,7 +46,7 @@ async function doSomething() {
     ],
   })
   // group
-  const proplayers = await leaguepedia.fetch({
+  const proplayers = await cargoQuery({
     tables: ['Pentakills'],
     groupBy: ['Pentakills.Name'],
     having: 'COUNT(DateDisplay) > 10',
@@ -57,21 +57,21 @@ async function doSomething() {
 ### Riot
 
 ```ts
-import { riot } from 'poro'
+import { general, ddragon, cdragon, Client } from 'poro'
 
 async function doSomething() {
   // General
-  const gameModes = await riot.static.general.gameModes()
+  const gameModes = await general.gameModes()
   // Data Dragon
-  const realm = await riot.static.ddragon.realm('na')
+  const realm = await ddragon.realm('na')
   // Community Dragon
-  const champion = await riot.static.cdragon.champion.championData(
+  const champion = await cdragon.champion.championData(
     '11.15.1',
     'Heimerdinger',
   )
 
   // APIs
-  const client = new riot.Client({
+  const client = new Client({
     auth: 'RGAPI-564972ce-02d6-4931-9020-6cfc540f56bd',
     platform: 'KR',
     region: 'AMERICAS',
@@ -121,7 +121,11 @@ interface Parameter {
 
 ## Axios Instance
 
-Poro use `axios` as request library, you can get the axios instance by `leaguepedia.axiosInstance`, `riot.static.axiosInstance`, `client.axiosInstance`.
+Poro use `axios` as request library, you can get the axios instance by
+
+- `cargoQuery.axiosInstance`
+- `axiosInstance` (for `general`, `cdragon`, `ddragon`)
+- `client.axiosInstance`.
 
 ## Credits
 
