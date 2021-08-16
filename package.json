@@ -19,9 +19,9 @@
     "lint": "eslint src/**/*.{ts,tsx}  --fix"
   },
   "files": [
-    "/dist/cjs/bin",
-    "/dist/cjs/src",
-    "/dist/esm/src"
+    "./dist/cjs/bin/**",
+    "./dist/cjs/src/**",
+    "./dist/esm/src/**"
   ],
   "keywords": [
     "api",
