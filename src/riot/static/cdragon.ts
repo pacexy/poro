@@ -1,6 +1,7 @@
 import { generateRequestMethods } from './axios'
 
-const CDRAGON_BASE_URL = 'https://cdn.communitydragon.org'
+export const CDRAGON_DOMAIN = 'cdn.communitydragon.org'
+const CDRAGON_BASE_URL = `https://${CDRAGON_DOMAIN}`
 const r = generateRequestMethods(CDRAGON_BASE_URL)
 
 type ChampionId = string
@@ -14,104 +15,147 @@ type WardId = number | string
 export const cdragon = {
   champion: {
     squareIconPlaceholder(patch: string) {
-      return `/${patch}/champion/generic/square`
+      return CDRAGON_BASE_URL + `/${patch}/champion/generic/square`
     },
     squareIcon(patch: string, championIDorKey: ChampionIDorKey) {
-      return `/${patch}/champion/${championIDorKey}/square`
+      return CDRAGON_BASE_URL + `/${patch}/champion/${championIDorKey}/square`
     },
     championData(patch: string, championIDorKey: ChampionIDorKey) {
       return r.get(`/${patch}/champion/${championIDorKey}/data`)
     },
     baseSplashArt(patch: string, championIDorKey: ChampionIDorKey) {
-      return `/${patch}/champion/${championIDorKey}/splash-art`
+      return (
+        CDRAGON_BASE_URL + `/${patch}/champion/${championIDorKey}/splash-art`
+      )
     },
     splashArtWithSkin(
       patch: string,
       championIDorKey: ChampionIDorKey,
       skinId: SkinId,
     ) {
-      return `/${patch}/champion/${championIDorKey}/splash-art/skin/${skinId}`
+      return (
+        CDRAGON_BASE_URL +
+        `/${patch}/champion/${championIDorKey}/splash-art/skin/${skinId}`
+      )
     },
     baseCenteredSplashArt(patch: string, championIDorKey: ChampionIDorKey) {
-      return `/${patch}/champion/${championIDorKey}/splash-art/centered`
+      return (
+        CDRAGON_BASE_URL +
+        `/${patch}/champion/${championIDorKey}/splash-art/centered`
+      )
     },
     centeredSplashArtWithSkin(
       patch: string,
       championIDorKey: ChampionIDorKey,
       skinId: SkinId,
     ) {
-      return `/${patch}/champion/${championIDorKey}/splash-art/centered/skin/${skinId}`
+      return (
+        CDRAGON_BASE_URL +
+        `/${patch}/champion/${championIDorKey}/splash-art/centered/skin/${skinId}`
+      )
     },
     baseTile(patch: string, championIDorKey: ChampionIDorKey) {
-      return `/${patch}/champion/${championIDorKey}/tile`
+      return CDRAGON_BASE_URL + `/${patch}/champion/${championIDorKey}/tile`
     },
     tileWithSkin(
       patch: string,
       championIDorKey: ChampionIDorKey,
       skinId: SkinId,
     ) {
-      return `/${patch}/champion/${championIDorKey}/tile/skin/${skinId}`
+      return (
+        CDRAGON_BASE_URL +
+        `/${patch}/champion/${championIDorKey}/tile/skin/${skinId}`
+      )
     },
     basePortrait(patch: string, championIDorKey: ChampionIDorKey) {
-      return `/${patch}/champion/${championIDorKey}/portrait`
+      return CDRAGON_BASE_URL + `/${patch}/champion/${championIDorKey}/portrait`
     },
     portraitWithSkin(
       patch: string,
       championIDorKey: ChampionIDorKey,
       skinId: SkinId,
     ) {
-      return `/${patch}/champion/${championIDorKey}/portrait/skin/${skinId}`
+      return (
+        CDRAGON_BASE_URL +
+        `/${patch}/champion/${championIDorKey}/portrait/skin/${skinId}`
+      )
     },
     passiveIcon(patch: string, championIDorKey: ChampionIDorKey) {
-      return `/${patch}/champion/${championIDorKey}/ability-icon/passive`
+      return (
+        CDRAGON_BASE_URL +
+        `/${patch}/champion/${championIDorKey}/ability-icon/passive`
+      )
     },
     qAbilityIcon(patch: string, championIDorKey: ChampionIDorKey) {
-      return `/${patch}/champion/${championIDorKey}/ability-icon/q`
+      return (
+        CDRAGON_BASE_URL +
+        `/${patch}/champion/${championIDorKey}/ability-icon/q`
+      )
     },
     wAbilityIcon(patch: string, championIDorKey: ChampionIDorKey) {
-      return `/${patch}/champion/${championIDorKey}/ability-icon/w`
+      return (
+        CDRAGON_BASE_URL +
+        `/${patch}/champion/${championIDorKey}/ability-icon/w`
+      )
     },
     eAbilityIcon(patch: string, championIDorKey: ChampionIDorKey) {
-      return `/${patch}/champion/${championIDorKey}/ability-icon/e`
+      return (
+        CDRAGON_BASE_URL +
+        `/${patch}/champion/${championIDorKey}/ability-icon/e`
+      )
     },
     ultimateAbilityIcon(patch: string, championIDorKey: ChampionIDorKey) {
-      return `/${patch}/champion/${championIDorKey}/ability-icon/r`
+      return (
+        CDRAGON_BASE_URL +
+        `/${patch}/champion/${championIDorKey}/ability-icon/r`
+      )
     },
   },
   championSelect: {
     banSound(patch: string, championIDorKey: ChampionIDorKey) {
-      return `/${patch}/champion/${championIDorKey}/champ-select/sounds/ban`
+      return (
+        CDRAGON_BASE_URL +
+        `/${patch}/champion/${championIDorKey}/champ-select/sounds/ban`
+      )
     },
     lockinSound(patch: string, championIDorKey: ChampionIDorKey) {
-      return `/${patch}/champion/${championIDorKey}/champ-select/sounds/choose`
+      return (
+        CDRAGON_BASE_URL +
+        `/${patch}/champion/${championIDorKey}/champ-select/sounds/choose`
+      )
     },
     backgroundSound(patch: string, championIDorKey: ChampionIDorKey) {
-      return `/${patch}/champion/${championIDorKey}/champ-select/sounds/sfx`
+      return (
+        CDRAGON_BASE_URL +
+        `/${patch}/champion/${championIDorKey}/champ-select/sounds/sfx`
+      )
     },
   },
   summoner: {
     honorEmblemPlaceholder(patch: string) {
-      return `/${patch}/honor/emblem/generic`
+      return CDRAGON_BASE_URL + `/${patch}/honor/emblem/generic`
     },
     honorEmblem(patch: string, honorId: HonorId) {
-      return `/${patch}/honor/emblem/${honorId}`
+      return CDRAGON_BASE_URL + `/${patch}/honor/emblem/${honorId}`
     },
     lockedHonorEmblem(patch: string, honorId: HonorId) {
-      return `/${patch}/honor/emblem/${honorId}/locked`
+      return CDRAGON_BASE_URL + `/${patch}/honor/emblem/${honorId}/locked`
     },
     honorEmblemWithCheckpoints(patch: string, honorId: HonorId, level: number) {
-      return `/${patch}/honor/emblem/${honorId}/level/${level}`
+      return (
+        CDRAGON_BASE_URL + `/${patch}/honor/emblem/${honorId}/level/${level}`
+      )
     },
     profileIcon(patch: string, profileIconId: ProfileIconId) {
-      return `/${patch}/profile-icon/${profileIconId}`
+      return CDRAGON_BASE_URL + `/${patch}/profile-icon/${profileIconId}`
     },
   },
   game: {
     wardIcon(patch: string, wardId: WardId) {
-      return `/${patch}/ward/${wardId}`
+      return CDRAGON_BASE_URL + `/${patch}/ward/${wardId}`
     },
     wardShadow(patch: string, wardId: WardId) {
-      return `/${patch}/ward/${wardId}/shadow`
+      return CDRAGON_BASE_URL + `/${patch}/ward/${wardId}/shadow`
     },
   },
 }
