@@ -1,7 +1,4 @@
 export { Client } from './riot/apis'
-export * from './riot/apis/dtos'
-export * from './riot/apis/types'
-export * from './riot/apis/inputs'
 
 export {
   cdragon,
@@ -12,4 +9,6 @@ export { ddragon } from './riot/static/ddragon'
 export { general } from './riot/static/general'
 
 export { cargoQuery } from './leaguepedia'
-export { Table, fieldMap } from './leaguepedia/types'
+export { fieldMap } from './leaguepedia/types'
+
+export * as Riot from './types'

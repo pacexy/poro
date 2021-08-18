@@ -1,4 +1,4 @@
-import { general, ddragon, cdragon, Client, Platform, Region } from '../src'
+import { general, ddragon, cdragon, Client, Riot } from '../src'
 
 describe('static files', () => {
   it('general', () => {
@@ -22,8 +22,8 @@ describe('api client', () => {
   it('league-exp', () => {
     const client = new Client({
       auth: 'RGAPI-564972ce-02d6-4931-9020-6cfc540f56bd',
-      platform: Platform.KR,
-      region: Region.ASIA,
+      platform: Riot.Platform.KR,
+      region: Riot.Region.ASIA,
     })
 
     return client

@@ -57,7 +57,7 @@ async function doSomething() {
 ### Riot
 
 ```ts
-import { general, ddragon, cdragon, Client, Platform, Region } from 'poro'
+import { general, ddragon, cdragon, Client, Riot } from 'poro'
 
 async function doSomething() {
   // General
@@ -70,8 +70,8 @@ async function doSomething() {
   // APIs
   const client = new Client({
     auth: 'RIOT-API-KEY',
-    platform: Platform.KR,
-    region: Region.ASIA,
+    platform: Riot.Platform.KR,
+    region: Riot.Region.ASIA,
   })
   const leagueEntries = await client
     .path('/lol/league-exp/v4/entries/{queue}/{tier}/{division}', {
