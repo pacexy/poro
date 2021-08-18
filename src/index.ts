@@ -3,7 +3,7 @@ export * from './riot/apis/dtos'
 export * from './riot/apis/types'
 export * from './riot/apis/inputs'
 
-export { cdragon } from './riot/static/cdragon'
+export { cdragon, CDRAGON_DOMAIN } from './riot/static/cdragon'
 export { ddragon } from './riot/static/ddragon'
 export { general } from './riot/static/general'
 export { axiosInstance } from './riot/static/axios'
