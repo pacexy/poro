@@ -8,7 +8,7 @@ import { isString } from 'lodash-es'
 import { Project } from 'ts-morph'
 import ts from 'typescript'
 
-import { axiosInstance } from '../src/leaguepedia'
+import { cargoQuery } from '../src'
 
 const DIR_PATH = path.join(__dirname, '../src/leaguepedia')
 const DTS_FILE_PATH = path.join(DIR_PATH, 'types.d.ts')
@@ -25,36 +25,33 @@ const jsSourceFile = project.createSourceFile(
   fs.readFileSync(JS_FILE_PATH).toString(),
 )
 
-let tableUnionTypes: ts.LiteralTypeNode[]
 const fieldMapTypeMembers: ts.PropertySignature[] = []
 const fieldMapObjectProperties: ts.PropertyAssignment[] = []
 
 function generateTables() {
-  return axiosInstance.get('/wiki/Special:CargoTables').then(({ data }) => {
-    const $ = cheerio.load(data)
+  return cargoQuery.axiosInstance
+    .get('/wiki/Special:CargoTables')
+    .then(({ data }) => {
+      const $ = cheerio.load(data)
 
-    const cargoTableList = $('#mw-content-text > ul').children().toArray()
-    const cargoTableNames = cargoTableList
-      .map((tableElem) => {
-        if (tableElem.type === 'tag') {
-          const firstChild = tableElem.firstChild
-          if (firstChild?.type === 'text') {
-            return firstChild.data?.split(' ')[0]
+      const cargoTableList = $('#mw-content-text > ul').children().toArray()
+      const cargoTableNames = cargoTableList
+        .map((tableElem) => {
+          if (tableElem.type === 'tag') {
+            const firstChild = tableElem.firstChild
+            if (firstChild?.type === 'text') {
+              return firstChild.data?.split(' ')[0]
+            }
           }
-        }
-      })
-      .filter(isString)
+        })
+        .filter(isString)
 
-    tableUnionTypes = cargoTableNames.map((name) =>
-      ts.factory.createLiteralTypeNode(ts.factory.createStringLiteral(name)),
-    )
-
-    return cargoTableNames
-  })
+      return cargoTableNames
+    })
 }
 
 function generateFields(table: string) {
-  return axiosInstance
+  return cargoQuery.axiosInstance
     .get<{ cargoqueryautocomplete: string[] }>(
       `/api.php?action=cargoqueryautocomplete&format=json&tables=${table}`,
     )
@@ -103,16 +100,6 @@ async function generate() {
 
   dtsSourceFile.transform((traversal) => {
     const node = traversal.visitChildren()
-    if (ts.isTypeAliasDeclaration(node) && node.name.escapedText === 'Table') {
-      return ts.factory.updateTypeAliasDeclaration(
-        node,
-        undefined,
-        node.modifiers,
-        node.name,
-        undefined,
-        ts.factory.createUnionTypeNode(tableUnionTypes),
-      )
-    }
 
     if (ts.isVariableStatement(node)) {
       const [variableDeclarationNode] = node.declarationList.declarations
