@@ -3,8 +3,9 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   collectCoverage: true,
-  testPathIgnorePatterns: ['out'],
+  testPathIgnorePatterns: ['dist'],
+  // https://github.com/nrwl/nx/issues/812#issuecomment-680970609
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1',
+    '^lodash-es$': 'lodash',
   },
 }

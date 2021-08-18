@@ -1,13 +1,10 @@
 import { snakeCase } from 'lodash-es'
 
-import { generateRequestMethods } from './axios'
-
 export const RAW_CDRAGON_DOMAIN = 'raw.communitydragon.org'
 const RAW_CDRAGON_BASE_URL = `https://${RAW_CDRAGON_DOMAIN}`
 
 export const CDRAGON_DOMAIN = 'cdn.communitydragon.org'
 const CDRAGON_BASE_URL = `https://${CDRAGON_DOMAIN}`
-const r = generateRequestMethods(CDRAGON_BASE_URL)
 
 type ChampionId = string
 type ChampionKey = number | string
@@ -26,7 +23,7 @@ export const cdragon = {
       return CDRAGON_BASE_URL + `/${patch}/champion/${championIDorKey}/square`
     },
     championData(patch: string, championIDorKey: ChampionIDorKey) {
-      return r.get(`/${patch}/champion/${championIDorKey}/data`)
+      return CDRAGON_BASE_URL + `/${patch}/champion/${championIDorKey}/data`
     },
     baseSplashArt(patch: string, championIDorKey: ChampionIDorKey) {
       return (

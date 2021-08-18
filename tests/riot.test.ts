@@ -2,21 +2,19 @@ import { general, ddragon, cdragon, Client, Platform, Region } from '../src'
 
 describe('static files', () => {
   it('general', () => {
-    return general.gameModes().then((res) => {
-      expect(Array.isArray(res.data)).toBe(true)
-    })
+    expect(general.gameModes).toBe(
+      'https://static.developer.riotgames.com/docs/lol/gameModes.json',
+    )
   })
   it('ddragon', () => {
-    return ddragon.realm('na').then((res) => {
-      expect(res.data).toHaveProperty('cdn')
-    })
+    expect(ddragon.realm('na')).toBe(
+      'https://ddragon.leagueoflegends.com/realms/na.json',
+    )
   })
   it('cdragon', () => {
-    return cdragon.champion
-      .championData('11.15.1', 'Heimerdinger')
-      .then((res) => {
-        expect(res.data).toHaveProperty('shortBio')
-      })
+    expect(cdragon.summoner.profileIcon('latest', '1')).toBe(
+      'https://cdn.communitydragon.org/latest/profile-icon/1',
+    )
   })
 })
 

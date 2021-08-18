@@ -10,7 +10,6 @@ export {
 } from './riot/static/cdragon'
 export { ddragon } from './riot/static/ddragon'
 export { general } from './riot/static/general'
-export { axiosInstance } from './riot/static/axios'
 
 export { cargoQuery } from './leaguepedia'
 export { Table, fieldMap } from './leaguepedia/types'

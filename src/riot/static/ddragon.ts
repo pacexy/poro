@@ -1,7 +1,4 @@
-import { generateRequestMethods } from './axios'
-
 const DDRAGON_BASE_URL = 'https://ddragon.leagueoflegends.com'
-const r = generateRequestMethods(DDRAGON_BASE_URL)
 
 /**
  * Data Dragon
@@ -23,16 +20,14 @@ export const ddragon = {
    * always use the most recent Data Dragon version for a given patch for the
    * best results.
    */
-  versions() {
-    return r.get('/api/versions.json')
-  },
+  versions: DDRAGON_BASE_URL + '/api/versions.json',
   /**
    * Data Dragon versions aren't always equivalent to the League of Legends
    * client version in a region. You can find the version each region is using
    * via the realms files.
    */
   realm(region: string) {
-    return r.get(`/realms/${region}.json`)
+    return DDRAGON_BASE_URL + `/realms/${region}.json`
   },
   /**
    * Data Dragon provides localized versions of each of the data files in
@@ -40,20 +35,21 @@ export const ddragon = {
    * supported by Data Dragon, which you can also retrieved from the Data
    * Dragon languages file.
    */
-  languages() {
-    return r.get('/cdn/languages.json')
-  },
+  languages: DDRAGON_BASE_URL + '/cdn/languages.json',
   /**
    * The `champion.json` data file returns a list of champions with a brief summary.
    */
   champions(version: string, language: string) {
-    return r.get(`/cdn/${version}/data/${language}/champion.json`)
+    return DDRAGON_BASE_URL + `/cdn/${version}/data/${language}/champion.json`
   },
   /**
    * The individual champion JSON files contain additional data for each champion.
    */
   champion(version: string, language: string, championId: string) {
-    return r.get(`/cdn/${version}/data/${language}/champion/${championId}.json`)
+    return (
+      DDRAGON_BASE_URL +
+      `/cdn/${version}/data/${language}/champion/${championId}.json`
+    )
   },
   /**
    * Data Dragon also provides the same level of detail for every item in the
@@ -62,18 +58,22 @@ export const ddragon = {
    * and stats granted from the item.
    */
   items(version: string, language: string) {
-    return r.get(`/cdn/${version}/data/${language}/item.json`)
+    return DDRAGON_BASE_URL + `/cdn/${version}/data/${language}/item.json`
   },
 
   summonerSpells(version: string, language: string) {
-    return r.get(`/cdn/${version}/data/${language}/summoner.json`)
+    return DDRAGON_BASE_URL + `/cdn/${version}/data/${language}/summoner.json`
   },
 
   profileicons(version: string, language: string) {
-    return r.get(`/cdn/${version}/data/${language}/profileicon.json`)
+    return (
+      DDRAGON_BASE_URL + `/cdn/${version}/data/${language}/profileicon.json`
+    )
   },
 
   runesReforged(version: string, language: string) {
-    return r.get(`/cdn/${version}/data/${language}/runesReforged.json`)
+    return (
+      DDRAGON_BASE_URL + `/cdn/${version}/data/${language}/runesReforged.json`
+    )
   },
 }
