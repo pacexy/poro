@@ -4,7 +4,7 @@ import fs from 'fs'
 import path from 'path'
 
 import * as cheerio from 'cheerio'
-import { isString } from 'lodash'
+import { isString } from 'lodash-es'
 import { Project } from 'ts-morph'
 import ts from 'typescript'
 
