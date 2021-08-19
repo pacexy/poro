@@ -1,8 +1,3 @@
-import { snakeCase } from 'lodash-es'
-
-export const RAW_CDRAGON_DOMAIN = 'raw.communitydragon.org'
-const RAW_CDRAGON_BASE_URL = `https://${RAW_CDRAGON_DOMAIN}`
-
 export const CDRAGON_DOMAIN = 'cdn.communitydragon.org'
 const CDRAGON_BASE_URL = `https://${CDRAGON_DOMAIN}`
 
@@ -150,12 +145,6 @@ export const cdragon = {
     },
     profileIcon(patch: string, profileIconId: ProfileIconId) {
       return CDRAGON_BASE_URL + `/${patch}/profile-icon/${profileIconId}`
-    },
-    spell(version: string, spellName: string) {
-      return (
-        RAW_CDRAGON_BASE_URL +
-        `/${version}/game/data/spells/icons2d/${snakeCase(spellName)}.png`
-      )
     },
   },
   game: {

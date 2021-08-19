@@ -1,4 +1,5 @@
-const DDRAGON_BASE_URL = 'https://ddragon.leagueoflegends.com'
+export const DDRAGON_DOMAIN = 'ddragon.leagueoflegends.com'
+const DDRAGON_BASE_URL = `https://${DDRAGON_DOMAIN}`
 
 /**
  * Data Dragon
@@ -75,5 +76,9 @@ export const ddragon = {
     return (
       DDRAGON_BASE_URL + `/cdn/${version}/data/${language}/runesReforged.json`
     )
+  },
+
+  summonerSpell(version: string, spellName: string) {
+    return DDRAGON_BASE_URL + `/cdn/${version}/img/spell/${spellName}.png`
   },
 }
