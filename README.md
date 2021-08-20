@@ -57,24 +57,21 @@ async function doSomething() {
 ### Riot
 
 ```ts
-import { general, ddragon, cdragon, Client } from 'poro'
+import { general, ddragon, cdragon, Client, Riot } from 'poro'
 
 async function doSomething() {
   // General
-  const gameModes = await general.gameModes()
+  fetch(general.gameModes)
   // Data Dragon
-  const realm = await ddragon.realm('na')
+  fetch(ddragon.realm('na'))
   // Community Dragon
-  const champion = await cdragon.champion.championData(
-    '11.15.1',
-    'Heimerdinger',
-  )
+  fetch(cdragon.champion.championData('latest', 'Heimerdinger'))
 
   // APIs
   const client = new Client({
-    auth: 'RGAPI-564972ce-02d6-4931-9020-6cfc540f56bd',
-    platform: 'KR',
-    region: 'AMERICAS',
+    auth: 'RIOT-API-KEY',
+    platform: Riot.Platform.KR,
+    region: Riot.Region.ASIA,
   })
   const leagueEntries = await client
     .path('/lol/league-exp/v4/entries/{queue}/{tier}/{division}', {
@@ -124,7 +121,6 @@ interface Parameter {
 Poro use `axios` as request library, you can get the axios instance by
 
 - `cargoQuery.axiosInstance`
-- `axiosInstance` (for `general`, `cdragon`, `ddragon`)
 - `client.axiosInstance`.
 
 ## Credits

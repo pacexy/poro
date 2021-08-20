@@ -5,7 +5,7 @@ import { Field, Item, Parameter, Table } from './types'
 
 const LEAGUEPEDIA_BASE_URL = 'https://lol.fandom.com'
 
-export const axiosInstance = axios.create({
+const axiosInstance = axios.create({
   baseURL: LEAGUEPEDIA_BASE_URL,
 })
 

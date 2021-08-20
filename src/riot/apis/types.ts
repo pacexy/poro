@@ -1,19 +1,22 @@
 export enum Platform {
-  BR1 = 'BR1',
-  EUN1 = 'EUN1',
-  EUW1 = 'EUW1',
-  JP1 = 'JP1',
+  BR = 'BR1',
+  EUNE = 'EUN1',
+  EUW = 'EUW1',
+  JP = 'JP1',
   KR = 'KR',
-  LA1 = 'LA1',
-  LA2 = 'LA2',
-  NA1 = 'NA1',
-  OC1 = 'OC1',
-  TR1 = 'TR1',
+  LAN = 'LA1',
+  LAS = 'LA2',
+  NA = 'NA1',
+  OCE = 'OC1',
+  TR = 'TR1',
   RU = 'RU',
 }
 
 export enum Region {
+  /** BR, LAN, LAS, NA, OCE */
   AMERICAS = 'AMERICAS',
+  /** JP, KR */
   ASIA = 'ASIA',
+  /** EUNE, EUW, RU, TR */
   EUROPE = 'EUROPE',
 }

@@ -1,22 +1,25 @@
-import { general, ddragon, cdragon, Client, Platform, Region } from '../src'
+import { general, DataDragon, CommunityDragon, Client, Riot } from '../src'
 
 describe('static files', () => {
   it('general', () => {
-    return general.gameModes().then((res) => {
-      expect(Array.isArray(res.data)).toBe(true)
-    })
+    expect(general.gameModes).toBe(
+      'https://static.developer.riotgames.com/docs/lol/gameModes.json',
+    )
+    expect(general.realm('na')).toBe(
+      'https://ddragon.leagueoflegends.com/realms/na.json',
+    )
   })
   it('ddragon', () => {
-    return ddragon.realm('na').then((res) => {
-      expect(res.data).toHaveProperty('cdn')
-    })
+    const ddragon = new DataDragon('11.16.1', 'en_US')
+    expect(ddragon.meta.summonerSpells).toBe(
+      'https://ddragon.leagueoflegends.com/cdn/11.16.1/data/en_US/summoner.json',
+    )
   })
   it('cdragon', () => {
-    return cdragon.champion
-      .championData('11.15.1', 'Heimerdinger')
-      .then((res) => {
-        expect(res.data).toHaveProperty('shortBio')
-      })
+    const cdragon = new CommunityDragon('latest')
+    expect(cdragon.summoner.profileIcon('1')).toBe(
+      'https://cdn.communitydragon.org/latest/profile-icon/1',
+    )
   })
 })
 
@@ -24,8 +27,8 @@ describe('api client', () => {
   it('league-exp', () => {
     const client = new Client({
       auth: 'RGAPI-564972ce-02d6-4931-9020-6cfc540f56bd',
-      platform: Platform.KR,
-      region: Region.ASIA,
+      platform: Riot.Platform.KR,
+      region: Riot.Region.ASIA,
     })
 
     return client
