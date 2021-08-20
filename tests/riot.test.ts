@@ -1,18 +1,23 @@
-import { general, ddragon, cdragon, Client, Riot } from '../src'
+import { general, DataDragon, CommunityDragon, Client, Riot } from '../src'
 
 describe('static files', () => {
   it('general', () => {
     expect(general.gameModes).toBe(
       'https://static.developer.riotgames.com/docs/lol/gameModes.json',
     )
-  })
-  it('ddragon', () => {
-    expect(ddragon.realm('na')).toBe(
+    expect(general.realm('na')).toBe(
       'https://ddragon.leagueoflegends.com/realms/na.json',
     )
   })
+  it('ddragon', () => {
+    const ddragon = new DataDragon('11.16.1', 'en_US')
+    expect(ddragon.meta.summonerSpells).toBe(
+      'https://ddragon.leagueoflegends.com/cdn/11.16.1/data/en_US/summoner.json',
+    )
+  })
   it('cdragon', () => {
-    expect(cdragon.summoner.profileIcon('latest', '1')).toBe(
+    const cdragon = new CommunityDragon('latest')
+    expect(cdragon.summoner.profileIcon('1')).toBe(
       'https://cdn.communitydragon.org/latest/profile-icon/1',
     )
   })
