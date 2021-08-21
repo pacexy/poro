@@ -11,7 +11,7 @@ describe('static files', () => {
   })
   it('ddragon', () => {
     const ddragon = new DataDragon('11.16.1', 'en_US')
-    expect(ddragon.meta.summonerSpells).toBe(
+    expect(ddragon.meta('summoner')).toBe(
       'https://ddragon.leagueoflegends.com/cdn/11.16.1/data/en_US/summoner.json',
     )
   })

@@ -3,8 +3,8 @@ export class Version {
 }
 
 export class VersionLanguage {
-  constructor(
-    protected readonly version: string,
-    protected readonly language: string,
-  ) {}
+  protected readonly language: string
+  constructor(protected readonly version: string, language: string) {
+    this.language = language.replace('-', '_')
+  }
 }

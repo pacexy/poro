@@ -68,7 +68,6 @@
     "husky": "^4.2.5",
     "jest": "^27.0.6",
     "lint-staged": "^10.2.11",
-    "np": "^7.5.0",
     "prettier": "^2.3.2",
     "release-it": "^14.11.5",
     "rimraf": "^3.0.2",
@@ -78,7 +77,8 @@
   },
   "release-it": {
     "github": {
-      "release": true
+      "release": true,
+      "web": true
     }
   }
 }
