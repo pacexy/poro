@@ -1,6 +1,6 @@
 {
   "name": "poro",
-  "version": "2.0.0-alpha.4",
+  "version": "2.0.0-alpha.5",
   "description": "Leaguepedia API & Riot League of Legends API & CommunityDragon & Data Dragon",
   "bin": "./dist/cjs/bin/poro.js",
   "main": "./dist/cjs/src/index.js",
