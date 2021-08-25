@@ -1,7 +1,10 @@
-import { Version } from './utils'
+import { Version, VersionLanguage } from './utils'
 
 export const CDRAGON_DOMAIN = 'cdn.communitydragon.org'
 const CDRAGON_BASE_URL = `https://${CDRAGON_DOMAIN}`
+
+export const RAW_CDRAGON_DOMAIN = 'raw.communitydragon.org'
+const RAW_CDRAGON_BASE_URL = `https://${RAW_CDRAGON_DOMAIN}`
 
 type ChampionId = string
 type ChampionKey = number | string
@@ -116,9 +119,27 @@ class Game extends Version {
   }
 }
 
-export class CommunityDragon extends Version {
+type MetaFile = 'queues'
+
+export class CommunityDragon extends VersionLanguage {
+  constructor(version: string, language: string) {
+    super(version, language)
+    // `latest` will not be affected
+    this.version = this.version.split('.').slice(0, 2).join('.')
+    this.language = this.language.toLowerCase()
+    if (this.language === 'en_us') {
+      this.language = 'default'
+    }
+  }
   champion = new Champion(this.version)
   championSelect = new ChampionSelect(this.version)
   summoner = new Summoner(this.version)
   game = new Game(this.version)
+
+  meta(file: MetaFile) {
+    return (
+      RAW_CDRAGON_BASE_URL +
+      `/${this.version}/plugins/rcp-be-lol-game-data/global/${this.language}/v1/${file}.json`
+    )
+  }
 }

@@ -16,7 +16,7 @@ describe('static files', () => {
     )
   })
   it('cdragon', () => {
-    const cdragon = new CommunityDragon('latest')
+    const cdragon = new CommunityDragon('latest', 'default')
     expect(cdragon.summoner.profileIcon('1')).toBe(
       'https://cdn.communitydragon.org/latest/profile-icon/1',
     )
