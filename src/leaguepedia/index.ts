@@ -7,22 +7,16 @@ import {
   Options,
   Parameter,
   PrefixMetaProperties,
+  schemaMap,
   Table,
-  UncapitalizeProperties,
 } from './types'
 
 const LEAGUEPEDIA_BASE_URL = 'https://lol.fandom.com'
 
-function uncapitalize(str: string) {
-  return str.charAt(0).toLowerCase() + str.slice(1)
-}
-
-export class Cargo<U extends boolean = false, P extends string = ''> {
-  private readonly uncapitalize: boolean
+export class Cargo<P extends string = ''> {
   private readonly metadataPrefix: string
 
-  constructor({ uncapitalize, metadataPrefix }: Options<U, P> = {}) {
-    this.uncapitalize = uncapitalize ?? false
+  constructor({ metadataPrefix }: Options<P> = {}) {
     this.metadataPrefix = metadataPrefix ?? ''
   }
 
@@ -30,23 +24,62 @@ export class Cargo<U extends boolean = false, P extends string = ''> {
     baseURL: LEAGUEPEDIA_BASE_URL,
   })
 
-  private uncapitalizeProperties<T extends Record<string, any>>(obj: T) {
+  private spaceToUnderscore<T extends Record<string, any>>(obj: T) {
     // No index signature with a parameter of type 'string' was found on type '{}'.
     // https://stackoverflow.com/a/66406882/13151903
-    let newObj: Record<string, any> = {}
+    const newObj: Record<string, any> = {}
+    Object.entries(obj).forEach(([key, value]) => {
+      newObj[key.replaceAll(' ', '_')] = value
+    })
+    return newObj as T
+  }
 
-    if (!this.uncapitalize) {
-      newObj = obj
-    } else {
-      Object.entries(obj).forEach(([key, value]) => {
-        newObj[uncapitalize(key)] = value
-      })
-    }
+  private convert<T extends Record<string, any>>(obj: T, tables: Table[]) {
+    const newObj: Record<string, any> = {}
+    const defaultTable = tables[0]
+    const schema = schemaMap[defaultTable]
 
-    return newObj as U extends false ? T : UncapitalizeProperties<T>
+    Object.entries(obj).forEach(([key, value]) => {
+      if (!(key in schema)) return
+      switch (typeof schema[key as keyof typeof schema]) {
+        case 'boolean': {
+          // leaguepedia use bit(1) to store boolean
+          newObj[key] = typeof value === 'number' ? Boolean(value) : null
+          break
+        }
+        case 'number': {
+          const n = schema[key as keyof typeof schema]
+            ? parseFloat(value)
+            : parseInt(value)
+          newObj[key] = isNaN(n) ? null : n
+          break
+        }
+        case 'string': {
+          switch (schema[key as keyof typeof schema]) {
+            case '': {
+              const s = String(value)
+              newObj[key] = s === '' ? null : s
+              break
+            }
+            case 'Date':
+            case 'Datetime': {
+              newObj[key] = value ? new Date(value) : null
+            }
+          }
+          break
+        }
+        default: {
+          newObj[key] = value
+        }
+      }
+    })
+
+    return newObj as T
   }
 
   private addPrefixToMetadata<T extends Record<string, any>>(obj: T) {
+    // No index signature with a parameter of type 'string' was found on type '{}'.
+    // https://stackoverflow.com/a/66406882/13151903
     let newObj: Record<string, any> = {}
 
     if (this.metadataPrefix === '') {
@@ -75,7 +108,9 @@ export class Cargo<U extends boolean = false, P extends string = ''> {
     return {
       ...res,
       data: res.data
-        .map(this.uncapitalizeProperties.bind(this))
+        // `spaceToUnderscore` should be executed first to guarantee object shape is as same as schema defined in `schemaMap`
+        .map(this.spaceToUnderscore.bind(this))
+        .map((item) => this.convert(item, parameter.tables))
         .map(this.addPrefixToMetadata.bind(this)),
     }
   }

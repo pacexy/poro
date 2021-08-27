@@ -95,15 +95,15 @@ describe('cargoQuery leaguepedia table items', () => {
       })
   })
 
-  it('uncapitalize', () => {
-    const cargo = new Cargo({ uncapitalize: true })
+  it('spaceToUnderscore', () => {
+    const cargo = new Cargo({ metadataPrefix: 'Cargo' })
     return cargo
       .query({
-        tables: ['Teams'],
-        limit: 10,
+        tables: ['GCDArchive'],
+        limit: 1,
       })
       .then(({ data }) => {
-        expect(typeof data[0].name === 'string').toBe(true)
+        expect(typeof data[0].Diff_URL === 'string').toBe(true)
       })
   })
 

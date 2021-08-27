@@ -37,11 +37,17 @@ function parse(name: string) {
     return {
       name,
       children: fieldElements.map((fieldElem) => {
-        const typeNode = $('tt', fieldElem)
+        const nameNode = $('strong', fieldElem)
+        const name = nameNode.text()
+        const type = nameNode.next().text()
+        const isArray = nameNode
+          .parent()
+          .text()
+          .startsWith(`${name} - List of ${type}`)
         return {
-          name: $('strong', fieldElem).text(),
-          type: typeNode.text(),
-          isArray: typeNode.parent().text().includes('List of'),
+          name,
+          type,
+          isArray,
           desc: $('span', fieldElem).text(),
         }
       }),
@@ -66,14 +72,14 @@ function updateString(data: Data) {
   const map: Record<string, any> = {
     String: "''",
     Text: "''",
-    Date: "''",
+    Date: "'Date'",
     Boolean: false,
     Integer: 0,
-    Float: 0,
+    Float: 1,
     Wikitext: "''",
     'Wikitext string': "''",
     Page: "''",
-    Datetime: "''",
+    Datetime: "'Datetime'",
   }
 
   const content = data.children
