@@ -5,6 +5,6 @@ export { DataDragon, DDRAGON_DOMAIN } from './riot/static/ddragon'
 export { general } from './riot/static/general'
 
 export { Cargo } from './leaguepedia'
-export { fieldMap } from './leaguepedia/types'
+export { schemaMap } from './leaguepedia/types'
 
 export * as Riot from './types'
