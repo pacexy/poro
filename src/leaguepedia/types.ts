@@ -1,3 +1,23 @@
+export interface Options<U, P> {
+  uncapitalize?: U
+  metadataPrefix?: P
+}
+
+export type PrefixMetadata<S, P extends string> = S extends `_${infer Name}`
+  ? `${P}_${Name}`
+  : S
+
+export type PrefixMetaProperties<T, P extends string> = {
+  // https://github.com/sindresorhus/type-fest/blob/6de66eb8c26cd37adda7213cdbfb5e8246af8328/source/camel-case.d.ts#L47
+  [K in keyof T as PrefixMetadata<K, P>]: T[K]
+}
+
+export type UncapitalizeProperties<T extends Record<string, any>> = {
+  // Type 'keyof T' does not satisfy the constraint 'string'.
+  // https://github.com/microsoft/TypeScript/issues/25260#issuecomment-548837595
+  [P in keyof T as Uncapitalize<Extract<P, string>>]: T[P]
+}
+
 export type Field<T extends Table> = FieldMap[T][number]
 
 type UnderscoreToSpace<S> = S extends `${infer L}_${infer R}`
