@@ -59,15 +59,15 @@ interface ClientConfig {
 
 export class Client {
   readonly axiosInstance = axios.create()
-  readonly #endpoints
-  readonly #platform
-  readonly #region
+  private readonly endpoints
+  private readonly platform
+  private readonly region
 
   constructor({ auth, platform, region }: ClientConfig) {
     this.axiosInstance.defaults.headers.common['X-Riot-Token'] = auth
-    this.#endpoints = createEndpoints(this.axiosInstance)
-    this.#platform = platform
-    this.#region = region
+    this.endpoints = createEndpoints(this.axiosInstance)
+    this.platform = platform
+    this.region = region
   }
 
   path<Path extends keyof Endpoints>(
@@ -93,14 +93,14 @@ export class Client {
       path.startsWith(prefix),
     )
     if (isRegionScoped) {
-      originPrefix ??= this.#region ?? Region.AMERICAS
+      originPrefix ??= this.region ?? Region.AMERICAS
     } else {
-      originPrefix ??= this.#platform ?? Platform.NA
+      originPrefix ??= this.platform ?? Platform.NA
     }
 
     const url = `https://${originPrefix?.toLowerCase()}.api.riotgames.com${realPath}`
 
-    return this.#endpoints[path](url) as ReturnType<Endpoints[Path]>
+    return this.endpoints[path](url) as ReturnType<Endpoints[Path]>
   }
 }
 
