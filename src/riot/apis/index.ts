@@ -100,7 +100,7 @@ export class Client {
 
     const url = `https://${originPrefix?.toLowerCase()}.api.riotgames.com${realPath}`
 
-    return this.endpoints[path](url) as ReturnType<Endpoints[Path]>
+    return this.endpoints[path](encodeURI(url)) as ReturnType<Endpoints[Path]>
   }
 }
 
