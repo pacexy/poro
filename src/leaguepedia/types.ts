@@ -154,7 +154,7 @@ export const schemaMap = {
   Champions: {
     Name: '', // String
     Title: '', // String
-    ReleaseDate: 'Date', // Date
+    ReleaseDate: new Date(), // Date
     BE: 0, // Integer
     RP: 0, // Integer
     Attributes: [''], // List of String
@@ -195,7 +195,7 @@ export const schemaMap = {
   ChromaSets: {
     Champion: '', // String
     Skin: '', // String
-    ReleaseDate: 'Date', // Date
+    ReleaseDate: new Date(), // Date
     RP: 0, // Integer
     Name: '', // String
     NumberOfChromas: 0, // Integer
@@ -214,7 +214,7 @@ export const schemaMap = {
     IsBundleExclusive: false, // Boolean
     IsLootExclusive: false, // Boolean
     Special: '', // Text
-    ReleaseDate: 'Date', // Date
+    ReleaseDate: new Date(), // Date
     BundleRP: 0, // Integer
     RP: 0, // Integer
     Hex1: '', // String
@@ -230,7 +230,7 @@ export const schemaMap = {
   Contracts: {
     Player: '', // String
     Team: '', // String
-    ContractEnd: 'Date', // Date
+    ContractEnd: new Date(), // Date
     IsRemoval: false, // Boolean
     NewsId: '', // String
     _pageName: '',
@@ -287,7 +287,7 @@ export const schemaMap = {
     Players: [''], // List of String
     Tournaments: [''], // List of String
     Teams: [''], // List of String
-    Date: 'Datetime', // Datetime
+    Date: new Date(), // Datetime
     Year: 0, // Integer
     Publication: '', // String
     N_ItemInDate: 0, // Integer
@@ -306,10 +306,10 @@ export const schemaMap = {
   GCDArchive: {
     Region: '', // String
     RegionAbbreviation: '', // String
-    PageDate: 'Date', // Date
-    PageDateTime: 'Datetime', // Datetime
-    UpdateDate: 'Date', // Date
-    PageURLDate: 'Date', // Date
+    PageDate: new Date(), // Date
+    PageDateTime: new Date(), // Datetime
+    UpdateDate: new Date(), // Date
+    PageURLDate: new Date(), // Date
     IsNew: false, // Boolean
     Diff: '', // String
     Diff_URL: '', // Wikitext
@@ -434,7 +434,7 @@ export const schemaMap = {
     IsSubstitute: '', // String
     IsTrainee: '', // String
     Team: '', // String
-    ContractDate: 'Date', // Date
+    ContractDate: new Date(), // Date
     Residency: '', // String
     _pageName: '',
     _pageTitle: '',
@@ -472,7 +472,7 @@ export const schemaMap = {
     Player1: '', // String
     Player2: '', // String
     MatchDay: 0, // Integer
-    DateTime_UTC: 'Datetime', // Datetime
+    DateTime_UTC: new Date(), // Datetime
     HasTime: false, // Boolean
     DST: '', // String
     IsFlexibleStart: false, // Boolean
@@ -632,10 +632,10 @@ export const schemaMap = {
 
   NewsItems: {
     Date_Display: '', // String
-    Date_Sort: 'Datetime', // Datetime
+    Date_Sort: new Date(), // Datetime
     IsApproxDate: false, // Boolean
-    EarliestPossibleDate: 'Date', // Date
-    LatestPossibleDate: 'Date', // Date
+    EarliestPossibleDate: new Date(), // Date
+    LatestPossibleDate: new Date(), // Date
     Sentence: '', // Wikitext
     SentenceWithDate: '', // Wikitext
     Sentence_Team: '', // Wikitext
@@ -711,7 +711,7 @@ export const schemaMap = {
   Pentakills: {
     N: 0, // Integer
     DateDisplay: '', // String
-    DateSort: 'Date', // Date
+    DateSort: new Date(), // Date
     Region: '', // String
     Tournament: '', // String
     OverviewPage: '', // String
@@ -802,7 +802,7 @@ export const schemaMap = {
     ImageType: '', // String
     Caption: '', // Text
     IsProfileImage: false, // Boolean
-    SortDate: 'Date', // Date
+    SortDate: new Date(), // Date
     _pageName: '',
     _pageTitle: '',
     _pageNamespace: 0,
@@ -829,7 +829,7 @@ export const schemaMap = {
     RecordedBy: '', // String
     RecordedBy_User: '', // String
     Source: '', // String
-    Date: 'Date', // Date
+    Date: new Date(), // Date
     Language: '', // String
     _pageName: '',
     _pageTitle: '',
@@ -850,7 +850,7 @@ export const schemaMap = {
   },
 
   PlayerRenames: {
-    Date: 'Datetime', // Datetime
+    Date: new Date(), // Datetime
     OriginalName: '', // String
     NewName: '', // String
     NewsId: '', // String
@@ -875,7 +875,7 @@ export const schemaMap = {
     Nationality: [''], // List of String
     NationalityPrimary: '', // String
     Age: 0, // Integer
-    Birthdate: 'Date', // Date
+    Birthdate: new Date(), // Date
     ResidencyFormer: '', // String
     Team: '', // String
     Team2: '', // String
@@ -964,8 +964,8 @@ export const schemaMap = {
 
   RosterChangePortalDates: {
     Region: '', // String
-    DateStart: 'Date', // Date
-    DateEnd: 'Date', // Date
+    DateStart: new Date(), // Date
+    DateEnd: new Date(), // Date
     Year: 0, // Integer
     Period: '', // String
     PeriodName: '', // String
@@ -989,7 +989,7 @@ export const schemaMap = {
   },
 
   RosterChanges: {
-    Date_Sort: 'Datetime', // Datetime
+    Date_Sort: new Date(), // Datetime
     Player: '', // String
     Direction: '', // String
     Team: '', // String
@@ -1020,7 +1020,7 @@ export const schemaMap = {
   },
 
   RosterRumors: {
-    Date: 'Date', // Date
+    Date: new Date(), // Date
     Status: '', // String
     IsOver: false, // Boolean
     NotHappening: false, // Boolean
@@ -1058,7 +1058,7 @@ export const schemaMap = {
     Team2: '', // String
     WinTeam: '', // String
     LossTeam: '', // String
-    DateTime_UTC: 'Datetime', // Datetime
+    DateTime_UTC: new Date(), // Datetime
     DST: '', // String
     Team1Score: 0, // Integer
     Team2Score: 0, // Integer
@@ -1133,9 +1133,9 @@ export const schemaMap = {
     TeamGold: 0, // Integer
     Team: '', // String
     TeamVs: '', // String
-    Time: 'Datetime', // Datetime
+    Time: new Date(), // Datetime
     PlayerWin: '', // String
-    DateTime_UTC: 'Datetime', // Datetime
+    DateTime_UTC: new Date(), // Datetime
     DST: '', // String
     Tournament: '', // String
     Role: '', // String
@@ -1213,7 +1213,7 @@ export const schemaMap = {
     Name: '', // String
     Champion: '', // String
     RP: 0, // Integer
-    ReleaseDate: 'Date', // Date
+    ReleaseDate: new Date(), // Date
     Artists: [''], // List of String
     IsLegacy: false, // Boolean
     Special: '', // String
@@ -1289,7 +1289,7 @@ export const schemaMap = {
   },
 
   TeamRenames: {
-    Date: 'Datetime', // Datetime
+    Date: new Date(), // Datetime
     OriginalName: '', // String
     NewName: '', // String
     Verb: '', // String
@@ -1308,7 +1308,7 @@ export const schemaMap = {
     Team: '', // String
     Tournament: '', // String
     Caption: '', // Text
-    SortDate: 'Date', // Date
+    SortDate: new Date(), // Date
     _pageName: '',
     _pageTitle: '',
     _pageNamespace: 0,
@@ -1357,8 +1357,8 @@ export const schemaMap = {
   Tenures: {
     Player: '', // String
     Team: '', // String
-    DateJoin: 'Date', // Date
-    DateLeave: 'Date', // Date
+    DateJoin: new Date(), // Date
+    DateLeave: new Date(), // Date
     Duration: 0, // Integer
     ContractEnd: '', // String
     RosterChangeIdJoin: '', // String
@@ -1379,8 +1379,8 @@ export const schemaMap = {
   TenuresUnbroken: {
     Player: '', // String
     Team: '', // String
-    DateJoin: 'Date', // Date
-    DateLeave: 'Date', // Date
+    DateJoin: new Date(), // Date
+    DateLeave: new Date(), // Date
     Duration: 0, // Integer
     ContractEnd: '', // String
     RosterChangeIdJoin: '', // String
@@ -1435,7 +1435,7 @@ export const schemaMap = {
   TournamentResults: {
     Event: '', // String
     Tier: '', // String
-    Date: 'Date', // Date
+    Date: new Date(), // Date
     RosterPage: '', // Page
     Place: '', // String
     ForceNewPlace: false, // Boolean
@@ -1468,7 +1468,7 @@ export const schemaMap = {
   TournamentResults1v1: {
     Event: '', // String
     Tier: '', // String
-    Date: 'Date', // Date
+    Date: new Date(), // Date
     Place: '', // String
     Prize: 0, // Integer
     Prize_USD: 1, // Float
@@ -1529,9 +1529,9 @@ export const schemaMap = {
   Tournaments: {
     Name: '', // String
     OverviewPage: '', // String
-    DateStart: 'Date', // Date
-    Date: 'Date', // Date
-    DateStartFuzzy: 'Date', // Date
+    DateStart: new Date(), // Date
+    Date: new Date(), // Date
+    DateStartFuzzy: new Date(), // Date
     League: '', // String
     Region: '', // String
     Prizepool: '', // String
@@ -1594,8 +1594,8 @@ export const schemaMap = {
   },
 
   _pageData: {
-    _creationDate: 'Datetime', // Datetime
-    _modificationDate: 'Datetime', // Datetime
+    _creationDate: new Date(), // Datetime
+    _modificationDate: new Date(), // Datetime
     _creator: '', // String
     _categories: [''], // List of String
     _numRevisions: 0, // Integer

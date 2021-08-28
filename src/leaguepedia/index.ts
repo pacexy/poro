@@ -34,47 +34,48 @@ export class Cargo<P extends string = ''> {
     return newObj as T
   }
 
-  private convert<T extends Record<string, any>>(obj: T, tables: Table[]) {
+  private convert<O extends Record<string, any>, T extends Table>(
+    obj: O,
+    tables: T[],
+  ) {
     const newObj: Record<string, any> = {}
     const defaultTable = tables[0]
     const schema = schemaMap[defaultTable]
 
     Object.entries(obj).forEach(([key, value]) => {
       if (!(key in schema)) return
-      switch (typeof schema[key as keyof typeof schema]) {
+      const defaultValue = schema[key as keyof typeof schema]
+      switch (typeof defaultValue) {
         case 'boolean': {
           // leaguepedia use bit(1) to store boolean
           newObj[key] = typeof value === 'number' ? Boolean(value) : null
           break
         }
         case 'number': {
-          const n = schema[key as keyof typeof schema]
-            ? parseFloat(value)
-            : parseInt(value)
+          const n = defaultValue ? parseFloat(value) : parseInt(value)
           newObj[key] = isNaN(n) ? null : n
           break
         }
         case 'string': {
-          switch (schema[key as keyof typeof schema]) {
-            case '': {
-              const s = String(value)
-              newObj[key] = s === '' ? null : s
-              break
-            }
-            case 'Date':
-            case 'Datetime': {
-              newObj[key] = value ? new Date(value) : null
-            }
-          }
+          const s = String(value)
+          newObj[key] = s === '' ? null : s
           break
         }
+        case 'object': {
+          if (defaultValue instanceof Date) {
+            newObj[key] = value ? new Date(value) : null
+            break
+          }
+        }
+        // array will be processed by default
+        // eslint-disable-next-line no-fallthrough
         default: {
           newObj[key] = value
         }
       }
     })
 
-    return newObj as T
+    return newObj as O
   }
 
   private addPrefixToMetadata<T extends Record<string, any>>(obj: T) {

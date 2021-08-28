@@ -118,4 +118,21 @@ describe('cargoQuery leaguepedia table items', () => {
         expect(typeof data[0].cargo_ID === 'number').toBe(true)
       })
   })
+
+  it('data convertion', () => {
+    const cargo = new Cargo({ metadataPrefix: 'cargo' })
+    return cargo
+      .query({
+        tables: ['Players'],
+        limit: 5,
+      })
+      .then(({ data }) => {
+        expect(data.some((player) => player.Birthdate instanceof Date)).toBe(
+          true,
+        )
+        expect(data.every((player) => Array.isArray(player.FavChamps))).toBe(
+          true,
+        )
+      })
+  })
 })
