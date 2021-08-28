@@ -43,3 +43,109 @@ describe('api client', () => {
       })
   })
 })
+
+describe('set region/platform correctly', () => {
+  it('default region', () => {
+    const client = new Client({
+      auth: '',
+    })
+
+    return client
+      .path('/riot/account/v1/accounts/me')
+      .get()
+      .catch((err) => {
+        expect(err.config.url).toBe(
+          `https://${Riot.Region.AMERICAS.toLowerCase()}.api.riotgames.com/riot/account/v1/accounts/me`,
+        )
+      })
+  })
+
+  it('default platform', () => {
+    const client = new Client({
+      auth: '',
+    })
+
+    return client
+      .path(
+        '/lol/champion-mastery/v4/champion-masteries/by-summoner/{encryptedSummonerId}',
+        { encryptedSummonerId: '123' },
+      )
+      .get()
+      .catch((err) => {
+        expect(err.config.url).toBe(
+          `https://${Riot.Platform.NA.toLowerCase()}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/123`,
+        )
+      })
+  })
+
+  it('class-scoped region', () => {
+    const client = new Client({
+      auth: '',
+      region: Riot.Region.ASIA,
+    })
+
+    return client
+      .path('/riot/account/v1/accounts/me')
+      .get()
+      .catch((err) => {
+        expect(err.config.url).toBe(
+          `https://${Riot.Region.ASIA.toLowerCase()}.api.riotgames.com/riot/account/v1/accounts/me`,
+        )
+      })
+  })
+
+  it('class-scoped platform', () => {
+    const client = new Client({
+      auth: '',
+      platform: Riot.Platform.KR,
+    })
+
+    return client
+      .path(
+        '/lol/champion-mastery/v4/champion-masteries/by-summoner/{encryptedSummonerId}',
+        { encryptedSummonerId: '123' },
+      )
+      .get()
+      .catch((err) => {
+        expect(err.config.url).toBe(
+          `https://${Riot.Platform.KR.toLowerCase()}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/123`,
+        )
+      })
+  })
+
+  it('method-scoped region', () => {
+    const client = new Client({
+      auth: '',
+      region: Riot.Region.EUROPE,
+    })
+
+    return client
+      .path('/riot/account/v1/accounts/me', Riot.Region.ASIA)
+      .get()
+      .catch((err) => {
+        expect(err.config.url).toBe(
+          `https://${Riot.Region.ASIA.toLowerCase()}.api.riotgames.com/riot/account/v1/accounts/me`,
+        )
+      })
+  })
+
+  it('method-scoped platform', () => {
+    const client = new Client({
+      auth: '',
+      platform: Riot.Platform.RU,
+    })
+
+    return client
+      .path(
+        '/lol/champion-mastery/v4/champion-masteries/by-summoner/{encryptedSummonerId}',
+        { encryptedSummonerId: '123' },
+        Riot.Platform.KR,
+      )
+      .get()
+      .catch((err) => {
+        expect(err.config.url).toBe(
+          `https://${Riot.Platform.KR.toLowerCase()}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/123`,
+        )
+      })
+  })
+})
