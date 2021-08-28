@@ -1,16 +1,35 @@
-export type Field<T extends Table> = FieldMap[T][number]
+export interface Options<P> {
+  metadataPrefix?: P
+}
 
-type UnderscoreToSpace<S> = S extends `${infer L}_${infer R}`
-  ? L extends ''
-    ? S
-    : `${L} ${R}`
+export type PrefixMetadata<S, P extends string> = S extends `_${infer Name}`
+  ? `${P}_${Name}`
   : S
-type ToFieldName<Field> = Field extends `${Table}.${infer FieldName}`
-  ? UnderscoreToSpace<FieldName>
+
+export type PrefixMetaProperties<T, P extends string> = {
+  // https://github.com/sindresorhus/type-fest/blob/6de66eb8c26cd37adda7213cdbfb5e8246af8328/source/camel-case.d.ts#L47
+  [K in keyof T as PrefixMetadata<K, P>]: T[K]
+}
+
+export type Field<T> = T extends Table
+  ? // Type 'keyof T' does not satisfy the constraint 'string'.
+    // https://github.com/microsoft/TypeScript/issues/25260#issuecomment-548837595
+    `${T}.${Extract<keyof SchemaMap[T], string>}`
   : never
 
-export type Item<Field> = {
-  [key in ToFieldName<Field>]: any
+type ToFieldName<F> = F extends `${Table}.${infer FieldName}`
+  ? FieldName
+  : never
+type ToFieldType<F, K> = F extends `${infer T}.${string}`
+  ? T extends Table
+    ? K extends keyof SchemaMap[T]
+      ? SchemaMap[T][K]
+      : never
+    : never
+  : never
+
+export type Item<F> = {
+  [K in ToFieldName<F>]: ToFieldType<F, K>
 }
 
 export type JoinOn<
@@ -47,1472 +66,1545 @@ export interface Parameter<
   format?: string
 }
 
-export type Table = keyof FieldMap
+export type Table = keyof SchemaMap
 
-type FieldMap = typeof fieldMap
-export const fieldMap = {
-  Alphabets: [
-    'Alphabets.Alphabet',
-    'Alphabets.IsTransliterated',
-    'Alphabets._pageName',
-    'Alphabets._pageTitle',
-    'Alphabets._pageNamespace',
-    'Alphabets._pageID',
-    'Alphabets._ID',
-  ],
-  BroadcastMusicTrackTypes: [
-    'BroadcastMusicTrackTypes.Type',
-    'BroadcastMusicTrackTypes.Priority',
-    'BroadcastMusicTrackTypes._pageName',
-    'BroadcastMusicTrackTypes._pageTitle',
-    'BroadcastMusicTrackTypes._pageNamespace',
-    'BroadcastMusicTrackTypes._pageID',
-    'BroadcastMusicTrackTypes._ID',
-  ],
-  BroadcastMusicTracks: [
-    'BroadcastMusicTracks.TrackID',
-    'BroadcastMusicTracks.TrackName',
-    'BroadcastMusicTracks.Album',
-    'BroadcastMusicTracks.Publishers',
-    'BroadcastMusicTracks.Label',
-    'BroadcastMusicTracks.TrackLength',
-    'BroadcastMusicTracks.Artists',
-    'BroadcastMusicTracks._pageName',
-    'BroadcastMusicTracks._pageTitle',
-    'BroadcastMusicTracks._pageNamespace',
-    'BroadcastMusicTracks._pageID',
-    'BroadcastMusicTracks._ID',
-  ],
-  BroadcastMusicUsages: [
-    'BroadcastMusicUsages.TrackID',
-    'BroadcastMusicUsages.Tournament',
-    'BroadcastMusicUsages.Type',
-    'BroadcastMusicUsages.Link',
-    'BroadcastMusicUsages.LinkType',
-    'BroadcastMusicUsages._pageName',
-    'BroadcastMusicUsages._pageTitle',
-    'BroadcastMusicUsages._pageNamespace',
-    'BroadcastMusicUsages._pageID',
-    'BroadcastMusicUsages._ID',
-  ],
-  CargoAttachments: [
-    'CargoAttachments.CargoTable',
-    'CargoAttachments.TemplateName',
-    'CargoAttachments._pageName',
-    'CargoAttachments._pageTitle',
-    'CargoAttachments._pageNamespace',
-    'CargoAttachments._pageID',
-    'CargoAttachments._ID',
-  ],
-  ChampionFlashcards: [
-    'ChampionFlashcards.Year',
-    'ChampionFlashcards.Champion',
-    'ChampionFlashcards.ChampionRange',
-    'ChampionFlashcards.DamageType',
-    'ChampionFlashcards.CCLevel',
-    'ChampionFlashcards.BurstLevel',
-    'ChampionFlashcards.SustainedLevel',
-    'ChampionFlashcards.TankLevel',
-    'ChampionFlashcards.Goal',
-    'ChampionFlashcards.Strengths',
-    'ChampionFlashcards.Weaknesses',
-    'ChampionFlashcards.Ultimate',
-    'ChampionFlashcards.Mechanic',
-    'ChampionFlashcards.Classes',
-    'ChampionFlashcards.Roles',
-    'ChampionFlashcards._pageName',
-    'ChampionFlashcards._pageTitle',
-    'ChampionFlashcards._pageNamespace',
-    'ChampionFlashcards._pageID',
-    'ChampionFlashcards._ID',
-  ],
-  Champions: [
-    'Champions.Name',
-    'Champions.Title',
-    'Champions.ReleaseDate',
-    'Champions.BE',
-    'Champions.RP',
-    'Champions.Attributes',
-    'Champions.Resource',
-    'Champions.RealName',
-    'Champions.Health',
-    'Champions.HPLevel',
-    'Champions.HPDisplay',
-    'Champions.HPLevelDisplay',
-    'Champions.HPRegen',
-    'Champions.HPRegenLevel',
-    'Champions.Mana',
-    'Champions.ManaLevel',
-    'Champions.ManaRegen',
-    'Champions.ManaRegenLevel',
-    'Champions.Energy',
-    'Champions.EnergyRegen',
-    'Champions.Movespeed',
-    'Champions.AttackDamage',
-    'Champions.ADLevel',
-    'Champions.AttackSpeed',
-    'Champions.ASLevel',
-    'Champions.AttackRange',
-    'Champions.Armor',
-    'Champions.ArmorLevel',
-    'Champions.MagicResist',
-    'Champions.MagicResistLevel',
-    'Champions.Pronoun',
-    'Champions.KeyDdragon',
-    'Champions.KeyInteger',
-    'Champions._pageName',
-    'Champions._pageTitle',
-    'Champions._pageNamespace',
-    'Champions._pageID',
-    'Champions._ID',
-  ],
-  ChromaSets: [
-    'ChromaSets.Champion',
-    'ChromaSets.Skin',
-    'ChromaSets.ReleaseDate',
-    'ChromaSets.RP',
-    'ChromaSets.Name',
-    'ChromaSets.NumberOfChromas',
-    'ChromaSets.UniqueSet',
-    'ChromaSets._pageName',
-    'ChromaSets._pageTitle',
-    'ChromaSets._pageNamespace',
-    'ChromaSets._pageID',
-    'ChromaSets._ID',
-  ],
-  Chromas: [
-    'Chromas.Name',
-    'Chromas.Skin',
-    'Chromas.Champion',
-    'Chromas.IsBundleExclusive',
-    'Chromas.IsLootExclusive',
-    'Chromas.Special',
-    'Chromas.ReleaseDate',
-    'Chromas.BundleRP',
-    'Chromas.RP',
-    'Chromas.Hex1',
-    'Chromas.Hex2',
-    'Chromas.UniqueSet',
-    'Chromas._pageName',
-    'Chromas._pageTitle',
-    'Chromas._pageNamespace',
-    'Chromas._pageID',
-    'Chromas._ID',
-  ],
-  Contracts: [
-    'Contracts.Player',
-    'Contracts.Team',
-    'Contracts.ContractEnd',
-    'Contracts.IsRemoval',
-    'Contracts.NewsId',
-    'Contracts._pageName',
-    'Contracts._pageTitle',
-    'Contracts._pageNamespace',
-    'Contracts._pageID',
-    'Contracts._ID',
-  ],
-  CurrentLeagues: [
-    'CurrentLeagues.Event',
-    'CurrentLeagues.Page',
-    'CurrentLeagues.Priority',
-    'CurrentLeagues._pageName',
-    'CurrentLeagues._pageTitle',
-    'CurrentLeagues._pageNamespace',
-    'CurrentLeagues._pageID',
-    'CurrentLeagues._ID',
-  ],
-  Disambiguations: [
-    'Disambiguations.FinalLocation',
-    'Disambiguations.Term',
-    'Disambiguations.DisambigType',
-    'Disambiguations.N_LineInPage',
-    'Disambiguations.DisambigID',
-    'Disambiguations._pageName',
-    'Disambiguations._pageTitle',
-    'Disambiguations._pageNamespace',
-    'Disambiguations._pageID',
-    'Disambiguations._ID',
-  ],
-  Entities: [
-    'Entities.Entity',
-    'Entities.EntityName',
-    'Entities.EntityPage',
-    'Entities.EntityType',
-    'Entities.IsLowercase',
-    'Entities.DisambigSentence',
-    'Entities._pageName',
-    'Entities._pageTitle',
-    'Entities._pageNamespace',
-    'Entities._pageID',
-    'Entities._ID',
-  ],
-  ExternalContent: [
-    'ExternalContent.Title',
-    'ExternalContent.URL',
-    'ExternalContent.ContentType',
-    'ExternalContent.MediaType',
-    'ExternalContent.Language',
-    'ExternalContent.Players',
-    'ExternalContent.Tournaments',
-    'ExternalContent.Teams',
-    'ExternalContent.Date',
-    'ExternalContent.Year',
-    'ExternalContent.Publication',
-    'ExternalContent.N_ItemInDate',
-    'ExternalContent.Authors',
-    'ExternalContent.Translators',
-    'ExternalContent.Series',
-    'ExternalContent.SeriesSeason',
-    'ExternalContent.SeriesSeasonNumber',
-    'ExternalContent._pageName',
-    'ExternalContent._pageTitle',
-    'ExternalContent._pageNamespace',
-    'ExternalContent._pageID',
-    'ExternalContent._ID',
-  ],
-  GCDArchive: [
-    'GCDArchive.Region',
-    'GCDArchive.RegionAbbreviation',
-    'GCDArchive.PageDate',
-    'GCDArchive.PageDateTime',
-    'GCDArchive.UpdateDate',
-    'GCDArchive.PageURLDate',
-    'GCDArchive.IsNew',
-    'GCDArchive.Diff',
-    'GCDArchive.Diff_URL',
-    'GCDArchive._pageName',
-    'GCDArchive._pageTitle',
-    'GCDArchive._pageNamespace',
-    'GCDArchive._pageID',
-    'GCDArchive._ID',
-  ],
-  Hooks: [
-    'Hooks.Hook',
-    'Hooks.Module',
-    'Hooks.Action',
-    'Hooks._pageName',
-    'Hooks._pageTitle',
-    'Hooks._pageNamespace',
-    'Hooks._pageID',
-    'Hooks._ID',
-  ],
-  IgnorePagedata: [
-    'IgnorePagedata.TypeOfIgnore',
-    'IgnorePagedata._pageName',
-    'IgnorePagedata._pageTitle',
-    'IgnorePagedata._pageNamespace',
-    'IgnorePagedata._pageID',
-    'IgnorePagedata._ID',
-  ],
-  IndividualAchievements: [
-    'IndividualAchievements.Player',
-    'IndividualAchievements.Link',
-    'IndividualAchievements.Team',
-    'IndividualAchievements.OverviewPage',
-    'IndividualAchievements.Display',
-    'IndividualAchievements.Place',
-    'IndividualAchievements.Place_Number',
-    'IndividualAchievements.AchievementType',
-    'IndividualAchievements.Description',
-    'IndividualAchievements._pageName',
-    'IndividualAchievements._pageTitle',
-    'IndividualAchievements._pageNamespace',
-    'IndividualAchievements._pageID',
-    'IndividualAchievements._ID',
-  ],
-  Items: [
-    'Items.Name',
-    'Items.Recipe',
-    'Items.Cost',
-    'Items.TotalCost',
-    'Items.AD',
-    'Items.LifeSteal',
-    'Items.Health',
-    'Items.HPRegen',
-    'Items.Armor',
-    'Items.MR',
-    'Items.AttackDamage',
-    'Items.Crit',
-    'Items.AttackSpeed',
-    'Items.ArmorPen',
-    'Items.AttackRange',
-    'Items.Mana',
-    'Items.ManaRegen',
-    'Items.Energy',
-    'Items.EnergyRegen',
-    'Items.AP',
-    'Items.CDR',
-    'Items.AbilityHaste',
-    'Items.Omnivamp',
-    'Items.PhysVamp',
-    'Items.SpellVamp',
-    'Items.MPen',
-    'Items.MovespeedFlat',
-    'Items.MovespeedPercent',
-    'Items.Tenacity',
-    'Items.GoldGen',
-    'Items.OnHit',
-    'Items.BonusHP',
-    'Items.Healing',
-    'Items.HSPower',
-    'Items.SlowResist',
-    'Items._pageName',
-    'Items._pageTitle',
-    'Items._pageNamespace',
-    'Items._pageID',
-    'Items._ID',
-  ],
-  LeagueGroups: [
-    'LeagueGroups.LongName',
-    'LeagueGroups.ShortName',
-    'LeagueGroups.Leagues',
-    'LeagueGroups._pageName',
-    'LeagueGroups._pageTitle',
-    'LeagueGroups._pageNamespace',
-    'LeagueGroups._pageID',
-    'LeagueGroups._ID',
-  ],
-  Leagues: [
-    'Leagues.League',
-    'Leagues.League_Short',
-    'Leagues.Region',
-    'Leagues.Level',
-    'Leagues.IsOfficial',
-    'Leagues._pageName',
-    'Leagues._pageTitle',
-    'Leagues._pageNamespace',
-    'Leagues._pageID',
-    'Leagues._ID',
-  ],
-  ListplayerCurrent: [
-    'ListplayerCurrent.ID',
-    'ListplayerCurrent.Link',
-    'ListplayerCurrent.Name',
-    'ListplayerCurrent.N',
-    'ListplayerCurrent.Country',
-    'ListplayerCurrent.Role',
-    'ListplayerCurrent.IsSubstitute',
-    'ListplayerCurrent.IsTrainee',
-    'ListplayerCurrent.Team',
-    'ListplayerCurrent.ContractDate',
-    'ListplayerCurrent.Residency',
-    'ListplayerCurrent._pageName',
-    'ListplayerCurrent._pageTitle',
-    'ListplayerCurrent._pageNamespace',
-    'ListplayerCurrent._pageID',
-    'ListplayerCurrent._ID',
-  ],
-  LowPriorityRedirects: [
-    'LowPriorityRedirects.IsLowPriority',
-    'LowPriorityRedirects._pageName',
-    'LowPriorityRedirects._pageTitle',
-    'LowPriorityRedirects._pageNamespace',
-    'LowPriorityRedirects._pageID',
-    'LowPriorityRedirects._ID',
-  ],
-  MatchSchedule: [
-    'MatchSchedule.Team1',
-    'MatchSchedule.Team2',
-    'MatchSchedule.Team1Final',
-    'MatchSchedule.Team2Final',
-    'MatchSchedule.Winner',
-    'MatchSchedule.Team1Points',
-    'MatchSchedule.Team2Points',
-    'MatchSchedule.Team1PointsTB',
-    'MatchSchedule.Team2PointsTB',
-    'MatchSchedule.Team1Score',
-    'MatchSchedule.Team2Score',
-    'MatchSchedule.Team1Poster',
-    'MatchSchedule.Team2Poster',
-    'MatchSchedule.Team1Advantage',
-    'MatchSchedule.Team2Advantage',
-    'MatchSchedule.FF',
-    'MatchSchedule.Player1',
-    'MatchSchedule.Player2',
-    'MatchSchedule.MatchDay',
-    'MatchSchedule.DateTime_UTC',
-    'MatchSchedule.HasTime',
-    'MatchSchedule.DST',
-    'MatchSchedule.IsFlexibleStart',
-    'MatchSchedule.IsReschedulable',
-    'MatchSchedule.OverrideAllowPredictions',
-    'MatchSchedule.IsTiebreaker',
-    'MatchSchedule.OverviewPage',
-    'MatchSchedule.ShownName',
-    'MatchSchedule.ShownRound',
-    'MatchSchedule.BestOf',
-    'MatchSchedule.Round',
-    'MatchSchedule.Phase',
-    'MatchSchedule.N_MatchInPage',
-    'MatchSchedule.Tab',
-    'MatchSchedule.N_MatchInTab',
-    'MatchSchedule.N_TabInPage',
-    'MatchSchedule.N_Page',
-    'MatchSchedule.Patch',
-    'MatchSchedule.PatchPage',
-    'MatchSchedule.Hotfix',
-    'MatchSchedule.DisabledChampions',
-    'MatchSchedule.PatchFootnote',
-    'MatchSchedule.InitialN_MatchInTab',
-    'MatchSchedule.InitialPageAndTab',
-    'MatchSchedule.GroupName',
-    'MatchSchedule.Stream',
-    'MatchSchedule.StreamDisplay',
-    'MatchSchedule.Venue',
-    'MatchSchedule.CastersPBP',
-    'MatchSchedule.CastersColor',
-    'MatchSchedule.Casters',
-    'MatchSchedule.MVP',
-    'MatchSchedule.MVPPoints',
-    'MatchSchedule.VodInterview',
-    'MatchSchedule.VodHighlights',
-    'MatchSchedule.InterviewWith',
-    'MatchSchedule.Recap',
-    'MatchSchedule.Reddit',
-    'MatchSchedule.QQ',
-    'MatchSchedule.Wanplus',
-    'MatchSchedule.WanplusId',
-    'MatchSchedule.PageAndTeam1',
-    'MatchSchedule.PageAndTeam2',
-    'MatchSchedule.Team1Footnote',
-    'MatchSchedule.Team2Footnote',
-    'MatchSchedule.Footnote',
-    'MatchSchedule.UniqueMatch',
-    'MatchSchedule.MatchId',
-    'MatchSchedule.UserSignup',
-    'MatchSchedule.Tags',
-    'MatchSchedule._pageName',
-    'MatchSchedule._pageTitle',
-    'MatchSchedule._pageNamespace',
-    'MatchSchedule._pageID',
-    'MatchSchedule._ID',
-  ],
-  MatchScheduleGame: [
-    'MatchScheduleGame.Blue',
-    'MatchScheduleGame.Red',
-    'MatchScheduleGame.Winner',
-    'MatchScheduleGame.BlueFinal',
-    'MatchScheduleGame.RedFinal',
-    'MatchScheduleGame.BlueFootnote',
-    'MatchScheduleGame.RedFootnote',
-    'MatchScheduleGame.Footnote',
-    'MatchScheduleGame.IsChronobreak',
-    'MatchScheduleGame.IsRemake',
-    'MatchScheduleGame.FF',
-    'MatchScheduleGame.Selection',
-    'MatchScheduleGame.HasSelection',
-    'MatchScheduleGame.MatchHistory',
-    'MatchScheduleGame.Recap',
-    'MatchScheduleGame.Reddit',
-    'MatchScheduleGame.Vod',
-    'MatchScheduleGame.VodPB',
-    'MatchScheduleGame.VodGameStart',
-    'MatchScheduleGame.VodPostgame',
-    'MatchScheduleGame.VodHighlights',
-    'MatchScheduleGame.VodInterview',
-    'MatchScheduleGame.InterviewWith',
-    'MatchScheduleGame.MVP',
-    'MatchScheduleGame.MVPPoints',
-    'MatchScheduleGame.OverviewPage',
-    'MatchScheduleGame.N_MatchInTab',
-    'MatchScheduleGame.N_TabInPage',
-    'MatchScheduleGame.N_GameInMatch',
-    'MatchScheduleGame.N_Page',
-    'MatchScheduleGame.ScoreboardID_Wiki',
-    'MatchScheduleGame.ScoreboardID_Riot',
-    'MatchScheduleGame.GameID_Wiki',
-    'MatchScheduleGame.GameId',
-    'MatchScheduleGame.UniqueMatch',
-    'MatchScheduleGame.MatchId',
-    'MatchScheduleGame.UniqueLine',
-    'MatchScheduleGame.WrittenSummary',
-    'MatchScheduleGame._pageName',
-    'MatchScheduleGame._pageTitle',
-    'MatchScheduleGame._pageNamespace',
-    'MatchScheduleGame._pageID',
-    'MatchScheduleGame._ID',
-  ],
-  NASGLadder2018: [
-    'NASGLadder2018.Display',
-    'NASGLadder2018.Link',
-    'NASGLadder2018.Year',
-    'NASGLadder2018.Cycle1',
-    'NASGLadder2018.Cycle2',
-    'NASGLadder2018.Cycle3',
-    'NASGLadder2018.Cycle4',
-    'NASGLadder2018.Cycle5',
-    'NASGLadder2018.Cycle6',
-    'NASGLadder2018.Cycle7',
-    'NASGLadder2018.Cycle8',
-    'NASGLadder2018.Total',
-    'NASGLadder2018.Role',
-    'NASGLadder2018._pageName',
-    'NASGLadder2018._pageTitle',
-    'NASGLadder2018._pageNamespace',
-    'NASGLadder2018._pageID',
-    'NASGLadder2018._ID',
-  ],
-  NASGLadder7Cycles: [
-    'NASGLadder7Cycles.Display',
-    'NASGLadder7Cycles.Link',
-    'NASGLadder7Cycles.Year',
-    'NASGLadder7Cycles.Cycle1',
-    'NASGLadder7Cycles.Cycle2',
-    'NASGLadder7Cycles.Cycle3',
-    'NASGLadder7Cycles.Cycle4',
-    'NASGLadder7Cycles.Cycle5',
-    'NASGLadder7Cycles.Cycle6',
-    'NASGLadder7Cycles.Cycle7',
-    'NASGLadder7Cycles.Total',
-    'NASGLadder7Cycles.Role',
-    'NASGLadder7Cycles._pageName',
-    'NASGLadder7Cycles._pageTitle',
-    'NASGLadder7Cycles._pageNamespace',
-    'NASGLadder7Cycles._pageID',
-    'NASGLadder7Cycles._ID',
-  ],
-  NTLGlossary: [
-    'NTLGlossary.Term',
-    'NTLGlossary.Term_LC',
-    'NTLGlossary.Definition',
-    'NTLGlossary.Categories',
-    'NTLGlossary._pageName',
-    'NTLGlossary._pageTitle',
-    'NTLGlossary._pageNamespace',
-    'NTLGlossary._pageID',
-    'NTLGlossary._ID',
-  ],
-  NewsItems: [
-    'NewsItems.Date_Display',
-    'NewsItems.Date_Sort',
-    'NewsItems.IsApproxDate',
-    'NewsItems.EarliestPossibleDate',
-    'NewsItems.LatestPossibleDate',
-    'NewsItems.Sentence',
-    'NewsItems.SentenceWithDate',
-    'NewsItems.Sentence_Team',
-    'NewsItems.Sentence_Player',
-    'NewsItems.Sentence_Tournament',
-    'NewsItems.Subject',
-    'NewsItems.SubjectType',
-    'NewsItems.SubjectLink',
-    'NewsItems.Preload',
-    'NewsItems.Region',
-    'NewsItems.Players',
-    'NewsItems.Teams',
-    'NewsItems.Tournaments',
-    'NewsItems.Tags',
-    'NewsItems.Source',
-    'NewsItems.N_LineInDate',
-    'NewsItems.NewsId',
-    'NewsItems.ExcludeFrontpage',
-    'NewsItems.ExcludePortal',
-    'NewsItems._pageName',
-    'NewsItems._pageTitle',
-    'NewsItems._pageNamespace',
-    'NewsItems._pageID',
-    'NewsItems._ID',
-  ],
-  Organizations: [
-    'Organizations.Name',
-    'Organizations.OverviewPage',
-    'Organizations.Location',
-    'Organizations.Region',
-    'Organizations.Image',
-    'Organizations.Twitter',
-    'Organizations.Youtube',
-    'Organizations.Facebook',
-    'Organizations.Instagram',
-    'Organizations.Discord',
-    'Organizations.Snapchat',
-    'Organizations.Vk',
-    'Organizations.Subreddit',
-    'Organizations.IsLowercase',
-    'Organizations._pageName',
-    'Organizations._pageTitle',
-    'Organizations._pageNamespace',
-    'Organizations._pageID',
-    'Organizations._ID',
-  ],
-  ParticipantsArgs: [
-    'ParticipantsArgs.OverviewPage',
-    'ParticipantsArgs.N_TeamInPage',
-    'ParticipantsArgs.Pool',
-    'ParticipantsArgs.Args',
-    'ParticipantsArgs._pageName',
-    'ParticipantsArgs._pageTitle',
-    'ParticipantsArgs._pageNamespace',
-    'ParticipantsArgs._pageID',
-    'ParticipantsArgs._ID',
-  ],
-  PatchNotes: [
-    'PatchNotes.EntityType',
-    'PatchNotes.Entity',
-    'PatchNotes.Changes',
-    'PatchNotes.Patch',
-    'PatchNotes._pageName',
-    'PatchNotes._pageTitle',
-    'PatchNotes._pageNamespace',
-    'PatchNotes._pageID',
-    'PatchNotes._ID',
-  ],
-  Pentakills: [
-    'Pentakills.N',
-    'Pentakills.DateDisplay',
-    'Pentakills.DateSort',
-    'Pentakills.Region',
-    'Pentakills.Tournament',
-    'Pentakills.OverviewPage',
-    'Pentakills.Team',
-    'Pentakills.TeamVs',
-    'Pentakills.Name',
-    'Pentakills.Link',
-    'Pentakills.Champion',
-    'Pentakills.Role',
-    'Pentakills.Win',
-    'Pentakills.Kills',
-    'Pentakills.Deaths',
-    'Pentakills.Assists',
-    'Pentakills.ScoreboardLink',
-    'Pentakills.Vod',
-    'Pentakills._pageName',
-    'Pentakills._pageTitle',
-    'Pentakills._pageNamespace',
-    'Pentakills._pageID',
-    'Pentakills._ID',
-  ],
-  PicksAndBansS7: [
-    'PicksAndBansS7.Team1Role1',
-    'PicksAndBansS7.Team1Role2',
-    'PicksAndBansS7.Team1Role3',
-    'PicksAndBansS7.Team1Role4',
-    'PicksAndBansS7.Team1Role5',
-    'PicksAndBansS7.Team2Role1',
-    'PicksAndBansS7.Team2Role2',
-    'PicksAndBansS7.Team2Role3',
-    'PicksAndBansS7.Team2Role4',
-    'PicksAndBansS7.Team2Role5',
-    'PicksAndBansS7.Team1Ban1',
-    'PicksAndBansS7.Team1Ban2',
-    'PicksAndBansS7.Team1Ban3',
-    'PicksAndBansS7.Team1Ban4',
-    'PicksAndBansS7.Team1Ban5',
-    'PicksAndBansS7.Team1Pick1',
-    'PicksAndBansS7.Team1Pick2',
-    'PicksAndBansS7.Team1Pick3',
-    'PicksAndBansS7.Team1Pick4',
-    'PicksAndBansS7.Team1Pick5',
-    'PicksAndBansS7.Team2Ban1',
-    'PicksAndBansS7.Team2Ban2',
-    'PicksAndBansS7.Team2Ban3',
-    'PicksAndBansS7.Team2Ban4',
-    'PicksAndBansS7.Team2Ban5',
-    'PicksAndBansS7.Team2Pick1',
-    'PicksAndBansS7.Team2Pick2',
-    'PicksAndBansS7.Team2Pick3',
-    'PicksAndBansS7.Team2Pick4',
-    'PicksAndBansS7.Team2Pick5',
-    'PicksAndBansS7.Team1',
-    'PicksAndBansS7.Team2',
-    'PicksAndBansS7.Winner',
-    'PicksAndBansS7.Team1Score',
-    'PicksAndBansS7.Team2Score',
-    'PicksAndBansS7.Team1PicksByRoleOrder',
-    'PicksAndBansS7.Team2PicksByRoleOrder',
-    'PicksAndBansS7.OverviewPage',
-    'PicksAndBansS7.Phase',
-    'PicksAndBansS7.UniqueLine',
-    'PicksAndBansS7.IsComplete',
-    'PicksAndBansS7.Tab',
-    'PicksAndBansS7.N_Page',
-    'PicksAndBansS7.N_TabInPage',
-    'PicksAndBansS7.N_MatchInPage',
-    'PicksAndBansS7.N_GameInPage',
-    'PicksAndBansS7.N_GameInMatch',
-    'PicksAndBansS7.N_MatchInTab',
-    'PicksAndBansS7.N_GameInTab',
-    'PicksAndBansS7.GameId',
-    'PicksAndBansS7.MatchId',
-    'PicksAndBansS7.GameID_Wiki',
-    'PicksAndBansS7._pageName',
-    'PicksAndBansS7._pageTitle',
-    'PicksAndBansS7._pageNamespace',
-    'PicksAndBansS7._pageID',
-    'PicksAndBansS7._ID',
-  ],
-  PlayerImages: [
-    'PlayerImages.FileName',
-    'PlayerImages.Link',
-    'PlayerImages.Team',
-    'PlayerImages.Tournament',
-    'PlayerImages.ImageType',
-    'PlayerImages.Caption',
-    'PlayerImages.IsProfileImage',
-    'PlayerImages.SortDate',
-    'PlayerImages._pageName',
-    'PlayerImages._pageTitle',
-    'PlayerImages._pageNamespace',
-    'PlayerImages._pageID',
-    'PlayerImages._ID',
-  ],
-  PlayerLeagueHistory: [
-    'PlayerLeagueHistory.Player',
-    'PlayerLeagueHistory.Teams',
-    'PlayerLeagueHistory.League',
-    'PlayerLeagueHistory.LeagueHistory',
-    'PlayerLeagueHistory.TotalGames',
-    'PlayerLeagueHistory._pageName',
-    'PlayerLeagueHistory._pageTitle',
-    'PlayerLeagueHistory._pageNamespace',
-    'PlayerLeagueHistory._pageID',
-    'PlayerLeagueHistory._ID',
-  ],
-  PlayerPronunciationFiles: [
-    'PlayerPronunciationFiles.Player',
-    'PlayerPronunciationFiles.Name',
-    'PlayerPronunciationFiles.RecordedBy',
-    'PlayerPronunciationFiles.RecordedBy_User',
-    'PlayerPronunciationFiles.Source',
-    'PlayerPronunciationFiles.Date',
-    'PlayerPronunciationFiles.Language',
-    'PlayerPronunciationFiles._pageName',
-    'PlayerPronunciationFiles._pageTitle',
-    'PlayerPronunciationFiles._pageNamespace',
-    'PlayerPronunciationFiles._pageID',
-    'PlayerPronunciationFiles._ID',
-  ],
-  PlayerRedirects: [
-    'PlayerRedirects.AllName',
-    'PlayerRedirects.OverviewPage',
-    'PlayerRedirects.ID',
-    'PlayerRedirects._pageName',
-    'PlayerRedirects._pageTitle',
-    'PlayerRedirects._pageNamespace',
-    'PlayerRedirects._pageID',
-    'PlayerRedirects._ID',
-  ],
-  PlayerRenames: [
-    'PlayerRenames.Date',
-    'PlayerRenames.OriginalName',
-    'PlayerRenames.NewName',
-    'PlayerRenames.NewsId',
-    'PlayerRenames.IsRestyle',
-    'PlayerRenames._pageName',
-    'PlayerRenames._pageTitle',
-    'PlayerRenames._pageNamespace',
-    'PlayerRenames._pageID',
-    'PlayerRenames._ID',
-  ],
-  Players: [
-    'Players.ID',
-    'Players.OverviewPage',
-    'Players.Player',
-    'Players.Image',
-    'Players.Name',
-    'Players.NativeName',
-    'Players.NameAlphabet',
-    'Players.NameFull',
-    'Players.Country',
-    'Players.Nationality',
-    'Players.NationalityPrimary',
-    'Players.Age',
-    'Players.Birthdate',
-    'Players.ResidencyFormer',
-    'Players.Team',
-    'Players.Team2',
-    'Players.CurrentTeams',
-    'Players.TeamSystem',
-    'Players.Team2System',
-    'Players.Residency',
-    'Players.Role',
-    'Players.FavChamps',
-    'Players.SoloqueueIds',
-    'Players.Askfm',
-    'Players.Discord',
-    'Players.Facebook',
-    'Players.Instagram',
-    'Players.Lolpros',
-    'Players.Reddit',
-    'Players.Snapchat',
-    'Players.Stream',
-    'Players.Twitter',
-    'Players.Vk',
-    'Players.Website',
-    'Players.Weibo',
-    'Players.Youtube',
-    'Players.TeamLast',
-    'Players.RoleLast',
-    'Players.IsRetired',
-    'Players.ToWildrift',
-    'Players.IsPersonality',
-    'Players.IsSubstitute',
-    'Players.IsTrainee',
-    'Players.IsLowercase',
-    'Players.IsAutoTeam',
-    'Players.IsLowContent',
-    'Players._pageName',
-    'Players._pageTitle',
-    'Players._pageNamespace',
-    'Players._pageID',
-    'Players._ID',
-  ],
-  RegionStatuses: [
-    'RegionStatuses.Region',
-    'RegionStatuses.Year',
-    'RegionStatuses.Status',
-    'RegionStatuses._pageName',
-    'RegionStatuses._pageTitle',
-    'RegionStatuses._pageNamespace',
-    'RegionStatuses._pageID',
-    'RegionStatuses._ID',
-  ],
-  Regions: [
-    'Regions.RegionLong',
-    'Regions.RegionMedium',
-    'Regions.Priority',
-    'Regions.IsCurrent',
-    'Regions._pageName',
-    'Regions._pageTitle',
-    'Regions._pageNamespace',
-    'Regions._pageID',
-    'Regions._ID',
-  ],
-  ResidencyChanges: [
-    'ResidencyChanges.Player',
-    'ResidencyChanges.NewsId',
-    'ResidencyChanges.ResidencyOld',
-    'ResidencyChanges.ResidencyNew',
-    'ResidencyChanges._pageName',
-    'ResidencyChanges._pageTitle',
-    'ResidencyChanges._pageNamespace',
-    'ResidencyChanges._pageID',
-    'ResidencyChanges._ID',
-  ],
-  Retirements: [
-    'Retirements.Player',
-    'Retirements.NewsId',
-    'Retirements.Unretires',
-    'Retirements._pageName',
-    'Retirements._pageTitle',
-    'Retirements._pageNamespace',
-    'Retirements._pageID',
-    'Retirements._ID',
-  ],
-  RosterChangePortalDates: [
-    'RosterChangePortalDates.Region',
-    'RosterChangePortalDates.DateStart',
-    'RosterChangePortalDates.DateEnd',
-    'RosterChangePortalDates.Year',
-    'RosterChangePortalDates.Period',
-    'RosterChangePortalDates.PeriodName',
-    'RosterChangePortalDates.PeriodSort',
-    'RosterChangePortalDates.OverviewPage',
-    'RosterChangePortalDates._pageName',
-    'RosterChangePortalDates._pageTitle',
-    'RosterChangePortalDates._pageNamespace',
-    'RosterChangePortalDates._pageID',
-    'RosterChangePortalDates._ID',
-  ],
-  RosterChangePortalPages: [
-    'RosterChangePortalPages.SplitOrder',
-    'RosterChangePortalPages.Year',
-    'RosterChangePortalPages._pageName',
-    'RosterChangePortalPages._pageTitle',
-    'RosterChangePortalPages._pageNamespace',
-    'RosterChangePortalPages._pageID',
-    'RosterChangePortalPages._ID',
-  ],
-  RosterChanges: [
-    'RosterChanges.Date_Sort',
-    'RosterChanges.Player',
-    'RosterChanges.Direction',
-    'RosterChanges.Team',
-    'RosterChanges.RolesIngame',
-    'RosterChanges.RolesStaff',
-    'RosterChanges.Roles',
-    'RosterChanges.RoleDisplay',
-    'RosterChanges.Role',
-    'RosterChanges.RoleModifier',
-    'RosterChanges.Status',
-    'RosterChanges.CurrentTeamPriority',
-    'RosterChanges.PlayerUnlinked',
-    'RosterChanges.AlreadyJoined',
-    'RosterChanges.Tournaments',
-    'RosterChanges.Source',
-    'RosterChanges.IsGCD',
-    'RosterChanges.Preload',
-    'RosterChanges.PreloadSortNumber',
-    'RosterChanges.Tags',
-    'RosterChanges.NewsId',
-    'RosterChanges.RosterChangeId',
-    'RosterChanges.N_LineInNews',
-    'RosterChanges._pageName',
-    'RosterChanges._pageTitle',
-    'RosterChanges._pageNamespace',
-    'RosterChanges._pageID',
-    'RosterChanges._ID',
-  ],
-  RosterRumors: [
-    'RosterRumors.Date',
-    'RosterRumors.Status',
-    'RosterRumors.IsOver',
-    'RosterRumors.NotHappening',
-    'RosterRumors.Player',
-    'RosterRumors.Regions',
-    'RosterRumors.TeamStart',
-    'RosterRumors.TeamEnd',
-    'RosterRumors.LeagueStart',
-    'RosterRumors.LeagueEnd',
-    'RosterRumors.RegionStart',
-    'RosterRumors.RegionEnd',
-    'RosterRumors.RoleStart',
-    'RosterRumors.RoleEnd',
-    'RosterRumors.IsSubStart',
-    'RosterRumors.IsSubEnd',
-    'RosterRumors.IsTraineeStart',
-    'RosterRumors.IsTraineeEnd',
-    'RosterRumors.CustomText',
-    'RosterRumors.SourceLink',
-    'RosterRumors.SourceAuthors',
-    'RosterRumors.SourceSite',
-    'RosterRumors.StatusLink',
-    'RosterRumors.N_LineInDate',
-    'RosterRumors._pageName',
-    'RosterRumors._pageTitle',
-    'RosterRumors._pageNamespace',
-    'RosterRumors._pageID',
-    'RosterRumors._ID',
-  ],
-  ScoreboardGames: [
-    'ScoreboardGames.OverviewPage',
-    'ScoreboardGames.Tournament',
-    'ScoreboardGames.Team1',
-    'ScoreboardGames.Team2',
-    'ScoreboardGames.WinTeam',
-    'ScoreboardGames.LossTeam',
-    'ScoreboardGames.DateTime_UTC',
-    'ScoreboardGames.DST',
-    'ScoreboardGames.Team1Score',
-    'ScoreboardGames.Team2Score',
-    'ScoreboardGames.Winner',
-    'ScoreboardGames.Gamelength',
-    'ScoreboardGames.Gamelength_Number',
-    'ScoreboardGames.Team1Bans',
-    'ScoreboardGames.Team2Bans',
-    'ScoreboardGames.Team1Picks',
-    'ScoreboardGames.Team2Picks',
-    'ScoreboardGames.Team1Players',
-    'ScoreboardGames.Team2Players',
-    'ScoreboardGames.Team1Dragons',
-    'ScoreboardGames.Team2Dragons',
-    'ScoreboardGames.Team1Barons',
-    'ScoreboardGames.Team2Barons',
-    'ScoreboardGames.Team1Towers',
-    'ScoreboardGames.Team2Towers',
-    'ScoreboardGames.Team1Gold',
-    'ScoreboardGames.Team2Gold',
-    'ScoreboardGames.Team1Kills',
-    'ScoreboardGames.Team2Kills',
-    'ScoreboardGames.Team1RiftHeralds',
-    'ScoreboardGames.Team2RiftHeralds',
-    'ScoreboardGames.Team1Inhibitors',
-    'ScoreboardGames.Team2Inhibitors',
-    'ScoreboardGames.Patch',
-    'ScoreboardGames.PatchSort',
-    'ScoreboardGames.MatchHistory',
-    'ScoreboardGames.VOD',
-    'ScoreboardGames.N_Page',
-    'ScoreboardGames.N_MatchInTab',
-    'ScoreboardGames.N_MatchInPage',
-    'ScoreboardGames.N_GameInMatch',
-    'ScoreboardGames.Gamename',
-    'ScoreboardGames.UniqueGame',
-    'ScoreboardGames.UniqueLine',
-    'ScoreboardGames.GameId',
-    'ScoreboardGames.MatchId',
-    'ScoreboardGames.ScoreboardID_Wiki',
-    'ScoreboardGames.ScoreboardID_Riot',
-    'ScoreboardGames.Note1',
-    'ScoreboardGames.Note2',
-    'ScoreboardGames.Note3',
-    'ScoreboardGames.Note4',
-    'ScoreboardGames._pageName',
-    'ScoreboardGames._pageTitle',
-    'ScoreboardGames._pageNamespace',
-    'ScoreboardGames._pageID',
-    'ScoreboardGames._ID',
-  ],
-  ScoreboardPlayers: [
-    'ScoreboardPlayers.OverviewPage',
-    'ScoreboardPlayers.Name',
-    'ScoreboardPlayers.Link',
-    'ScoreboardPlayers.Champion',
-    'ScoreboardPlayers.Kills',
-    'ScoreboardPlayers.Deaths',
-    'ScoreboardPlayers.Assists',
-    'ScoreboardPlayers.SummonerSpells',
-    'ScoreboardPlayers.Gold',
-    'ScoreboardPlayers.CS',
-    'ScoreboardPlayers.Items',
-    'ScoreboardPlayers.Trinket',
-    'ScoreboardPlayers.KeystoneMastery',
-    'ScoreboardPlayers.KeystoneRune',
-    'ScoreboardPlayers.PrimaryTree',
-    'ScoreboardPlayers.SecondaryTree',
-    'ScoreboardPlayers.Runes',
-    'ScoreboardPlayers.TeamKills',
-    'ScoreboardPlayers.TeamGold',
-    'ScoreboardPlayers.Team',
-    'ScoreboardPlayers.TeamVs',
-    'ScoreboardPlayers.Time',
-    'ScoreboardPlayers.PlayerWin',
-    'ScoreboardPlayers.DateTime_UTC',
-    'ScoreboardPlayers.DST',
-    'ScoreboardPlayers.Tournament',
-    'ScoreboardPlayers.Role',
-    'ScoreboardPlayers.Role_Number',
-    'ScoreboardPlayers.IngameRole',
-    'ScoreboardPlayers.Side',
-    'ScoreboardPlayers.GameIDWiki',
-    'ScoreboardPlayers.GameIDRiot',
-    'ScoreboardPlayers.UniqueGame',
-    'ScoreboardPlayers.UniqueLine',
-    'ScoreboardPlayers.UniqueLineVs',
-    'ScoreboardPlayers.UniqueRole',
-    'ScoreboardPlayers.UniqueRoleVs',
-    'ScoreboardPlayers.GameId',
-    'ScoreboardPlayers.MatchId',
-    'ScoreboardPlayers.GameTeamId',
-    'ScoreboardPlayers.GameRoleId',
-    'ScoreboardPlayers.GameRoleIdVs',
-    'ScoreboardPlayers.StatsPage',
-    'ScoreboardPlayers._pageName',
-    'ScoreboardPlayers._pageTitle',
-    'ScoreboardPlayers._pageNamespace',
-    'ScoreboardPlayers._pageID',
-    'ScoreboardPlayers._ID',
-  ],
-  ScoreboardTeams: [
-    'ScoreboardTeams.Team',
-    'ScoreboardTeams.Side',
-    'ScoreboardTeams.Number',
-    'ScoreboardTeams.IsWinner',
-    'ScoreboardTeams.Score',
-    'ScoreboardTeams.Bans',
-    'ScoreboardTeams.Picks',
-    'ScoreboardTeams.Roster',
-    'ScoreboardTeams.Dragons',
-    'ScoreboardTeams.Barons',
-    'ScoreboardTeams.Towers',
-    'ScoreboardTeams.Gold',
-    'ScoreboardTeams.Kills',
-    'ScoreboardTeams.RiftHeralds',
-    'ScoreboardTeams.Inhibitors',
-    'ScoreboardTeams.OverviewPage',
-    'ScoreboardTeams.StatsPage',
-    'ScoreboardTeams.UniqueGame',
-    'ScoreboardTeams.UniqueTeam',
-    'ScoreboardTeams.GameId',
-    'ScoreboardTeams.MatchId',
-    'ScoreboardTeams.GameTeamId',
-    'ScoreboardTeams._pageName',
-    'ScoreboardTeams._pageTitle',
-    'ScoreboardTeams._pageNamespace',
-    'ScoreboardTeams._pageID',
-    'ScoreboardTeams._ID',
-  ],
-  SisterTeams: [
-    'SisterTeams.Team',
-    'SisterTeams.Team_Markup',
-    'SisterTeams.Status',
-    'SisterTeams.ActiveList',
-    'SisterTeams.InactiveList',
-    'SisterTeams.Active_Markup',
-    'SisterTeams.Inactive_Markup',
-    'SisterTeams.AllTeams',
-    'SisterTeams.AllTeams_Markup',
-    'SisterTeams._pageName',
-    'SisterTeams._pageTitle',
-    'SisterTeams._pageNamespace',
-    'SisterTeams._pageID',
-    'SisterTeams._ID',
-  ],
-  Skins: [
-    'Skins.Name',
-    'Skins.Champion',
-    'Skins.RP',
-    'Skins.ReleaseDate',
-    'Skins.Artists',
-    'Skins.IsLegacy',
-    'Skins.Special',
-    'Skins.HasChromas',
-    'Skins.IsClassic',
-    'Skins.IsReleased',
-    'Skins._pageName',
-    'Skins._pageTitle',
-    'Skins._pageNamespace',
-    'Skins._pageID',
-    'Skins._ID',
-  ],
-  SkinsUsed: [
-    'SkinsUsed.Champion',
-    'SkinsUsed.Skin',
-    'SkinsUsed.Chroma',
-    'SkinsUsed.OverviewPage',
-    'SkinsUsed._pageName',
-    'SkinsUsed._pageTitle',
-    'SkinsUsed._pageNamespace',
-    'SkinsUsed._pageID',
-    'SkinsUsed._ID',
-  ],
-  Standings: [
-    'Standings.OverviewPage',
-    'Standings.Team',
-    'Standings.PageAndTeam',
-    'Standings.N',
-    'Standings.Place',
-    'Standings.WinSeries',
-    'Standings.LossSeries',
-    'Standings.TieSeries',
-    'Standings.WinGames',
-    'Standings.LossGames',
-    'Standings.Points',
-    'Standings.PointsTiebreaker',
-    'Standings.Streak',
-    'Standings.StreakDirection',
-    'Standings._pageName',
-    'Standings._pageTitle',
-    'Standings._pageNamespace',
-    'Standings._pageID',
-    'Standings._ID',
-  ],
-  StandingsArgs: [
-    'StandingsArgs.OverviewPage',
-    'StandingsArgs.TournamentGroup',
-    'StandingsArgs.N',
-    'StandingsArgs.Args',
-    'StandingsArgs.RowArgs',
-    'StandingsArgs.Finalorder',
-    'StandingsArgs.UniqueLine',
-    'StandingsArgs.IsOver',
-    'StandingsArgs._pageName',
-    'StandingsArgs._pageTitle',
-    'StandingsArgs._pageNamespace',
-    'StandingsArgs._pageID',
-    'StandingsArgs._ID',
-  ],
-  TeamRedirects: [
-    'TeamRedirects.AllName',
-    'TeamRedirects.OtherName',
-    'TeamRedirects.UniqueLine',
-    'TeamRedirects._pageName',
-    'TeamRedirects._pageTitle',
-    'TeamRedirects._pageNamespace',
-    'TeamRedirects._pageID',
-    'TeamRedirects._ID',
-  ],
-  TeamRenames: [
-    'TeamRenames.Date',
-    'TeamRenames.OriginalName',
-    'TeamRenames.NewName',
-    'TeamRenames.Verb',
-    'TeamRenames.Slot',
-    'TeamRenames.IsSamePage',
-    'TeamRenames.NewsId',
-    'TeamRenames._pageName',
-    'TeamRenames._pageTitle',
-    'TeamRenames._pageNamespace',
-    'TeamRenames._pageID',
-    'TeamRenames._ID',
-  ],
-  TeamRosterPhotos: [
-    'TeamRosterPhotos.FileName',
-    'TeamRosterPhotos.Team',
-    'TeamRosterPhotos.Tournament',
-    'TeamRosterPhotos.Caption',
-    'TeamRosterPhotos.SortDate',
-    'TeamRosterPhotos._pageName',
-    'TeamRosterPhotos._pageTitle',
-    'TeamRosterPhotos._pageNamespace',
-    'TeamRosterPhotos._pageID',
-    'TeamRosterPhotos._ID',
-  ],
-  Teams: [
-    'Teams.Name',
-    'Teams.OverviewPage',
-    'Teams.Short',
-    'Teams.Location',
-    'Teams.TeamLocation',
-    'Teams.Region',
-    'Teams.OrganizationPage',
-    'Teams.Image',
-    'Teams.Twitter',
-    'Teams.Youtube',
-    'Teams.Facebook',
-    'Teams.Instagram',
-    'Teams.Discord',
-    'Teams.Snapchat',
-    'Teams.Vk',
-    'Teams.Subreddit',
-    'Teams.Website',
-    'Teams.RosterPhoto',
-    'Teams.IsDisbanded',
-    'Teams.RenamedTo',
-    'Teams.IsLowercase',
-    'Teams._pageName',
-    'Teams._pageTitle',
-    'Teams._pageNamespace',
-    'Teams._pageID',
-    'Teams._ID',
-  ],
-  TeamsWithAutoRosters: [
-    'TeamsWithAutoRosters.OverviewPage',
-    'TeamsWithAutoRosters._pageName',
-    'TeamsWithAutoRosters._pageTitle',
-    'TeamsWithAutoRosters._pageNamespace',
-    'TeamsWithAutoRosters._pageID',
-    'TeamsWithAutoRosters._ID',
-  ],
-  Tenures: [
-    'Tenures.Player',
-    'Tenures.Team',
-    'Tenures.DateJoin',
-    'Tenures.DateLeave',
-    'Tenures.Duration',
-    'Tenures.ContractEnd',
-    'Tenures.RosterChangeIdJoin',
-    'Tenures.RosterChangeIdLeave',
-    'Tenures.ResidencyLeave',
-    'Tenures.NameLeave',
-    'Tenures.NextTeam',
-    'Tenures.NextIsRetired',
-    'Tenures.NextIsWildrift',
-    'Tenures.IsCurrent',
-    'Tenures._pageName',
-    'Tenures._pageTitle',
-    'Tenures._pageNamespace',
-    'Tenures._pageID',
-    'Tenures._ID',
-  ],
-  TenuresUnbroken: [
-    'TenuresUnbroken.Player',
-    'TenuresUnbroken.Team',
-    'TenuresUnbroken.DateJoin',
-    'TenuresUnbroken.DateLeave',
-    'TenuresUnbroken.Duration',
-    'TenuresUnbroken.ContractEnd',
-    'TenuresUnbroken.RosterChangeIdJoin',
-    'TenuresUnbroken.RosterChangeIdLeave',
-    'TenuresUnbroken.RosterChangeIds',
-    'TenuresUnbroken.ResidencyLeave',
-    'TenuresUnbroken.NameLeave',
-    'TenuresUnbroken.NextTeam',
-    'TenuresUnbroken.NextIsRetired',
-    'TenuresUnbroken.NextIsWildrift',
-    'TenuresUnbroken.IsCurrent',
-    'TenuresUnbroken._pageName',
-    'TenuresUnbroken._pageTitle',
-    'TenuresUnbroken._pageNamespace',
-    'TenuresUnbroken._pageID',
-    'TenuresUnbroken._ID',
-  ],
-  TournamentGroups: [
-    'TournamentGroups.Team',
-    'TournamentGroups.OverviewPage',
-    'TournamentGroups.GroupName',
-    'TournamentGroups.GroupDisplay',
-    'TournamentGroups.GroupN',
-    'TournamentGroups.PageAndTeam',
-    'TournamentGroups._pageName',
-    'TournamentGroups._pageTitle',
-    'TournamentGroups._pageNamespace',
-    'TournamentGroups._pageID',
-    'TournamentGroups._ID',
-  ],
-  TournamentPlayers: [
-    'TournamentPlayers.Team',
-    'TournamentPlayers.N_PlayerInTeam',
-    'TournamentPlayers.TeamOrder',
-    'TournamentPlayers.Link',
-    'TournamentPlayers.Player',
-    'TournamentPlayers.Role',
-    'TournamentPlayers.Flag',
-    'TournamentPlayers.Footnote',
-    'TournamentPlayers.OverviewPage',
-    'TournamentPlayers.PageAndTeam',
-    'TournamentPlayers.IsDistribution',
-    'TournamentPlayers._pageName',
-    'TournamentPlayers._pageTitle',
-    'TournamentPlayers._pageNamespace',
-    'TournamentPlayers._pageID',
-    'TournamentPlayers._ID',
-  ],
-  TournamentResults: [
-    'TournamentResults.Event',
-    'TournamentResults.Tier',
-    'TournamentResults.Date',
-    'TournamentResults.RosterPage',
-    'TournamentResults.Place',
-    'TournamentResults.ForceNewPlace',
-    'TournamentResults.Place_Number',
-    'TournamentResults.Qualified',
-    'TournamentResults.Prize',
-    'TournamentResults.Prize_USD',
-    'TournamentResults.Prize_Euro',
-    'TournamentResults.PrizeUnit',
-    'TournamentResults.Prize_Markup',
-    'TournamentResults.PrizeOther',
-    'TournamentResults.Phase',
-    'TournamentResults.Team',
-    'TournamentResults.IsAchievement',
-    'TournamentResults.LastResult',
-    'TournamentResults.LastTeam',
-    'TournamentResults.LastOpponent_Markup',
-    'TournamentResults.GroupName',
-    'TournamentResults.LastOutcome',
-    'TournamentResults.PageAndTeam',
-    'TournamentResults.OverviewPage',
-    'TournamentResults.UniqueLine',
-    'TournamentResults._pageName',
-    'TournamentResults._pageTitle',
-    'TournamentResults._pageNamespace',
-    'TournamentResults._pageID',
-    'TournamentResults._ID',
-  ],
-  TournamentResults1v1: [
-    'TournamentResults1v1.Event',
-    'TournamentResults1v1.Tier',
-    'TournamentResults1v1.Date',
-    'TournamentResults1v1.Place',
-    'TournamentResults1v1.Prize',
-    'TournamentResults1v1.Prize_USD',
-    'TournamentResults1v1.Prize_Euro',
-    'TournamentResults1v1.PrizeUnit',
-    'TournamentResults1v1.Prize_Markup',
-    'TournamentResults1v1.PrizeOther',
-    'TournamentResults1v1.Phase',
-    'TournamentResults1v1.Player',
-    'TournamentResults1v1.PlayerLink',
-    'TournamentResults1v1.Team',
-    'TournamentResults1v1.LastResult',
-    'TournamentResults1v1.LastOpponent',
-    'TournamentResults1v1.LastOpponentLink',
-    'TournamentResults1v1.LastOutcome',
-    'TournamentResults1v1.LastOpponentTeam',
-    'TournamentResults1v1.OverviewPage',
-    'TournamentResults1v1.UniqueLine',
-    'TournamentResults1v1._pageName',
-    'TournamentResults1v1._pageTitle',
-    'TournamentResults1v1._pageNamespace',
-    'TournamentResults1v1._pageID',
-    'TournamentResults1v1._ID',
-  ],
-  TournamentRosters: [
-    'TournamentRosters.Team',
-    'TournamentRosters.OverviewPage',
-    'TournamentRosters.Region',
-    'TournamentRosters.RosterLinks',
-    'TournamentRosters.Roles',
-    'TournamentRosters.Flags',
-    'TournamentRosters.Footnotes',
-    'TournamentRosters.IsUsed',
-    'TournamentRosters.Tournament',
-    'TournamentRosters.Short',
-    'TournamentRosters.IsComplete',
-    'TournamentRosters.PageAndTeam',
-    'TournamentRosters.UniqueLine',
-    'TournamentRosters._pageName',
-    'TournamentRosters._pageTitle',
-    'TournamentRosters._pageNamespace',
-    'TournamentRosters._pageID',
-    'TournamentRosters._ID',
-  ],
-  TournamentTabs: [
-    'TournamentTabs.BasePage',
-    'TournamentTabs.BasePageDisplay',
-    'TournamentTabs.Events',
-    'TournamentTabs._pageName',
-    'TournamentTabs._pageTitle',
-    'TournamentTabs._pageNamespace',
-    'TournamentTabs._pageID',
-    'TournamentTabs._ID',
-  ],
-  Tournaments: [
-    'Tournaments.Name',
-    'Tournaments.OverviewPage',
-    'Tournaments.DateStart',
-    'Tournaments.Date',
-    'Tournaments.DateStartFuzzy',
-    'Tournaments.League',
-    'Tournaments.Region',
-    'Tournaments.Prizepool',
-    'Tournaments.Currency',
-    'Tournaments.Country',
-    'Tournaments.ClosestTimezone',
-    'Tournaments.Rulebook',
-    'Tournaments.EventType',
-    'Tournaments.Links',
-    'Tournaments.Sponsors',
-    'Tournaments.Organizer',
-    'Tournaments.Organizers',
-    'Tournaments.StandardName',
-    'Tournaments.StandardName_Redirect',
-    'Tournaments.Split',
-    'Tournaments.SplitNumber',
-    'Tournaments.TournamentLevel',
-    'Tournaments.IsQualifier',
-    'Tournaments.IsPlayoffs',
-    'Tournaments.IsOfficial',
-    'Tournaments.Year',
-    'Tournaments.LeagueIconKey',
-    'Tournaments.AlternativeNames',
-    'Tournaments.ScrapeLink',
-    'Tournaments.Tags',
-    'Tournaments.SuppressTopSchedule',
-    'Tournaments._pageName',
-    'Tournaments._pageTitle',
-    'Tournaments._pageNamespace',
-    'Tournaments._pageID',
-    'Tournaments._ID',
-  ],
-  UserPredictionGroups: [
-    'UserPredictionGroups.GroupName',
-    'UserPredictionGroups.Members',
-    'UserPredictionGroups.NumberOfMembers',
-    'UserPredictionGroups.OverviewPage',
-    'UserPredictionGroups._pageName',
-    'UserPredictionGroups._pageTitle',
-    'UserPredictionGroups._pageNamespace',
-    'UserPredictionGroups._pageID',
-    'UserPredictionGroups._ID',
-  ],
-  UserPredictions: [
-    'UserPredictions.User',
-    'UserPredictions.OverviewPage',
-    'UserPredictions.NumberOfPredictions',
-    'UserPredictions.NumberCorrect',
-    'UserPredictions.NumberOver',
-    'UserPredictions.NumberMadeAndOver',
-    'UserPredictions.PredictionList',
-    'UserPredictions.PredictionOrder',
-    'UserPredictions._pageName',
-    'UserPredictions._pageTitle',
-    'UserPredictions._pageNamespace',
-    'UserPredictions._pageID',
-    'UserPredictions._ID',
-  ],
-  _pageData: [
-    '_pageData._creationDate',
-    '_pageData._modificationDate',
-    '_pageData._creator',
-    '_pageData._categories',
-    '_pageData._numRevisions',
-    '_pageData._isRedirect',
-    '_pageData._pageNameOrRedirect',
-    '_pageData._pageName',
-    '_pageData._pageTitle',
-    '_pageData._pageNamespace',
-    '_pageData._pageID',
-    '_pageData._ID',
-  ],
-} as const
+export type SchemaMap = typeof schemaMap
+export const schemaMap = {
+  Alphabets: {
+    Alphabet: '', // String
+    IsTransliterated: false, // Boolean
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  BroadcastMusicTrackTypes: {
+    Type: '', // String
+    Priority: 0, // Integer
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  BroadcastMusicTracks: {
+    TrackID: '', // String
+    TrackName: '', // String
+    Album: '', // String
+    Publishers: '', // String
+    Label: '', // String
+    TrackLength: '', // String
+    Artists: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  BroadcastMusicUsages: {
+    TrackID: '', // String
+    Tournament: '', // String
+    Type: '', // String
+    Link: '', // String
+    LinkType: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  CargoAttachments: {
+    CargoTable: '', // String
+    TemplateName: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  ChampionFlashcards: {
+    Year: 0, // Integer
+    Champion: '', // String
+    ChampionRange: '', // String
+    DamageType: '', // String
+    CCLevel: 0, // Integer
+    BurstLevel: 0, // Integer
+    SustainedLevel: 0, // Integer
+    TankLevel: 0, // Integer
+    Goal: '', // String
+    Strengths: '', // String
+    Weaknesses: '', // String
+    Ultimate: '', // String
+    Mechanic: '', // String
+    Classes: [''], // List of String
+    Roles: [''], // List of String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  Champions: {
+    Name: '', // String
+    Title: '', // String
+    ReleaseDate: new Date(), // Date
+    BE: 0, // Integer
+    RP: 0, // Integer
+    Attributes: [''], // List of String
+    Resource: '', // String
+    RealName: '', // String
+    Health: 1, // Float
+    HPLevel: 1, // Float
+    HPDisplay: '', // Wikitext
+    HPLevelDisplay: '', // Wikitext
+    HPRegen: 1, // Float
+    HPRegenLevel: 1, // Float
+    Mana: 1, // Float
+    ManaLevel: 1, // Float
+    ManaRegen: 1, // Float
+    ManaRegenLevel: 1, // Float
+    Energy: 1, // Float
+    EnergyRegen: 1, // Float
+    Movespeed: 1, // Float
+    AttackDamage: 1, // Float
+    ADLevel: 1, // Float
+    AttackSpeed: 1, // Float
+    ASLevel: 1, // Float
+    AttackRange: 1, // Float
+    Armor: 1, // Float
+    ArmorLevel: 1, // Float
+    MagicResist: 1, // Float
+    MagicResistLevel: 1, // Float
+    Pronoun: '', // String
+    KeyDdragon: '', // String
+    KeyInteger: 0, // Integer
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  ChromaSets: {
+    Champion: '', // String
+    Skin: '', // String
+    ReleaseDate: new Date(), // Date
+    RP: 0, // Integer
+    Name: '', // String
+    NumberOfChromas: 0, // Integer
+    UniqueSet: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  Chromas: {
+    Name: '', // String
+    Skin: '', // String
+    Champion: '', // String
+    IsBundleExclusive: false, // Boolean
+    IsLootExclusive: false, // Boolean
+    Special: '', // Text
+    ReleaseDate: new Date(), // Date
+    BundleRP: 0, // Integer
+    RP: 0, // Integer
+    Hex1: '', // String
+    Hex2: '', // String
+    UniqueSet: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  Contracts: {
+    Player: '', // String
+    Team: '', // String
+    ContractEnd: new Date(), // Date
+    IsRemoval: false, // Boolean
+    NewsId: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  CurrentLeagues: {
+    Event: '', // String
+    Page: '', // Page
+    Priority: 0, // Integer
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  Disambiguations: {
+    FinalLocation: '', // String
+    Term: '', // String
+    DisambigType: '', // String
+    N_LineInPage: '', // String
+    DisambigID: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  Entities: {
+    Entity: '', // String
+    EntityName: '', // String
+    EntityPage: '', // String
+    EntityType: '', // String
+    IsLowercase: false, // Boolean
+    DisambigSentence: '', // Wikitext
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  ExternalContent: {
+    Title: '', // Text
+    URL: '', // Text
+    ContentType: '', // String
+    MediaType: '', // String
+    Language: '', // String
+    Players: [''], // List of String
+    Tournaments: [''], // List of String
+    Teams: [''], // List of String
+    Date: new Date(), // Datetime
+    Year: 0, // Integer
+    Publication: '', // String
+    N_ItemInDate: 0, // Integer
+    Authors: [''], // List of String
+    Translators: '', // String
+    Series: '', // String
+    SeriesSeason: '', // String
+    SeriesSeasonNumber: 0, // Integer
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  GCDArchive: {
+    Region: '', // String
+    RegionAbbreviation: '', // String
+    PageDate: new Date(), // Date
+    PageDateTime: new Date(), // Datetime
+    UpdateDate: new Date(), // Date
+    PageURLDate: new Date(), // Date
+    IsNew: false, // Boolean
+    Diff: '', // String
+    Diff_URL: '', // Wikitext
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  Hooks: {
+    Hook: '', // String
+    Module: '', // Page
+    Action: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  IgnorePagedata: {
+    TypeOfIgnore: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  IndividualAchievements: {
+    Player: '', // String
+    Link: '', // String
+    Team: '', // String
+    OverviewPage: '', // String
+    Display: '', // String
+    Place: '', // String
+    Place_Number: 0, // Integer
+    AchievementType: '', // String
+    Description: '', // Wikitext
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  Items: {
+    Name: '', // String
+    Recipe: [''], // List of String
+    Cost: 0, // Integer
+    TotalCost: 0, // Integer
+    AD: 0, // Integer
+    LifeSteal: 0, // Integer
+    Health: 0, // Integer
+    HPRegen: 0, // Integer
+    Armor: 0, // Integer
+    MR: 0, // Integer
+    AttackDamage: 0, // Integer
+    Crit: 0, // Integer
+    AttackSpeed: 0, // Integer
+    ArmorPen: 0, // Integer
+    AttackRange: 0, // Integer
+    Mana: 0, // Integer
+    ManaRegen: 0, // Integer
+    Energy: 0, // Integer
+    EnergyRegen: 0, // Integer
+    AP: 0, // Integer
+    CDR: 0, // Integer
+    AbilityHaste: 0, // Integer
+    Omnivamp: 0, // Integer
+    PhysVamp: 0, // Integer
+    SpellVamp: 0, // Integer
+    MPen: 0, // Integer
+    MovespeedFlat: 0, // Integer
+    MovespeedPercent: 0, // Integer
+    Tenacity: 0, // Integer
+    GoldGen: 0, // Integer
+    OnHit: 0, // Integer
+    BonusHP: 0, // Integer
+    Healing: 0, // Integer
+    HSPower: 0, // Integer
+    SlowResist: 0, // Integer
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  LeagueGroups: {
+    LongName: '', // String
+    ShortName: '', // String
+    Leagues: [''], // List of String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  Leagues: {
+    League: '', // String
+    League_Short: '', // String
+    Region: '', // String
+    Level: '', // String
+    IsOfficial: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  ListplayerCurrent: {
+    ID: '', // String
+    Link: '', // String
+    Name: '', // String
+    N: 0, // Integer
+    Country: '', // String
+    Role: '', // String
+    IsSubstitute: '', // String
+    IsTrainee: '', // String
+    Team: '', // String
+    ContractDate: new Date(), // Date
+    Residency: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  LowPriorityRedirects: {
+    IsLowPriority: false, // Boolean
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  MatchSchedule: {
+    Team1: '', // String
+    Team2: '', // String
+    Team1Final: '', // String
+    Team2Final: '', // String
+    Winner: '', // String
+    Team1Points: 0, // Integer
+    Team2Points: 0, // Integer
+    Team1PointsTB: 0, // Integer
+    Team2PointsTB: 0, // Integer
+    Team1Score: 0, // Integer
+    Team2Score: 0, // Integer
+    Team1Poster: '', // String
+    Team2Poster: '', // String
+    Team1Advantage: 0, // Integer
+    Team2Advantage: 0, // Integer
+    FF: 0, // Integer
+    Player1: '', // String
+    Player2: '', // String
+    MatchDay: 0, // Integer
+    DateTime_UTC: new Date(), // Datetime
+    HasTime: false, // Boolean
+    DST: '', // String
+    IsFlexibleStart: false, // Boolean
+    IsReschedulable: false, // Boolean
+    OverrideAllowPredictions: false, // Boolean
+    IsTiebreaker: false, // Boolean
+    OverviewPage: '', // String
+    ShownName: '', // String
+    ShownRound: '', // Text
+    BestOf: 0, // Integer
+    Round: '', // String
+    Phase: '', // String
+    N_MatchInPage: 0, // Integer
+    Tab: '', // String
+    N_MatchInTab: 0, // Integer
+    N_TabInPage: 0, // Integer
+    N_Page: 0, // Integer
+    Patch: '', // String
+    PatchPage: '', // String
+    Hotfix: '', // String
+    DisabledChampions: [''], // List of String
+    PatchFootnote: '', // Text
+    InitialN_MatchInTab: 0, // Integer
+    InitialPageAndTab: '', // String
+    GroupName: '', // String
+    Stream: '', // Wikitext
+    StreamDisplay: '', // Text
+    Venue: '', // String
+    CastersPBP: '', // Text
+    CastersColor: '', // Text
+    Casters: [''], // List of String
+    MVP: '', // String
+    MVPPoints: 0, // Integer
+    VodInterview: '', // Wikitext
+    VodHighlights: '', // Wikitext
+    InterviewWith: [''], // List of String
+    Recap: '', // Text
+    Reddit: '', // Text
+    QQ: 0, // Integer
+    Wanplus: '', // String
+    WanplusId: 0, // Integer
+    PageAndTeam1: '', // String
+    PageAndTeam2: '', // String
+    Team1Footnote: '', // Text
+    Team2Footnote: '', // Text
+    Footnote: '', // Text
+    UniqueMatch: '', // String
+    MatchId: '', // String
+    UserSignup: '', // String
+    Tags: [''], // List of String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  MatchScheduleGame: {
+    Blue: '', // String
+    Red: '', // String
+    Winner: 0, // Integer
+    BlueFinal: '', // String
+    RedFinal: '', // String
+    BlueFootnote: '', // Text
+    RedFootnote: '', // Text
+    Footnote: '', // Text
+    IsChronobreak: false, // Boolean
+    IsRemake: false, // Boolean
+    FF: 0, // Integer
+    Selection: '', // String
+    HasSelection: false, // Boolean
+    MatchHistory: '', // Wikitext string
+    Recap: '', // Wikitext
+    Reddit: '', // Wikitext
+    Vod: '', // Wikitext
+    VodPB: '', // Wikitext
+    VodGameStart: '', // Wikitext
+    VodPostgame: '', // Wikitext
+    VodHighlights: '', // Wikitext
+    VodInterview: '', // Wikitext
+    InterviewWith: [''], // List of String
+    MVP: '', // String
+    MVPPoints: 0, // Integer
+    OverviewPage: '', // String
+    N_MatchInTab: 0, // Integer
+    N_TabInPage: 0, // Integer
+    N_GameInMatch: 0, // Integer
+    N_Page: 0, // Integer
+    ScoreboardID_Wiki: '', // String
+    ScoreboardID_Riot: '', // String
+    GameID_Wiki: '', // String
+    GameId: '', // String
+    UniqueMatch: '', // String
+    MatchId: '', // String
+    UniqueLine: '', // String
+    RiotPlatformGameId: '', // String
+    WrittenSummary: '', // Text
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  NASGLadder2018: {
+    Display: '', // String
+    Link: '', // String
+    Year: '', // String
+    Cycle1: 0, // Integer
+    Cycle2: 0, // Integer
+    Cycle3: 0, // Integer
+    Cycle4: 0, // Integer
+    Cycle5: 0, // Integer
+    Cycle6: 0, // Integer
+    Cycle7: 0, // Integer
+    Cycle8: 0, // Integer
+    Total: 0, // Integer
+    Role: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  NASGLadder7Cycles: {
+    Display: '', // String
+    Link: '', // String
+    Year: '', // String
+    Cycle1: 0, // Integer
+    Cycle2: 0, // Integer
+    Cycle3: 0, // Integer
+    Cycle4: 0, // Integer
+    Cycle5: 0, // Integer
+    Cycle6: 0, // Integer
+    Cycle7: 0, // Integer
+    Total: 0, // Integer
+    Role: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  NTLGlossary: {
+    Term: '', // String
+    Term_LC: '', // String
+    Definition: '', // Wikitext
+    Categories: [''], // List of String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  NewsItems: {
+    Date_Display: '', // String
+    Date_Sort: new Date(), // Datetime
+    IsApproxDate: false, // Boolean
+    EarliestPossibleDate: new Date(), // Date
+    LatestPossibleDate: new Date(), // Date
+    Sentence: '', // Wikitext
+    SentenceWithDate: '', // Wikitext
+    Sentence_Team: '', // Wikitext
+    Sentence_Player: '', // Wikitext
+    Sentence_Tournament: '', // Wikitext
+    Subject: '', // String
+    SubjectType: '', // String
+    SubjectLink: '', // String
+    Preload: '', // String
+    Region: '', // String
+    Players: [''], // List of String
+    Teams: [''], // List of String
+    Tournaments: [''], // List of String
+    Tags: [''], // List of String
+    Source: '', // Wikitext
+    N_LineInDate: 0, // Integer
+    NewsId: '', // String
+    ExcludeFrontpage: false, // Boolean
+    ExcludePortal: false, // Boolean
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  Organizations: {
+    Name: '', // String
+    OverviewPage: '', // String
+    Location: '', // String
+    Region: '', // String
+    Image: '', // String
+    Twitter: '', // String
+    Youtube: '', // String
+    Facebook: '', // String
+    Instagram: '', // String
+    Discord: '', // String
+    Snapchat: '', // String
+    Vk: '', // String
+    Subreddit: '', // String
+    IsLowercase: false, // Boolean
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  ParticipantsArgs: {
+    OverviewPage: '', // String
+    N_TeamInPage: 0, // Integer
+    Pool: '', // String
+    Args: '', // Text
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  PatchNotes: {
+    EntityType: '', // String
+    Entity: '', // String
+    Changes: '', // Wikitext
+    Patch: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  Pentakills: {
+    N: 0, // Integer
+    DateDisplay: '', // String
+    DateSort: new Date(), // Date
+    Region: '', // String
+    Tournament: '', // String
+    OverviewPage: '', // String
+    Team: '', // String
+    TeamVs: '', // String
+    Name: '', // String
+    Link: '', // String
+    Champion: '', // String
+    Role: '', // String
+    Win: false, // Boolean
+    Kills: 0, // Integer
+    Deaths: 0, // Integer
+    Assists: 0, // Integer
+    ScoreboardLink: '', // String
+    Vod: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  PicksAndBansS7: {
+    Team1Role1: '', // String
+    Team1Role2: '', // String
+    Team1Role3: '', // String
+    Team1Role4: '', // String
+    Team1Role5: '', // String
+    Team2Role1: '', // String
+    Team2Role2: '', // String
+    Team2Role3: '', // String
+    Team2Role4: '', // String
+    Team2Role5: '', // String
+    Team1Ban1: '', // String
+    Team1Ban2: '', // String
+    Team1Ban3: '', // String
+    Team1Ban4: '', // String
+    Team1Ban5: '', // String
+    Team1Pick1: '', // String
+    Team1Pick2: '', // String
+    Team1Pick3: '', // String
+    Team1Pick4: '', // String
+    Team1Pick5: '', // String
+    Team2Ban1: '', // String
+    Team2Ban2: '', // String
+    Team2Ban3: '', // String
+    Team2Ban4: '', // String
+    Team2Ban5: '', // String
+    Team2Pick1: '', // String
+    Team2Pick2: '', // String
+    Team2Pick3: '', // String
+    Team2Pick4: '', // String
+    Team2Pick5: '', // String
+    Team1: '', // String
+    Team2: '', // String
+    Winner: 0, // Integer
+    Team1Score: 0, // Integer
+    Team2Score: 0, // Integer
+    Team1PicksByRoleOrder: '', // String
+    Team2PicksByRoleOrder: '', // String
+    OverviewPage: '', // String
+    Phase: '', // String
+    UniqueLine: '', // String
+    IsComplete: false, // Boolean
+    Tab: '', // String
+    N_Page: 0, // Integer
+    N_TabInPage: 0, // Integer
+    N_MatchInPage: 0, // Integer
+    N_GameInPage: 0, // Integer
+    N_GameInMatch: 0, // Integer
+    N_MatchInTab: 0, // Integer
+    N_GameInTab: 0, // Integer
+    GameId: '', // String
+    MatchId: '', // String
+    GameID_Wiki: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  PlayerImages: {
+    FileName: '', // String
+    Link: '', // String
+    Team: '', // String
+    Tournament: '', // String
+    ImageType: '', // String
+    Caption: '', // Text
+    IsProfileImage: false, // Boolean
+    SortDate: new Date(), // Date
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  PlayerLeagueHistory: {
+    Player: '', // String
+    Teams: [''], // List of String
+    League: '', // String
+    LeagueHistory: '', // Text
+    TotalGames: 0, // Integer
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  PlayerPronunciationFiles: {
+    Player: '', // String
+    Name: '', // String
+    RecordedBy: '', // String
+    RecordedBy_User: '', // String
+    Source: '', // String
+    Date: new Date(), // Date
+    Language: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  PlayerRedirects: {
+    AllName: '', // String
+    OverviewPage: '', // String
+    ID: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  PlayerRenames: {
+    Date: new Date(), // Datetime
+    OriginalName: '', // String
+    NewName: '', // String
+    NewsId: '', // String
+    IsRestyle: false, // Boolean
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  Players: {
+    ID: '', // String
+    OverviewPage: '', // String
+    Player: '', // String
+    Image: '', // String
+    Name: '', // String
+    NativeName: '', // String
+    NameAlphabet: '', // String
+    NameFull: '', // String
+    Country: '', // String
+    Nationality: [''], // List of String
+    NationalityPrimary: '', // String
+    Age: 0, // Integer
+    Birthdate: new Date(), // Date
+    ResidencyFormer: '', // String
+    Team: '', // String
+    Team2: '', // String
+    CurrentTeams: [''], // List of String
+    TeamSystem: '', // String
+    Team2System: '', // String
+    Residency: '', // String
+    Role: '', // String
+    FavChamps: [''], // List of String
+    SoloqueueIds: '', // Text
+    Askfm: '', // String
+    Discord: '', // Text
+    Facebook: '', // Text
+    Instagram: '', // String
+    Lolpros: '', // String
+    Reddit: '', // String
+    Snapchat: '', // String
+    Stream: '', // Text
+    Twitter: '', // String
+    Vk: '', // Text
+    Website: '', // Text
+    Weibo: '', // Text
+    Youtube: '', // Text
+    TeamLast: '', // String
+    RoleLast: '', // String
+    IsRetired: false, // Boolean
+    ToWildrift: false, // Boolean
+    IsPersonality: false, // Boolean
+    IsSubstitute: false, // Boolean
+    IsTrainee: false, // Boolean
+    IsLowercase: false, // Boolean
+    IsAutoTeam: false, // Boolean
+    IsLowContent: false, // Boolean
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  RegionStatuses: {
+    Region: '', // String
+    Year: '', // String
+    Status: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  Regions: {
+    RegionLong: '', // String
+    RegionMedium: '', // String
+    Priority: 0, // Integer
+    IsCurrent: false, // Boolean
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  ResidencyChanges: {
+    Player: '', // String
+    NewsId: '', // String
+    ResidencyOld: '', // String
+    ResidencyNew: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  Retirements: {
+    Player: '', // String
+    NewsId: '', // String
+    Unretires: false, // Boolean
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  RosterChangePortalDates: {
+    Region: '', // String
+    DateStart: new Date(), // Date
+    DateEnd: new Date(), // Date
+    Year: 0, // Integer
+    Period: '', // String
+    PeriodName: '', // String
+    PeriodSort: 0, // Integer
+    OverviewPage: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  RosterChangePortalPages: {
+    SplitOrder: 0, // Integer
+    Year: 0, // Integer
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  RosterChanges: {
+    Date_Sort: new Date(), // Datetime
+    Player: '', // String
+    Direction: '', // String
+    Team: '', // String
+    RolesIngame: [''], // List of String
+    RolesStaff: [''], // List of String
+    Roles: [''], // List of String
+    RoleDisplay: '', // String
+    Role: '', // String
+    RoleModifier: '', // String
+    Status: '', // String
+    CurrentTeamPriority: 0, // Integer
+    PlayerUnlinked: false, // Boolean
+    AlreadyJoined: '', // String
+    Tournaments: [''], // List of String
+    Source: '', // Wikitext
+    IsGCD: false, // Boolean
+    Preload: '', // String
+    PreloadSortNumber: 0, // Integer
+    Tags: [''], // List of String
+    NewsId: '', // String
+    RosterChangeId: '', // String
+    N_LineInNews: 0, // Integer
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  RosterRumors: {
+    Date: new Date(), // Date
+    Status: '', // String
+    IsOver: false, // Boolean
+    NotHappening: false, // Boolean
+    Player: '', // String
+    Regions: [''], // List of String
+    TeamStart: '', // String
+    TeamEnd: '', // String
+    LeagueStart: '', // String
+    LeagueEnd: '', // String
+    RegionStart: '', // String
+    RegionEnd: '', // String
+    RoleStart: '', // String
+    RoleEnd: '', // String
+    IsSubStart: false, // Boolean
+    IsSubEnd: false, // Boolean
+    IsTraineeStart: false, // Boolean
+    IsTraineeEnd: false, // Boolean
+    CustomText: '', // Wikitext
+    SourceLink: '', // Text
+    SourceAuthors: [''], // List of String
+    SourceSite: '', // String
+    StatusLink: '', // Text
+    N_LineInDate: 0, // Integer
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  ScoreboardGames: {
+    OverviewPage: '', // String
+    Tournament: '', // String
+    Team1: '', // String
+    Team2: '', // String
+    WinTeam: '', // String
+    LossTeam: '', // String
+    DateTime_UTC: new Date(), // Datetime
+    DST: '', // String
+    Team1Score: 0, // Integer
+    Team2Score: 0, // Integer
+    Winner: 0, // Integer
+    Gamelength: '', // String
+    Gamelength_Number: 1, // Float
+    Team1Bans: [''], // List of String
+    Team2Bans: [''], // List of String
+    Team1Picks: [''], // List of String
+    Team2Picks: [''], // List of String
+    Team1Players: [''], // List of String
+    Team2Players: [''], // List of String
+    Team1Dragons: 0, // Integer
+    Team2Dragons: 0, // Integer
+    Team1Barons: 0, // Integer
+    Team2Barons: 0, // Integer
+    Team1Towers: 0, // Integer
+    Team2Towers: 0, // Integer
+    Team1Gold: 1, // Float
+    Team2Gold: 1, // Float
+    Team1Kills: 0, // Integer
+    Team2Kills: 0, // Integer
+    Team1RiftHeralds: 0, // Integer
+    Team2RiftHeralds: 0, // Integer
+    Team1Inhibitors: 0, // Integer
+    Team2Inhibitors: 0, // Integer
+    Patch: '', // String
+    PatchSort: '', // String
+    MatchHistory: '', // String
+    VOD: '', // String
+    N_Page: 0, // Integer
+    N_MatchInTab: 0, // Integer
+    N_MatchInPage: 0, // Integer
+    N_GameInMatch: 0, // Integer
+    Gamename: '', // String
+    UniqueGame: '', // String
+    UniqueLine: '', // String
+    GameId: '', // String
+    MatchId: '', // String
+    ScoreboardID_Wiki: '', // String
+    ScoreboardID_Riot: '', // String
+    Note1: '', // String
+    Note2: '', // String
+    Note3: '', // String
+    Note4: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  ScoreboardPlayers: {
+    OverviewPage: '', // String
+    Name: '', // String
+    Link: '', // String
+    Champion: '', // String
+    Kills: 0, // Integer
+    Deaths: 0, // Integer
+    Assists: 0, // Integer
+    SummonerSpells: [''], // List of String
+    Gold: 0, // Integer
+    CS: 0, // Integer
+    Items: [''], // List of String
+    Trinket: '', // String
+    KeystoneMastery: '', // String
+    KeystoneRune: '', // String
+    PrimaryTree: '', // String
+    SecondaryTree: '', // String
+    Runes: '', // Text
+    TeamKills: 0, // Integer
+    TeamGold: 0, // Integer
+    Team: '', // String
+    TeamVs: '', // String
+    Time: new Date(), // Datetime
+    PlayerWin: '', // String
+    DateTime_UTC: new Date(), // Datetime
+    DST: '', // String
+    Tournament: '', // String
+    Role: '', // String
+    Role_Number: 0, // Integer
+    IngameRole: '', // String
+    Side: 0, // Integer
+    GameIDWiki: '', // String
+    GameIDRiot: '', // String
+    UniqueGame: '', // String
+    UniqueLine: '', // String
+    UniqueLineVs: '', // String
+    UniqueRole: '', // String
+    UniqueRoleVs: '', // String
+    GameId: '', // String
+    MatchId: '', // String
+    GameTeamId: '', // String
+    GameRoleId: '', // String
+    GameRoleIdVs: '', // String
+    StatsPage: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  ScoreboardTeams: {
+    Team: '', // String
+    Side: '', // String
+    Number: 0, // Integer
+    IsWinner: false, // Boolean
+    Score: 0, // Integer
+    Bans: [''], // List of String
+    Picks: [''], // List of String
+    Roster: [''], // List of String
+    Dragons: 0, // Integer
+    Barons: 0, // Integer
+    Towers: 0, // Integer
+    Gold: 0, // Integer
+    Kills: 0, // Integer
+    RiftHeralds: 0, // Integer
+    Inhibitors: 0, // Integer
+    OverviewPage: '', // String
+    StatsPage: '', // String
+    UniqueGame: '', // String
+    UniqueTeam: '', // String
+    GameId: '', // String
+    MatchId: '', // String
+    GameTeamId: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  SisterTeams: {
+    Team: '', // Page
+    Team_Markup: '', // Wikitext
+    Status: '', // String
+    ActiveList: [''], // List of String
+    InactiveList: [''], // List of String
+    Active_Markup: [''], // List of Wikitext
+    Inactive_Markup: [''], // List of Wikitext
+    AllTeams: [''], // List of String
+    AllTeams_Markup: [''], // List of Wikitext
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  Skins: {
+    Name: '', // String
+    Champion: '', // String
+    RP: 0, // Integer
+    ReleaseDate: new Date(), // Date
+    Artists: [''], // List of String
+    IsLegacy: false, // Boolean
+    Special: '', // String
+    HasChromas: false, // Boolean
+    IsClassic: false, // Boolean
+    IsReleased: false, // Boolean
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  SkinsUsed: {
+    Champion: '', // String
+    Skin: '', // String
+    Chroma: '', // String
+    OverviewPage: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  Standings: {
+    OverviewPage: '', // String
+    Team: '', // String
+    PageAndTeam: '', // String
+    N: 0, // Integer
+    Place: 0, // Integer
+    WinSeries: 0, // Integer
+    LossSeries: 0, // Integer
+    TieSeries: 0, // Integer
+    WinGames: 0, // Integer
+    LossGames: 0, // Integer
+    Points: 0, // Integer
+    PointsTiebreaker: 1, // Float
+    Streak: 0, // Integer
+    StreakDirection: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  StandingsArgs: {
+    OverviewPage: '', // String
+    TournamentGroup: '', // String
+    N: 0, // Integer
+    Args: '', // Text
+    RowArgs: '', // Text
+    Finalorder: '', // Text
+    UniqueLine: '', // String
+    IsOver: false, // Boolean
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  TeamRedirects: {
+    AllName: '', // String
+    OtherName: '', // String
+    UniqueLine: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  TeamRenames: {
+    Date: new Date(), // Datetime
+    OriginalName: '', // String
+    NewName: '', // String
+    Verb: '', // String
+    Slot: '', // String
+    IsSamePage: '', // String
+    NewsId: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  TeamRosterPhotos: {
+    FileName: '', // String
+    Team: '', // String
+    Tournament: '', // String
+    Caption: '', // Text
+    SortDate: new Date(), // Date
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  Teams: {
+    Name: '', // String
+    OverviewPage: '', // String
+    Short: '', // String
+    Location: '', // String
+    TeamLocation: '', // String
+    Region: '', // String
+    OrganizationPage: '', // String
+    Image: '', // String
+    Twitter: '', // String
+    Youtube: '', // String
+    Facebook: '', // String
+    Instagram: '', // String
+    Discord: '', // String
+    Snapchat: '', // String
+    Vk: '', // String
+    Subreddit: '', // String
+    Website: '', // Text
+    RosterPhoto: '', // String
+    IsDisbanded: false, // Boolean
+    RenamedTo: '', // String
+    IsLowercase: false, // Boolean
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  TeamsWithAutoRosters: {
+    OverviewPage: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  Tenures: {
+    Player: '', // String
+    Team: '', // String
+    DateJoin: new Date(), // Date
+    DateLeave: new Date(), // Date
+    Duration: 0, // Integer
+    ContractEnd: '', // String
+    RosterChangeIdJoin: '', // String
+    RosterChangeIdLeave: '', // String
+    ResidencyLeave: '', // String
+    NameLeave: '', // String
+    NextTeam: '', // String
+    NextIsRetired: false, // Boolean
+    NextIsWildrift: false, // Boolean
+    IsCurrent: false, // Boolean
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  TenuresUnbroken: {
+    Player: '', // String
+    Team: '', // String
+    DateJoin: new Date(), // Date
+    DateLeave: new Date(), // Date
+    Duration: 0, // Integer
+    ContractEnd: '', // String
+    RosterChangeIdJoin: '', // String
+    RosterChangeIdLeave: '', // String
+    RosterChangeIds: [''], // List of String
+    ResidencyLeave: '', // String
+    NameLeave: '', // String
+    NextTeam: '', // String
+    NextIsRetired: false, // Boolean
+    NextIsWildrift: false, // Boolean
+    IsCurrent: false, // Boolean
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  TournamentGroups: {
+    Team: '', // String
+    OverviewPage: '', // String
+    GroupName: '', // String
+    GroupDisplay: '', // String
+    GroupN: 0, // Integer
+    PageAndTeam: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  TournamentPlayers: {
+    Team: '', // String
+    N_PlayerInTeam: 0, // Integer
+    TeamOrder: 0, // Integer
+    Link: '', // String
+    Player: '', // String
+    Role: '', // String
+    Flag: '', // Wikitext
+    Footnote: '', // Wikitext
+    OverviewPage: '', // String
+    PageAndTeam: '', // String
+    IsDistribution: false, // Boolean
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  TournamentResults: {
+    Event: '', // String
+    Tier: '', // String
+    Date: new Date(), // Date
+    RosterPage: '', // Page
+    Place: '', // String
+    ForceNewPlace: false, // Boolean
+    Place_Number: 0, // Integer
+    Qualified: false, // Boolean
+    Prize: 0, // Integer
+    Prize_USD: 1, // Float
+    Prize_Euro: 1, // Float
+    PrizeUnit: '', // String
+    Prize_Markup: '', // String
+    PrizeOther: '', // String
+    Phase: '', // String
+    Team: '', // String
+    IsAchievement: false, // Boolean
+    LastResult: '', // String
+    LastTeam: '', // String
+    LastOpponent_Markup: '', // Wikitext
+    GroupName: '', // String
+    LastOutcome: '', // String
+    PageAndTeam: '', // String
+    OverviewPage: '', // String
+    UniqueLine: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  TournamentResults1v1: {
+    Event: '', // String
+    Tier: '', // String
+    Date: new Date(), // Date
+    Place: '', // String
+    Prize: 0, // Integer
+    Prize_USD: 1, // Float
+    Prize_Euro: 1, // Float
+    PrizeUnit: '', // String
+    Prize_Markup: '', // String
+    PrizeOther: '', // String
+    Phase: '', // String
+    Player: '', // String
+    PlayerLink: '', // String
+    Team: '', // String
+    LastResult: '', // String
+    LastOpponent: '', // String
+    LastOpponentLink: '', // String
+    LastOutcome: '', // String
+    LastOpponentTeam: '', // String
+    OverviewPage: '', // String
+    UniqueLine: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  TournamentRosters: {
+    Team: '', // String
+    OverviewPage: '', // String
+    Region: '', // String
+    RosterLinks: '', // Text
+    Roles: '', // Text
+    Flags: '', // Text
+    Footnotes: [''], // List of Wikitext
+    IsUsed: '', // Text
+    Tournament: '', // String
+    Short: '', // String
+    IsComplete: false, // Boolean
+    PageAndTeam: '', // String
+    UniqueLine: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  TournamentTabs: {
+    BasePage: '', // String
+    BasePageDisplay: '', // String
+    Events: [''], // List of String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  Tournaments: {
+    Name: '', // String
+    OverviewPage: '', // String
+    DateStart: new Date(), // Date
+    Date: new Date(), // Date
+    DateStartFuzzy: new Date(), // Date
+    League: '', // String
+    Region: '', // String
+    Prizepool: '', // String
+    Currency: '', // String
+    Country: '', // String
+    ClosestTimezone: '', // String
+    Rulebook: '', // String
+    EventType: '', // String
+    Links: '', // String
+    Sponsors: '', // String
+    Organizer: '', // String
+    Organizers: [''], // List of String
+    StandardName: '', // String
+    StandardName_Redirect: '', // String
+    Split: '', // String
+    SplitNumber: 0, // Integer
+    TournamentLevel: '', // String
+    IsQualifier: false, // Boolean
+    IsPlayoffs: false, // Boolean
+    IsOfficial: false, // Boolean
+    Year: '', // String
+    LeagueIconKey: '', // String
+    AlternativeNames: [''], // List of String
+    ScrapeLink: '', // Text
+    Tags: [''], // List of String
+    SuppressTopSchedule: false, // Boolean
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  UserPredictionGroups: {
+    GroupName: '', // String
+    Members: [''], // List of String
+    NumberOfMembers: 0, // Integer
+    OverviewPage: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  UserPredictions: {
+    User: '', // String
+    OverviewPage: '', // String
+    NumberOfPredictions: 0, // Integer
+    NumberCorrect: 0, // Integer
+    NumberOver: 0, // Integer
+    NumberMadeAndOver: 0, // Integer
+    PredictionList: [''], // List of Text
+    PredictionOrder: [''], // List of Text
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  _pageData: {
+    _creationDate: new Date(), // Datetime
+    _modificationDate: new Date(), // Datetime
+    _creator: '', // String
+    _categories: [''], // List of String
+    _numRevisions: 0, // Integer
+    _isRedirect: false, // Boolean
+    _pageNameOrRedirect: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+}

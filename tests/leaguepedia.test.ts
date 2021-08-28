@@ -1,79 +1,138 @@
-import { cargoQuery } from '../src'
+import { Cargo } from '../src'
 
 describe('cargoQuery leaguepedia table items', () => {
   it('single table', () => {
-    return cargoQuery({
-      tables: ['Alphabets'],
-      limit: 3,
-      offset: 2,
-    }).then((data) => {
-      expect(data).toHaveLength(3)
-    })
+    const cargo = new Cargo()
+    return cargo
+      .query({
+        tables: ['Alphabets'],
+        limit: 3,
+        offset: 2,
+      })
+      .then(({ data }) => {
+        expect(data).toHaveLength(3)
+      })
   })
 
   it('specified fields', () => {
-    return cargoQuery({
-      tables: ['Teams'],
-      fields: ['Teams.Name', 'Teams.Region'],
-      limit: 2,
-    }).then((data) => {
-      data.forEach((item) => {
-        expect(item).not.toHaveProperty('_pageName')
+    const cargo = new Cargo()
+    return cargo
+      .query({
+        tables: ['Teams'],
+        fields: ['Teams.Name', 'Teams.Region'],
+        limit: 2,
       })
-    })
+      .then(({ data }) => {
+        data.forEach((item) => {
+          expect(item).not.toHaveProperty('_pageName')
+        })
+      })
   })
 
   it('where', () => {
-    return cargoQuery({
-      tables: ['Teams'],
-      where: 'Teams.Name = "G2 Esports"',
-    }).then((data) => {
-      expect(data).toHaveLength(1)
-    })
+    const cargo = new Cargo()
+    return cargo
+      .query({
+        tables: ['Teams'],
+        where: 'Teams.Name = "G2 Esports"',
+      })
+      .then(({ data }) => {
+        expect(data).toHaveLength(1)
+      })
   })
 
   it('single join on left table', () => {
-    return cargoQuery({
-      tables: ['BroadcastMusicUsages', 'BroadcastMusicTracks'],
-      joinOn: [
-        {
-          left: 'BroadcastMusicUsages.TrackID',
-          right: 'BroadcastMusicTracks.TrackID',
-        },
-      ],
-      limit: 2,
-    }).then((data) => {
-      expect(data).toHaveLength(2)
-    })
+    const cargo = new Cargo()
+    return cargo
+      .query({
+        tables: ['BroadcastMusicUsages', 'BroadcastMusicTracks'],
+        joinOn: [
+          {
+            left: 'BroadcastMusicUsages.TrackID',
+            right: 'BroadcastMusicTracks.TrackID',
+          },
+        ],
+        limit: 2,
+      })
+      .then(({ data }) => {
+        expect(data).toHaveLength(2)
+      })
   })
 
   it('multiple join on left tables', () => {
-    return cargoQuery({
-      tables: ['MatchSchedule', 'Teams', 'Regions'],
-      joinOn: [
-        {
-          left: 'MatchSchedule.Team1',
-          right: 'Teams.Name',
-        },
-        {
-          left: 'Teams.Region',
-          // autocomplete can't exclude fields perfectly
-          right: 'Regions.RegionMedium',
-        },
-      ],
-      limit: 2,
-    }).then((data) => {
-      expect(data).toHaveLength(2)
-    })
+    const cargo = new Cargo()
+    return cargo
+      .query({
+        tables: ['MatchSchedule', 'Teams', 'Regions'],
+        joinOn: [
+          {
+            left: 'MatchSchedule.Team1',
+            right: 'Teams.Name',
+          },
+          {
+            left: 'Teams.Region',
+            // autocomplete can't exclude fields perfectly
+            right: 'Regions.RegionMedium',
+          },
+        ],
+        limit: 2,
+      })
+      .then(({ data }) => {
+        expect(data).toHaveLength(2)
+      })
   })
 
   it('group by and having', () => {
-    return cargoQuery({
-      tables: ['Pentakills'],
-      groupBy: ['Pentakills.Name'],
-      having: 'COUNT(DateDisplay) > 10',
-    }).then((data) => {
-      expect(data.length).toBeGreaterThan(0)
-    })
+    const cargo = new Cargo()
+    return cargo
+      .query({
+        tables: ['Pentakills'],
+        groupBy: ['Pentakills.Name'],
+        having: 'COUNT(DateDisplay) > 10',
+      })
+      .then(({ data }) => {
+        expect(data.length).toBeGreaterThan(0)
+      })
+  })
+
+  it('spaceToUnderscore', () => {
+    const cargo = new Cargo({ metadataPrefix: 'Cargo' })
+    return cargo
+      .query({
+        tables: ['GCDArchive'],
+        limit: 1,
+      })
+      .then(({ data }) => {
+        expect(typeof data[0].Diff_URL === 'string').toBe(true)
+      })
+  })
+
+  it('metadataPrefix', () => {
+    const cargo = new Cargo({ metadataPrefix: 'cargo' })
+    return cargo
+      .query({
+        tables: ['Teams'],
+        limit: 10,
+      })
+      .then(({ data }) => {
+        expect(typeof data[0].cargo_ID === 'number').toBe(true)
+      })
+  })
+
+  it('data convertion', () => {
+    const cargo = new Cargo({ metadataPrefix: 'cargo' })
+    return cargo
+      .query({
+        tables: ['Players'],
+        limit: 5,
+      })
+      .then(({ data }) => {
+        expect(data.some((player) => player.Birthdate instanceof Date)).toBe(
+          true,
+        )
+        expect(data.every((player) => Array.isArray(player.FavChamps))).toBe(
+          true,
+        )
+      })
   })
 })

@@ -1,6 +1,6 @@
 import { URLSearchParams } from 'url'
 
-import { Field, fieldMap, Parameter, Table } from './types'
+import { Field, schemaMap, Parameter, Table } from './types'
 
 function removeUndefinedProperty(obj: Record<string, any>) {
   Object.keys(obj).forEach((key) => {
@@ -19,7 +19,7 @@ export async function generateUrl<T extends Table, LeftField extends Field<T>>({
   joinOn,
   groupBy,
   having,
-  orderBy = [{ field: `${tables[0]}._pageName` }],
+  orderBy = [{ field: `${tables[0]}._pageName` as unknown as Field<T> }],
   limit = Number.MAX_SAFE_INTEGER,
   offset = 0,
   format = 'json',
@@ -29,7 +29,11 @@ Parameter<T, Field<T>, LeftField>) {
   if (!fields) {
     fields = []
     for (const table of tables) {
-      fields = fields.concat(fieldMap[table])
+      fields = fields.concat(
+        Object.keys(schemaMap[table]).map(
+          (fieldName) => `${table}.${fieldName}` as Field<T>,
+        ),
+      )
     }
   }
 

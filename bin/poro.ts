@@ -3,12 +3,11 @@
 import fs from 'fs'
 import path from 'path'
 
-import * as cheerio from 'cheerio'
-import { isString } from 'lodash'
 import { Project } from 'ts-morph'
 import ts from 'typescript'
 
-import { cargoQuery } from '../src'
+import { fetchTables } from '../scripts/cargoSchemaGenerator'
+import { Cargo } from '../src'
 
 const DIR_PATH = path.join(__dirname, '../src/leaguepedia')
 const DTS_FILE_PATH = path.join(DIR_PATH, 'types.d.ts')
@@ -28,30 +27,10 @@ const jsSourceFile = project.createSourceFile(
 const fieldMapTypeMembers: ts.PropertySignature[] = []
 const fieldMapObjectProperties: ts.PropertyAssignment[] = []
 
-function generateTables() {
-  return cargoQuery.axiosInstance
-    .get('/wiki/Special:CargoTables')
-    .then(({ data }) => {
-      const $ = cheerio.load(data)
-
-      const cargoTableList = $('#mw-content-text > ul').children().toArray()
-      const cargoTableNames = cargoTableList
-        .map((tableElem) => {
-          if (tableElem.type === 'tag') {
-            const firstChild = tableElem.firstChild
-            if (firstChild?.type === 'text') {
-              return firstChild.data?.split(' ')[0]
-            }
-          }
-        })
-        .filter(isString)
-
-      return cargoTableNames
-    })
-}
+const cargo = new Cargo()
 
 function generateFields(table: string) {
-  return cargoQuery.axiosInstance
+  return cargo.axiosInstance
     .get<{ cargoqueryautocomplete: string[] }>(
       `/api.php?action=cargoqueryautocomplete&format=json&tables=${table}`,
     )
@@ -88,9 +67,9 @@ function generateFields(table: string) {
 
 async function generate() {
   // eslint-disable-next-line no-console
-  console.log('Generating leaguepedia schema...')
+  console.log('Generating leaguepedia field...')
 
-  const tables = await generateTables()
+  const tables = await fetchTables()
 
   for (const [i, table] of tables.entries()) {
     await generateFields(table)
