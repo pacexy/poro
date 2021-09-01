@@ -18,6 +18,7 @@ import {
   TournamentCodeDTO,
   TournamentDto,
 } from './dtos'
+import { Platform, Region } from './enums'
 import {
   LeagueEntryInput,
   MatchIdsInput,
@@ -27,7 +28,6 @@ import {
   TournamentCodeUpdateInput,
   TournamentRegistrationInput,
 } from './inputs'
-import { Platform, Region } from './types'
 
 type Endpoints = ReturnType<typeof createEndpoints>
 

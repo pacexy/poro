@@ -1,3 +1,5 @@
+import { Queue, Tier, Division } from './enums'
+
 export interface AccountDto {
   puuid: string
   /** This field may be excluded from the response if the account doesn't have a gameName. */
@@ -75,10 +77,10 @@ export interface LeagueEntryDTO {
   /** Player's summonerId (Encrypted) */
   summonerId: string
   summonerName: string
-  queueType: string
-  tier: string
+  queueType: Queue
+  tier: Tier
   /** The player's division within a tier. */
-  rank: string
+  rank: Division
   leaguePoints: number
   /** Winning team on Summoners Rift. First placement in Teamfight Tactics. */
   wins: number
@@ -88,7 +90,7 @@ export interface LeagueEntryDTO {
   veteran: boolean
   freshBlood: boolean
   inactive: boolean
-  miniSeries: MiniSeriesDTO
+  miniSeries?: MiniSeriesDTO
 }
 
 export interface MiniSeriesDTO {
@@ -101,9 +103,9 @@ export interface MiniSeriesDTO {
 export interface LeagueListDTO {
   leagueId: string
   entries: LeagueItemDTO[]
-  tier: string
+  tier: Tier
   name: string
-  queue: string
+  queue: Queue
 }
 
 export interface LeagueItemDTO {
@@ -115,40 +117,12 @@ export interface LeagueItemDTO {
   inactive: boolean
   veteran: boolean
   hotStreak: boolean
-  rank: string
+  rank: Division
   leaguePoints: number
   /** Losing team on Summoners Rift. */
   losses: number
   /** Player's encrypted summonerId. */
   summonerId: string
-}
-
-export interface MiniSeriesDTO {
-  losses: number
-  progress: string
-  target: number
-  wins: number
-}
-
-export interface LeagueEntryDTO {
-  leagueId: string
-  /** Player's encrypted summonerId. */
-  summonerId: string
-  summonerName: string
-  queueType: string
-  tier: string
-  /** The player's division within a tier. */
-  rank: string
-  leaguePoints: number
-  /** Winning team on Summoners Rift. */
-  wins: number
-  /** Losing team on Summoners Rift. */
-  losses: number
-  hotStreak: boolean
-  veteran: boolean
-  freshBlood: boolean
-  inactive: boolean
-  miniSeries: MiniSeriesDTO
 }
 
 export interface PlatformDataDto {
