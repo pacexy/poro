@@ -5,14 +5,14 @@ import {
   TournamentRegistrationParameters,
 } from './dtos'
 
-export interface LeagueEntryInput {
+export type LeagueEntryInput = {
   query: {
     /** Defaults to 1. Starts with page 1. */
     page?: number
   }
 }
 
-export interface MatchIdsInput {
+export type MatchIdsInput = {
   query: {
     /** Filter the list of match ids by a specific queue id. This filter is mutually inclusive of the type filter meaning any match ids returned must match both the queue and type filters. */
     queue?: number
@@ -25,14 +25,14 @@ export interface MatchIdsInput {
   }
 }
 
-export interface SummonerInput {
+export type SummonerInput = {
   header: {
     /** Bearer token */
     Authorization?: string
   }
 }
 
-export interface TournamentCodeInput {
+export type TournamentCodeInput = {
   query: {
     /** The number of codes to create (max 1000) */
     count?: number
@@ -42,14 +42,14 @@ export interface TournamentCodeInput {
   body: TournamentCodeParameters
 }
 
-export interface TournamentCodeUpdateInput {
+export type TournamentCodeUpdateInput = {
   body: TournamentCodeUpdateParameters
 }
 
-export interface ProviderRegistrationInput {
+export type ProviderRegistrationInput = {
   body: ProviderRegistrationParameters
 }
 
-export interface TournamentRegistrationInput {
+export type TournamentRegistrationInput = {
   body: TournamentRegistrationParameters
 }

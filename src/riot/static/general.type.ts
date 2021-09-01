@@ -1,37 +1,37 @@
-export interface Season {
+export type Season = {
   id: number
   season: string
 }
 
 /** 5v5 Blind Pick games, 5v5 Ranked Solo games... */
-export interface Queue {
+export type Queue = {
   queueId: number
   map: string
   description?: string
   notes?: string
 }
 
-export interface Map {
+export type Map = {
   mapId: number
   mapName: string
   notes: string
 }
 
 /** CLASSIC, ARAM, URF... */
-export interface GameMode {
+export type GameMode = {
   gameMode: string
   description: string
 }
 
 /** CUSTOM_GAME, TUTORIAL_GAME, MATCHED_GAME */
-export interface GameType {
+export type GameType = {
   gametype: string
   description: string
 }
 
 export type Version = string
 
-export interface Realm {
+export type Realm = {
   n: {
     item: Version
     rune: Version

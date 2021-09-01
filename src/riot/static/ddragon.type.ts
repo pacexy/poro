@@ -1,4 +1,4 @@
-export interface Image {
+export type Image = {
   full: string
   sprite: string
   group: string
@@ -11,7 +11,7 @@ export interface Image {
 type ChampionName = string
 
 // champion.json
-export interface ChampionJSON {
+export type ChampionJSON = {
   type: string
   format: string
   version: string
@@ -20,7 +20,7 @@ export interface ChampionJSON {
   }
 }
 
-export interface BriefChampion {
+export type BriefChampion = {
   version: string
   id: string
   key: string
@@ -35,7 +35,7 @@ export interface BriefChampion {
 }
 
 // champion/[championName].json
-export interface ChampionNameJSON {
+export type ChampionNameJSON = {
   type: string
   format: string
   version: string
@@ -44,7 +44,7 @@ export interface ChampionNameJSON {
   }
 }
 
-export interface Champion {
+export type Champion = {
   id: string
   key: string
   name: string
@@ -64,21 +64,21 @@ export interface Champion {
   recommended: any[]
 }
 
-export interface Skin {
+export type Skin = {
   id: string
   num: number
   name: string
   chromas: boolean
 }
 
-export interface ChampionInfo {
+export type ChampionInfo = {
   attack: number
   defense: number
   magic: number
   difficulty: number
 }
 
-export interface ChampionStats {
+export type ChampionStats = {
   hp: number
   hpperlevel: number
   mp: number
@@ -101,7 +101,7 @@ export interface ChampionStats {
   attackspeed: number
 }
 
-export interface Spell {
+export type Spell = {
   id: string
   name: string
   description: string
@@ -124,22 +124,22 @@ export interface Spell {
   resource: string
 }
 
-export interface Leveltip {
+export type Leveltip = {
   label: string[]
   effect: string[]
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface Datavalues {}
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type Datavalues = {}
 
-export interface Passive {
+export type Passive = {
   name: string
   description: string
   image: Image
 }
 
 // item.json
-export interface ItemJSON {
+export type ItemJSON = {
   type: string
   version: string
   basic: {
@@ -182,7 +182,7 @@ export interface ItemJSON {
   }[]
 }
 
-export interface Item {
+export type Item = {
   name: string
   description: string
   colloq: string
@@ -195,14 +195,14 @@ export interface Item {
   stats: ItemStats
 }
 
-export interface Gold {
+export type Gold = {
   base: number
   total: number
   sell: number
   purchasable: boolean
 }
 
-export interface ItemStats {
+export type ItemStats = {
   FlatHPPoolMod: number
   rFlatHPModPerLevel: number
   FlatMPPoolMod: number
@@ -270,7 +270,7 @@ export interface ItemStats {
   PercentSpellVampMod: number
 }
 
-export interface ItemMaps {
+export type ItemMaps = {
   '1': boolean
   '8': boolean
   '10': boolean
@@ -278,7 +278,7 @@ export interface ItemMaps {
 }
 
 // summoner.json
-export interface SummonerJSON {
+export type SummonerJSON = {
   type: string
   version: string
   data: {
@@ -286,7 +286,7 @@ export interface SummonerJSON {
   }
 }
 
-export interface SummonerSpell {
+export type SummonerSpell = {
   id: string
   name: string
   description: string
@@ -312,7 +312,7 @@ export interface SummonerSpell {
 }
 
 // profileicon.json
-export interface ProfileIconJSON {
+export type ProfileIconJSON = {
   type: string
   version: string
   data: {
@@ -320,13 +320,13 @@ export interface ProfileIconJSON {
   }
 }
 
-export interface ProfileIcon {
+export type ProfileIcon = {
   id: number
   image: Image
 }
 
 // runesReforged.json
-export interface RunesReforgedJSON {
+export type RunesReforgedJSON = {
   id: number
   key: string
   icon: string
@@ -336,7 +336,7 @@ export interface RunesReforgedJSON {
   }[]
 }
 
-export interface Rune {
+export type Rune = {
   id: number
   key: string
   icon: string
@@ -346,7 +346,7 @@ export interface Rune {
 }
 
 // map.json
-export interface MapJSON {
+export type MapJSON = {
   type: string
   version: string
   data: {
@@ -354,14 +354,14 @@ export interface MapJSON {
   }
 }
 
-export interface Map {
+export type Map = {
   MapName: string
   MapId: string
   image: Image
 }
 
 // language.json
-export interface LanguageJSON {
+export type LanguageJSON = {
   type: string
   version: string
   data: LanguageData
@@ -371,7 +371,7 @@ export interface LanguageJSON {
   }
 }
 
-export interface LanguageData {
+export type LanguageData = {
   Back: string
   Continue: string
   Language: string
@@ -604,7 +604,7 @@ export interface LanguageData {
 }
 
 // mission-assets.json
-export interface MissionAssetJSON {
+export type MissionAssetJSON = {
   type: string
   version: string
   data: {
@@ -612,13 +612,13 @@ export interface MissionAssetJSON {
   }
 }
 
-export interface MissionAsset {
+export type MissionAsset = {
   id: number
   image: Image
 }
 
 // sticker.json
-export interface StickerJSON {
+export type StickerJSON = {
   type: string
   version: string
   // eslint-disable-next-line @typescript-eslint/ban-types
@@ -626,7 +626,7 @@ export interface StickerJSON {
 }
 
 // championFull.json
-export interface ChampionFullJSON {
+export type ChampionFullJSON = {
   type: string
   format: string
   version: string
