@@ -114,3 +114,4 @@ test/
 
 out/
 schemas/
+env.ts

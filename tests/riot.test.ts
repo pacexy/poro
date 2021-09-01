@@ -1,5 +1,9 @@
 import { general, DataDragon, CommunityDragon, Client, Riot } from '../src'
 
+import { auth } from './env'
+
+jest.setTimeout(60 * 1000)
+
 describe('static files', () => {
   it('general', () => {
     expect(general.gameModes).toBe(
@@ -26,7 +30,7 @@ describe('static files', () => {
 describe('api client', () => {
   it('league-exp', () => {
     const client = new Client({
-      auth: 'RGAPI-564972ce-02d6-4931-9020-6cfc540f56bd',
+      auth,
       platform: Riot.Platform.KR,
       region: Riot.Region.ASIA,
     })
@@ -38,8 +42,8 @@ describe('api client', () => {
         division: 'I',
       })
       .get({ query: {} })
-      .then((res) => {
-        expect(Array.isArray(res.data)).toBe(true)
+      .then((data) => {
+        expect(Array.isArray(data)).toBe(true)
       })
   })
 })
@@ -47,14 +51,14 @@ describe('api client', () => {
 describe('set region/platform correctly', () => {
   it('default region', () => {
     const client = new Client({
-      auth: '',
+      auth: 'mock',
     })
 
     return client
       .path('/riot/account/v1/accounts/me')
       .get()
       .catch((err) => {
-        expect(err.config.url).toBe(
+        expect(err.options.url).toBe(
           `https://${Riot.Region.AMERICAS.toLowerCase()}.api.riotgames.com/riot/account/v1/accounts/me`,
         )
       })
@@ -62,7 +66,7 @@ describe('set region/platform correctly', () => {
 
   it('default platform', () => {
     const client = new Client({
-      auth: '',
+      auth: 'mock',
     })
 
     return client
@@ -72,7 +76,7 @@ describe('set region/platform correctly', () => {
       )
       .get()
       .catch((err) => {
-        expect(err.config.url).toBe(
+        expect(err.options.url).toBe(
           `https://${Riot.Platform.NA.toLowerCase()}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/123`,
         )
       })
@@ -80,7 +84,7 @@ describe('set region/platform correctly', () => {
 
   it('class-scoped region', () => {
     const client = new Client({
-      auth: '',
+      auth: 'mock',
       region: Riot.Region.ASIA,
     })
 
@@ -88,7 +92,7 @@ describe('set region/platform correctly', () => {
       .path('/riot/account/v1/accounts/me')
       .get()
       .catch((err) => {
-        expect(err.config.url).toBe(
+        expect(err.options.url).toBe(
           `https://${Riot.Region.ASIA.toLowerCase()}.api.riotgames.com/riot/account/v1/accounts/me`,
         )
       })
@@ -96,7 +100,7 @@ describe('set region/platform correctly', () => {
 
   it('class-scoped platform', () => {
     const client = new Client({
-      auth: '',
+      auth: 'mock',
       platform: Riot.Platform.KR,
     })
 
@@ -107,7 +111,7 @@ describe('set region/platform correctly', () => {
       )
       .get()
       .catch((err) => {
-        expect(err.config.url).toBe(
+        expect(err.options.url).toBe(
           `https://${Riot.Platform.KR.toLowerCase()}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/123`,
         )
       })
@@ -115,7 +119,7 @@ describe('set region/platform correctly', () => {
 
   it('method-scoped region', () => {
     const client = new Client({
-      auth: '',
+      auth: 'mock',
       region: Riot.Region.EUROPE,
     })
 
@@ -123,7 +127,7 @@ describe('set region/platform correctly', () => {
       .path('/riot/account/v1/accounts/me', Riot.Region.ASIA)
       .get()
       .catch((err) => {
-        expect(err.config.url).toBe(
+        expect(err.options.url).toBe(
           `https://${Riot.Region.ASIA.toLowerCase()}.api.riotgames.com/riot/account/v1/accounts/me`,
         )
       })
@@ -131,7 +135,7 @@ describe('set region/platform correctly', () => {
 
   it('method-scoped platform', () => {
     const client = new Client({
-      auth: '',
+      auth: 'mock',
       platform: Riot.Platform.RU,
     })
 
@@ -143,9 +147,36 @@ describe('set region/platform correctly', () => {
       )
       .get()
       .catch((err) => {
-        expect(err.config.url).toBe(
+        expect(err.options.url).toBe(
           `https://${Riot.Platform.KR.toLowerCase()}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/123`,
         )
       })
+  })
+})
+
+describe('rate limit', () => {
+  it('spread strategy', () => {
+    const client = new Client({ auth })
+
+    let i = 0
+    const promises: Promise<any>[] = []
+
+    const startTime = Date.now()
+    let lastResolveTime = startTime
+
+    while (i++ < 10) {
+      const promise = client
+        .path('/lol/spectator/v4/featured-games')
+        .get()
+        .then(() => {
+          const now = Date.now()
+          expect(now - lastResolveTime).toBeGreaterThanOrEqual(500)
+          lastResolveTime = now
+        })
+
+      promises.push(promise)
+    }
+
+    return Promise.all(promises)
   })
 })

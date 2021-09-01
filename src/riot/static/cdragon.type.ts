@@ -1,4 +1,4 @@
-export interface QueuesJSON {
+export type QueuesJSON = {
   [queueId: string]: {
     name: string
     shortName: string

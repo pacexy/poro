@@ -1,4 +1,6 @@
-export interface AccountDto {
+import { Queue, Tier, Division } from './enums'
+
+export type AccountDto = {
   puuid: string
   /** This field may be excluded from the response if the account doesn't have a gameName. */
   gameName: string
@@ -6,7 +8,7 @@ export interface AccountDto {
   tagLine: string
 }
 /** This object contains single Champion Mastery information for player and champion combination. */
-export interface ChampionMasteryDto {
+export type ChampionMasteryDto = {
   /** Number of points needed to achieve next level. Zero if player reached maximum champion level for this champion. */
   championPointsUntilNextLevel: number
   /** Is chest granted for this champion or not in current season. */
@@ -27,13 +29,13 @@ export interface ChampionMasteryDto {
   tokensEarned: number
 }
 
-export interface ChampionInfo {
+export type ChampionInfo = {
   maxNewPlayerLevel: number
   freeChampionIdsForNewPlayers: number[]
   freeChampionIds: number[]
 }
 
-export interface PlayerDto {
+export type PlayerDto = {
   summonerId: string
   /** (Legal values:  UNSELECTED,  FILL,  TOP,  JUNGLE,  MIDDLE,  BOTTOM,  UTILITY) */
   position: string
@@ -41,7 +43,7 @@ export interface PlayerDto {
   role: string
 }
 
-export interface TeamDto {
+export type TeamDto = {
   id: string
   tournamentId: number
   name: string
@@ -54,7 +56,7 @@ export interface TeamDto {
   players: PlayerDto[]
 }
 
-export interface TournamentDto {
+export type TournamentDto = {
   id: number
   themeId: number
   nameKey: string
@@ -63,22 +65,22 @@ export interface TournamentDto {
   schedule: TournamentPhaseDto[]
 }
 
-export interface TournamentPhaseDto {
+export type TournamentPhaseDto = {
   id: number
   registrationTime: number
   startTime: number
   cancelled: boolean
 }
 
-export interface LeagueEntryDTO {
+export type LeagueEntryDTO = {
   leagueId: string
   /** Player's summonerId (Encrypted) */
   summonerId: string
   summonerName: string
-  queueType: string
-  tier: string
+  queueType: Queue
+  tier: Tier
   /** The player's division within a tier. */
-  rank: string
+  rank: Division
   leaguePoints: number
   /** Winning team on Summoners Rift. First placement in Teamfight Tactics. */
   wins: number
@@ -88,25 +90,25 @@ export interface LeagueEntryDTO {
   veteran: boolean
   freshBlood: boolean
   inactive: boolean
-  miniSeries: MiniSeriesDTO
+  miniSeries?: MiniSeriesDTO
 }
 
-export interface MiniSeriesDTO {
+export type MiniSeriesDTO = {
   losses: number
   progress: string
   target: number
   wins: number
 }
 
-export interface LeagueListDTO {
+export type LeagueListDTO = {
   leagueId: string
   entries: LeagueItemDTO[]
-  tier: string
+  tier: Tier
   name: string
-  queue: string
+  queue: Queue
 }
 
-export interface LeagueItemDTO {
+export type LeagueItemDTO = {
   freshBlood: boolean
   /** Winning team on Summoners Rift. */
   wins: number
@@ -115,7 +117,7 @@ export interface LeagueItemDTO {
   inactive: boolean
   veteran: boolean
   hotStreak: boolean
-  rank: string
+  rank: Division
   leaguePoints: number
   /** Losing team on Summoners Rift. */
   losses: number
@@ -123,35 +125,7 @@ export interface LeagueItemDTO {
   summonerId: string
 }
 
-export interface MiniSeriesDTO {
-  losses: number
-  progress: string
-  target: number
-  wins: number
-}
-
-export interface LeagueEntryDTO {
-  leagueId: string
-  /** Player's encrypted summonerId. */
-  summonerId: string
-  summonerName: string
-  queueType: string
-  tier: string
-  /** The player's division within a tier. */
-  rank: string
-  leaguePoints: number
-  /** Winning team on Summoners Rift. */
-  wins: number
-  /** Losing team on Summoners Rift. */
-  losses: number
-  hotStreak: boolean
-  veteran: boolean
-  freshBlood: boolean
-  inactive: boolean
-  miniSeries: MiniSeriesDTO
-}
-
-export interface PlatformDataDto {
+export type PlatformDataDto = {
   id: string
   name: string
   locales: string[]
@@ -159,7 +133,7 @@ export interface PlatformDataDto {
   incidents: StatusDto[]
 }
 
-export interface StatusDto {
+export type StatusDto = {
   id: number
   /** (Legal values:  scheduled,  in_progress,  complete) */
   maintenance_status: string
@@ -174,12 +148,12 @@ export interface StatusDto {
   platforms: string[]
 }
 
-export interface ContentDto {
+export type ContentDto = {
   locale: string
   content: string
 }
 
-export interface UpdateDto {
+export type UpdateDto = {
   id: number
   author: string
   publish: boolean
@@ -190,7 +164,7 @@ export interface UpdateDto {
   updated_at: string
 }
 
-export interface MatchDto {
+export type MatchDto = {
   gameId: number
   /** Participant identity information. Participant identity information is purposefully excluded for custom games. */
   participantIdentities: ParticipantIdentityDto[]
@@ -218,7 +192,7 @@ export interface MatchDto {
   participants: ParticipantDto[]
 }
 
-interface ParticipantIdentityDto {
+export type ParticipantIdentityDto = {
   participantId: number
   /** Player information not included in the response for custom matches. Custom matches are considered private unless a tournament code was used to create the match. */
   player: {
@@ -238,7 +212,7 @@ interface ParticipantIdentityDto {
   }
 }
 
-interface TeamStatsDto {
+export type TeamStatsDto = {
   /** Number of towers the team destroyed. */
   towerKills: number
   /** Number of times the team killed Rift Herald. */
@@ -273,14 +247,14 @@ interface TeamStatsDto {
   win: string
 }
 
-interface TeamBansDto {
+export type TeamBansDto = {
   /** Banned championId. */
   championId: number
   /** Turn during which the champion was banned. */
   pickTurn: number
 }
 
-interface ParticipantDto {
+export type ParticipantDto = {
   participantId: number
   championId: number
   /** List of legacy Rune information. Not included for matches played with Runes Reforged. */
@@ -301,12 +275,12 @@ interface ParticipantDto {
   masteries: MasteryDto[]
 }
 
-interface RuneDto {
+export type RuneDto = {
   runeId: number
   rank: number
 }
 
-interface ParticipantStatsDto {
+export type ParticipantStatsDto = {
   item0: number
   item2: number
   totalUnitsHealed: number
@@ -449,7 +423,7 @@ interface ParticipantStatsDto {
   statPerk2: number
 }
 
-interface ParticipantTimelineDto {
+export type ParticipantTimelineDto = {
   participantId: number
   /** Creep score difference versus the calculated lane opponent(s) for a specified period. */
   csDiffPerMinDeltas: Record<string, number>
@@ -471,23 +445,23 @@ interface ParticipantTimelineDto {
   goldPerMinDeltas: Record<string, number>
 }
 
-interface MasteryDto {
+export type MasteryDto = {
   rank: number
   masteryId: number
 }
 
-export interface MatchTimelineDto {
+export type MatchTimelineDto = {
   frames: MatchFrameDto[]
   frameInterval: number
 }
 
-interface MatchFrameDto {
+export type MatchFrameDto = {
   participantFrames: Record<string, MatchParticipantFrameDto>
   events: MatchEventDto[]
   timestamp: number
 }
 
-interface MatchParticipantFrameDto {
+export type MatchParticipantFrameDto = {
   participantId: number
   minionsKilled: number
   teamScore: number
@@ -500,12 +474,12 @@ interface MatchParticipantFrameDto {
   jungleMinionsKilled: number
 }
 
-interface MatchPositionDto {
+export type MatchPositionDto = {
   x: number
   y: number
 }
 
-interface MatchEventDto {
+export type MatchEventDto = {
   laneType: string
   skillSlot: number
   ascendedType: string
@@ -532,7 +506,7 @@ interface MatchEventDto {
   victimId: number
 }
 
-export interface CurrentGameInfo {
+export type CurrentGameInfo = {
   /** The ID of the game */
   gameId: number
   /** The game type */
@@ -557,7 +531,7 @@ export interface CurrentGameInfo {
   participants: CurrentGameParticipant[]
 }
 
-export interface BannedChampion {
+export type BannedChampion = {
   /** The turn during which the champion was banned */
   pickTurn: number
   /** The ID of the banned champion */
@@ -566,12 +540,12 @@ export interface BannedChampion {
   teamId: number
 }
 
-export interface Observer {
+export type Observer = {
   /** Key used to decrypt the spectator grid game data for playback */
   encryptionKey: string
 }
 
-export interface CurrentGameParticipant {
+export type CurrentGameParticipant = {
   /** The ID of the champion played by this participant */
   championId: number
   /** Perks/Runes Reforged Information */
@@ -594,7 +568,7 @@ export interface CurrentGameParticipant {
   gameCustomizationObjects: GameCustomizationObject[]
 }
 
-export interface Perks {
+export type Perks = {
   /** IDs of the perks/runes assigned. */
   perkIds: number[]
   /** Primary runes path */
@@ -603,21 +577,21 @@ export interface Perks {
   perkSubStyle: number
 }
 
-export interface GameCustomizationObject {
+export type GameCustomizationObject = {
   /** Category identifier for Game Customization */
   category: string
   /** Game Customization content */
   content: string
 }
 
-export interface FeaturedGames {
+export type FeaturedGames = {
   /** The list of featured games */
   gameList: FeaturedGameInfo[]
   /** The suggested interval to wait before requesting FeaturedGames again */
   clientRefreshInterval: number
 }
 
-export interface FeaturedGameInfo {
+export type FeaturedGameInfo = {
   /** The game mode
  (Legal values: CLASSIC, ODIN, ARAM, TUTORIAL, ONEFORALL, ASCENSION, FIRSTBLOOD, KINGPORO) */
   gameMode: string
@@ -644,7 +618,7 @@ export interface FeaturedGameInfo {
   platformId: string
 }
 
-export interface Participant {
+export type Participant = {
   /** Flag indicating whether or not this participant is a bot */
   bot: boolean
   /** The ID of the second summoner spell used by this participant */
@@ -662,7 +636,7 @@ export interface Participant {
 }
 
 /** represents a summoner */
-export interface SummonerDTO {
+export type SummonerDTO = {
   /** Encrypted account ID. Max length 56 characters. */
   accountId: string
   /** ID of the summoner icon associated with the summoner. */
@@ -677,94 +651,4 @@ export interface SummonerDTO {
   puuid: string
   /** Summoner level associated with the summoner. */
   summonerLevel: number
-}
-
-export interface TournamentCodeParameters {
-  /** Optional list of encrypted summonerIds in order to validate the players eligible to join the lobby. NOTE: We currently do not enforce participants at the team level, but rather the aggregate of teamOne and teamTwo. We may add the ability to enforce at the team level in the future. */
-  allowedSummonerIds: string[]
-  /** Optional string that may contain any data in any format, if specified at all. Used to denote any custom information about the game. */
-  metadata: string
-  /** The team size of the game. Valid values are 1-5. */
-  teamSize: number
-  /** The pick type of the game.
- (Legal values: BLIND_PICK, DRAFT_MODE, ALL_RANDOM, TOURNAMENT_DRAFT) */
-  pickType: string
-  /** The map type of the game.
- (Legal values: SUMMONERS_RIFT, TWISTED_TREELINE, HOWLING_ABYSS) */
-  mapType: string
-  /** The spectator type of the game.
- (Legal values: NONE, LOBBYONLY, ALL) */
-  spectatorType: string
-}
-
-export interface LobbyEventDTOWrapper {
-  eventList: LobbyEventDTO[]
-}
-
-export interface LobbyEventDTO {
-  /** The summonerId that triggered the event (Encrypted) */
-  summonerId: string
-  /** The type of event that was triggered */
-  eventType: string
-  /** Timestamp from the event */
-  timestamp: string
-}
-
-export interface ProviderRegistrationParameters {
-  /** The region in which the provider will be running tournaments.
- (Legal values: BR, EUNE, EUW, JP, LAN, LAS, NA, OCE, PBE, RU, TR) */
-  region: string
-  /** The provider's callback URL to which tournament game results in this region should be posted. The URL must be well-formed, use the http or https protocol, and use the default port for the protocol (http URLs must use port 80, https URLs must use port 443). */
-  url: string
-}
-
-export interface TournamentRegistrationParameters {
-  /** The provider ID to specify the regional registered provider data to associate this tournament. */
-  providerId: number
-  /** The optional name of the tournament. */
-  name: string
-}
-
-export interface TournamentCodeDTO {
-  /** The tournament code. */
-  code: string
-  /** The spectator mode for the tournament code game. */
-  spectators: string
-  /** The lobby name for the tournament code game. */
-  lobbyName: string
-  /** The metadata for tournament code. */
-  metaData: string
-  /** The password for the tournament code game. */
-  password: string
-  /** The team size for the tournament code game. */
-  teamSize: number
-  /** The provider's ID. */
-  providerId: number
-  /** The pick mode for tournament code game. */
-  pickType: string
-  /** The tournament's ID. */
-  tournamentId: number
-  /** The tournament code's ID. */
-  id: number
-  /** The tournament code's region.
- (Legal values: BR, EUNE, EUW, JP, LAN, LAS, NA, OCE, PBE, RU, TR) */
-  region: string
-  /** The game map for the tournament code game */
-  map: string
-  /** The summonerIds of the participants (Encrypted) */
-  participants: string[]
-}
-
-export interface TournamentCodeUpdateParameters {
-  /** Optional list of encrypted summonerIds in order to validate the players eligible to join the lobby. NOTE: We currently do not enforce participants at the team level, but rather the aggregate of teamOne and teamTwo. We may add the ability to enforce at the team level in the future. */
-  allowedSummonerIds: string[]
-  /** The pick type
- (Legal values: BLIND_PICK, DRAFT_MODE, ALL_RANDOM, TOURNAMENT_DRAFT) */
-  pickType: string
-  /** The map type
- (Legal values: SUMMONERS_RIFT, TWISTED_TREELINE, HOWLING_ABYSS) */
-  mapType: string
-  /** The spectator type
- (Legal values: NONE, LOBBYONLY, ALL) */
-  spectatorType: string
 }

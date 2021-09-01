@@ -47,6 +47,8 @@
   "dependencies": {
     "axios": "^0.21.1",
     "lodash": "^4.17.21",
+    "request": "^2.88.2",
+    "riot-ratelimiter": "^0.1.5",
     "ts-morph": "^11.0.3",
     "tslib": "^2.3.1"
   },
