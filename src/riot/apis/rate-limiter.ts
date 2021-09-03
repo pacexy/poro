@@ -1,9 +1,10 @@
-import { AxiosInstance, AxiosResponse } from 'axios'
+import axios, { AxiosInstance, AxiosResponse } from 'axios'
 import { RateLimiter } from 'limiter'
 
 import { Platform, Region } from './enums'
 
 export type GeneralRegion = Platform | Region
+export type Debug = boolean | 'mock'
 
 function parseRateLimitHeaders(str: string) {
   return str.split(',').map((rateLimit) => rateLimit.split(':').map(Number))
@@ -36,6 +37,7 @@ class RegionRateLimiter {
   constructor(
     private readonly generalRegion: GeneralRegion,
     private readonly axiosInstance: AxiosInstance,
+    private readonly debug?: Debug,
   ) {}
 
   async execute<T>(
@@ -46,9 +48,8 @@ class RegionRateLimiter {
     await this.preAppRequest()
     await this.preMethodRequest(path)
 
-    // debug
     // eslint-disable-next-line no-constant-condition
-    if (false) {
+    if (this.debug) {
       const now = Date.now()
       // eslint-disable-next-line no-console
       console.log(
@@ -60,9 +61,11 @@ class RegionRateLimiter {
       )
       this.lastRequestTime = now
 
-      // mock request if limiter has created
-      if (this.appRateLimiter && this.methodRateLimiterMap.get(path)) {
-        return {} as AxiosResponse<T>
+      // Mock request if limiter has created (that's say, the first request for each method are not mocked)
+      if (this.debug === 'mock') {
+        if (this.appRateLimiter && this.methodRateLimiterMap.get(path)) {
+          return {} as AxiosResponse<T>
+        }
       }
     }
 
@@ -74,6 +77,14 @@ class RegionRateLimiter {
         await this.postAppRequest(res)
         await this.postMethodRequest(res, path)
         return res
+      })
+      .catch(async (err) => {
+        if (axios.isAxiosError(err) && err.response) {
+          await this.postAppRequest(err.response)
+          await this.postMethodRequest(err.response, path)
+        }
+
+        throw err
       })
   }
 
@@ -133,13 +144,13 @@ export class RiotRateLimiter {
     RegionRateLimiter
   >()
 
-  constructor(axiosInstance: AxiosInstance) {
+  constructor(axiosInstance: AxiosInstance, debug?: Debug) {
     // eslint-disable-next-line @typescript-eslint/no-extra-semi
     ;[...Object.values(Region), ...Object.values(Platform)].forEach(
       (generalRegion) => {
         this.regionRateLimiterMap.set(
           generalRegion,
-          new RegionRateLimiter(generalRegion, axiosInstance),
+          new RegionRateLimiter(generalRegion, axiosInstance, debug),
         )
       },
     )

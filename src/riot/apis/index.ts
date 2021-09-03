@@ -18,7 +18,7 @@ import {
 } from './dtos'
 import { Platform, Region } from './enums'
 import { LeagueEntryInput, MatchIdsInput } from './inputs'
-import { GeneralRegion, RiotRateLimiter } from './rate-limiter'
+import { Debug, GeneralRegion, RiotRateLimiter } from './rate-limiter'
 
 type Endpoints = ReturnType<typeof createEndpoints>
 
@@ -46,6 +46,7 @@ interface ClientConfig {
   auth: string
   platform?: Platform
   region?: Region
+  debug?: Debug
 }
 
 export class Client {
@@ -55,9 +56,9 @@ export class Client {
   private readonly platform
   private readonly region
 
-  constructor({ auth, platform, region }: ClientConfig) {
+  constructor({ auth, platform, region, debug }: ClientConfig) {
     this.axiosInstance.defaults.headers.common['X-Riot-Token'] = auth
-    this.limiter = new RiotRateLimiter(this.axiosInstance)
+    this.limiter = new RiotRateLimiter(this.axiosInstance, debug)
     this.endpoints = createEndpoints(this.limiter)
     this.platform = platform
     this.region = region
