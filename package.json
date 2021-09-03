@@ -46,6 +46,7 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
+    "limiter": "^2.1.0",
     "lodash": "^4.17.21",
     "request": "^2.88.2",
     "riot-ratelimiter": "^0.1.5",
