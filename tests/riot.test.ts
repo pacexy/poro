@@ -155,22 +155,22 @@ describe('set region/platform correctly', () => {
 })
 
 describe('rate limit', () => {
-  it('spread strategy', () => {
+  it('app < method', () => {
+    // App rate limit: 100:120 spread to 1:1200ms
     const client = new Client({ auth })
-
-    let i = 0
     const promises: Promise<any>[] = []
+    let lastResolveTime = Date.now()
 
-    const startTime = Date.now()
-    let lastResolveTime = startTime
-
-    while (i++ < 30) {
+    for (let i = 0; i < 5; i++) {
+      // Method rate limit: 1200000:600 spread to 1:0.5ms
       const promise = client
         .path('/lol/spectator/v4/featured-games')
         .get()
         .then(() => {
           const now = Date.now()
-          expect(now - lastResolveTime).toBeGreaterThanOrEqual(0)
+          if (i !== 0) {
+            expect(now - lastResolveTime).toBeGreaterThanOrEqual(1200)
+          }
           lastResolveTime = now
         })
 
@@ -178,5 +178,77 @@ describe('rate limit', () => {
     }
 
     return Promise.all(promises)
+  })
+
+  it('app > method', () => {
+    // App rate limit: 100:120 spread to 1:1200ms
+    const client = new Client({ auth })
+    const promises: Promise<any>[] = []
+    let lastResolveTime = Date.now()
+
+    for (let i = 0; i < 5; i++) {
+      // Method rate limit: 10:60 spread to 1:6000ms
+      const promise = client
+        .path('/lol/clash/v1/tournaments')
+        .get()
+        .then(() => {
+          const now = Date.now()
+          if (i !== 0) {
+            expect(now - lastResolveTime).toBeGreaterThanOrEqual(6000)
+          }
+          lastResolveTime = now
+        })
+
+      promises.push(promise)
+    }
+
+    return Promise.all(promises)
+  })
+
+  it('multiple regions', () => {
+    const client = new Client({ auth })
+    const promises: Promise<any>[] = []
+
+    Object.values(Riot.Platform).forEach((platform) => {
+      let lastResolveTime = Date.now()
+      for (let i = 0; i < 5; i++) {
+        const promise = client
+          .path('/lol/spectator/v4/featured-games', platform)
+          .get()
+          .then(() => {
+            const now = Date.now()
+            if (i !== 0) {
+              expect(now - lastResolveTime).toBeGreaterThanOrEqual(1200)
+            }
+            lastResolveTime = now
+          })
+
+        promises.push(promise)
+      }
+    })
+
+    return Promise.all(promises)
+  })
+
+  it('multiple methods', () => {
+    const client = new Client({ auth })
+    const promises: Promise<any>[] = []
+
+    const startTime = Date.now()
+
+    for (let i = 0; i < 5; i++) {
+      const promise = client.path('/lol/spectator/v4/featured-games').get()
+      promises.push(promise)
+    }
+
+    for (let i = 0; i < 5; i++) {
+      const promise = client.path('/lol/clash/v1/tournaments').get()
+      promises.push(promise)
+    }
+
+    return Promise.all(promises).then(() => {
+      const now = Date.now()
+      expect(now - startTime).toBeGreaterThan(30 * 1000)
+    })
   })
 })
