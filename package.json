@@ -2,7 +2,6 @@
   "name": "poro",
   "version": "2.0.0-alpha.10",
   "description": "Leaguepedia API & Riot League of Legends API & CommunityDragon & Data Dragon",
-  "bin": "./dist/cjs/bin/poro.js",
   "main": "./dist/cjs/src/index.js",
   "module": "./dist/esm/src/index.js",
   "types": "./dist/esm/src/index.d.ts",
@@ -21,7 +20,6 @@
     "release": "yarn build && release-it"
   },
   "files": [
-    "dist/cjs/bin",
     "dist/cjs/src",
     "dist/esm/src"
   ],
@@ -46,7 +44,10 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
+    "axios-retry": "^3.1.9",
+    "limiter": "^2.1.0",
     "lodash": "^4.17.21",
+    "p-queue": "^6.6.2",
     "request": "^2.88.2",
     "riot-ratelimiter": "^0.1.5",
     "ts-morph": "^11.0.3",
@@ -75,7 +76,7 @@
     "rimraf": "^3.0.2",
     "ts-jest": "^27.0.4",
     "ts-node": "^10.1.0",
-    "typescript": "^4.3.5"
+    "typescript": "^4.4.2"
   },
   "release-it": {
     "github": {

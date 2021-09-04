@@ -1,3 +1,5 @@
+import { Platform } from '../apis/enums'
+
 import { DDRAGON_BASE_URL } from './ddragon'
 
 const GENERAL_BASE_URL = 'https://static.developer.riotgames.com'
@@ -46,7 +48,10 @@ export const general = {
    * via the realms files.
    */
   realm(region: string) {
-    return DDRAGON_BASE_URL + `/realms/${region.toLowerCase()}.json`
+    const platforms = Object.values(Platform)
+    const platformIndex = platforms.findIndex((platform) => platform === region)
+    const platformName = Object.keys(Platform)[platformIndex] ?? region
+    return DDRAGON_BASE_URL + `/realms/${platformName.toLowerCase()}.json`
   },
   /**
    * Data Dragon provides localized versions of each of the data files in
