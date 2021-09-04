@@ -1,4 +1,5 @@
 import axios from 'axios'
+import axiosRetry from 'axios-retry'
 
 import {
   AccountDto,
@@ -18,7 +19,7 @@ import {
 } from './dtos'
 import { Platform, Region } from './enums'
 import { LeagueEntryInput, MatchIdsInput } from './inputs'
-import { Debug, GeneralRegion, RiotRateLimiter } from './rate-limiter'
+import { GeneralRegion, LimiterConfig, RiotRateLimiter } from './rate-limiter'
 
 type Endpoints = ReturnType<typeof createEndpoints>
 
@@ -42,26 +43,43 @@ type UrlParameters<P> = PathParametersUnion<P> extends never
       ...OriginPrefix<P>
     ]
 
-interface ClientConfig {
+interface ClientConfig extends LimiterConfig {
   auth: string
   platform?: Platform
   region?: Region
-  debug?: Debug
 }
 
 export class Client {
-  readonly limiter
   readonly axiosInstance = axios.create()
+  private readonly limiter
   private readonly endpoints
   private readonly platform
   private readonly region
 
-  constructor({ auth, platform, region, debug }: ClientConfig) {
+  constructor({ auth, platform, region, ...limiterConfig }: ClientConfig) {
     this.axiosInstance.defaults.headers.common['X-Riot-Token'] = auth
-    this.limiter = new RiotRateLimiter(this.axiosInstance, debug)
+    this.limiter = new RiotRateLimiter(this.axiosInstance, limiterConfig)
     this.endpoints = createEndpoints(this.limiter)
     this.platform = platform
     this.region = region
+
+    axiosRetry(this.axiosInstance, {
+      retryCondition(err) {
+        const errCodes = ['ECONNRESET', 'ETIMEDOUT']
+        const statusCodes = [403, 503]
+        const errCode = err.code ?? ''
+        const statusCode = err.response?.status ?? 0
+
+        if (errCodes.includes(errCode)) {
+          return true
+        }
+        if (statusCodes.includes(statusCode)) {
+          return true
+        }
+
+        return false
+      },
+    })
   }
 
   path<Path extends keyof Endpoints>(

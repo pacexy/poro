@@ -1,10 +1,16 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios'
 import { RateLimiter } from 'limiter'
+import PQueue from 'p-queue'
 
 import { Platform, Region } from './enums'
 
 export type GeneralRegion = Platform | Region
-export type Debug = boolean | 'mock'
+
+export interface LimiterConfig {
+  /** Concurrency for each region */
+  concurrency?: number
+  debug?: boolean | 'mock'
+}
 
 function parseRateLimitHeaders(str: string) {
   return str.split(',').map((rateLimit) => rateLimit.split(':').map(Number))
@@ -31,14 +37,20 @@ type RateLimiterProperty = RateLimiter | null | undefined
 class RegionRateLimiter {
   private readonly methodRateLimiterMap = new Map<string, RateLimiterProperty>()
   private appRateLimiter: RateLimiterProperty
+  private readonly debug
+  private readonly queue
+
   private lastRequestTime = Date.now()
   private i = 0
 
   constructor(
     private readonly generalRegion: GeneralRegion,
     private readonly axiosInstance: AxiosInstance,
-    private readonly debug?: Debug,
-  ) {}
+    config: LimiterConfig,
+  ) {
+    this.debug = config.debug
+    this.queue = new PQueue({ concurrency: config.concurrency })
+  }
 
   async execute<T>(
     realPath: string,
@@ -48,31 +60,34 @@ class RegionRateLimiter {
     await this.preAppRequest()
     await this.preMethodRequest(path)
 
-    // eslint-disable-next-line no-constant-condition
-    if (this.debug) {
-      const now = Date.now()
-      // eslint-disable-next-line no-console
-      console.log(
-        this.generalRegion,
-        path,
-        'request',
-        this.i++,
-        now - this.lastRequestTime,
-      )
-      this.lastRequestTime = now
+    return this.queue
+      .add(() => {
+        if (this.debug) {
+          const now = Date.now()
+          // eslint-disable-next-line no-console
+          console.log(
+            this.generalRegion,
+            realPath,
+            'request',
+            this.i++,
+            now - this.lastRequestTime,
+          )
+          this.lastRequestTime = now
 
-      // Mock request if limiter has created (that's say, the first request for each method are not mocked)
-      if (this.debug === 'mock') {
-        if (this.appRateLimiter && this.methodRateLimiterMap.get(path)) {
-          return {} as AxiosResponse<T>
+          // Mock request if limiter has created (that's say, the first request for each method are not mocked)
+          if (this.debug === 'mock') {
+            if (this.appRateLimiter && this.methodRateLimiterMap.get(path)) {
+              return Promise.resolve({}) as Promise<AxiosResponse<T>>
+            }
+          }
         }
-      }
-    }
 
-    const origin = `https://${this.generalRegion.toLowerCase()}.api.riotgames.com`
+        const origin = `https://${this.generalRegion.toLowerCase()}.api.riotgames.com`
 
-    return this.axiosInstance
-      .get<T>(origin + realPath, { params: { query } })
+        return this.axiosInstance.get<T>(origin + realPath, {
+          params: { query },
+        })
+      })
       .then(async (res) => {
         await this.postAppRequest(res)
         await this.postMethodRequest(res, path)
@@ -144,13 +159,13 @@ export class RiotRateLimiter {
     RegionRateLimiter
   >()
 
-  constructor(axiosInstance: AxiosInstance, debug?: Debug) {
+  constructor(axiosInstance: AxiosInstance, config: LimiterConfig) {
     // eslint-disable-next-line @typescript-eslint/no-extra-semi
     ;[...Object.values(Region), ...Object.values(Platform)].forEach(
       (generalRegion) => {
         this.regionRateLimiterMap.set(
           generalRegion,
-          new RegionRateLimiter(generalRegion, axiosInstance, debug),
+          new RegionRateLimiter(generalRegion, axiosInstance, config),
         )
       },
     )
