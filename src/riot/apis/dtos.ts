@@ -524,7 +524,7 @@ export type CurrentGameInfo = {
   /** Banned champion information */
   bannedChampions: BannedChampion[]
   /** The queue type (queue types are documented on the Game Constants page) */
-  gameQueueConfigId: number
+  gameQueueConfigId?: number
   /** The observer information */
   observers: Observer
   /** The participant information */
