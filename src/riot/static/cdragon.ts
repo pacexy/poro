@@ -142,4 +142,13 @@ export class CommunityDragon extends VersionLanguage {
       `/${this.version}/plugins/rcp-be-lol-game-data/global/${this.language}/v1/${file}.json`
     )
   }
+
+  tier(tier: string) {
+    return (
+      RAW_CDRAGON_BASE_URL +
+      `/${
+        this.version
+      }/plugins/rcp-fe-lol-static-assets/global/default/images/ranked-mini-regalia/${tier.toLowerCase()}.png`
+    )
+  }
 }
