@@ -66,7 +66,7 @@ export class Client {
     axiosRetry(this.axiosInstance, {
       retryCondition(err) {
         const errCodes = ['ECONNRESET', 'ETIMEDOUT']
-        const statusCodes = [403, 503]
+        const statusCodes = [403, 429, 503]
         const errCode = err.code ?? ''
         const statusCode = err.response?.status ?? 0
 
@@ -78,6 +78,15 @@ export class Client {
         }
 
         return false
+      },
+      retryDelay(retryCount, err) {
+        if (err.response?.status === 429) {
+          const retryAfter = err.response.headers['retry-after']
+          if (retryAfter) {
+            return retryAfter * 1000
+          }
+        }
+        return axiosRetry.exponentialDelay(retryCount)
       },
     })
   }
