@@ -49,7 +49,7 @@ class RegionRateLimiter {
     config: LimiterConfig,
   ) {
     this.debug = config.debug
-    this.queue = new PQueue({ concurrency: config.concurrency })
+    this.queue = new PQueue({ concurrency: config.concurrency ?? Infinity })
   }
 
   async execute<T>(
@@ -85,7 +85,7 @@ class RegionRateLimiter {
         const origin = `https://${this.generalRegion.toLowerCase()}.api.riotgames.com`
 
         return this.axiosInstance.get<T>(origin + realPath, {
-          params: { query },
+          params: query,
         })
       })
       .then(async (res) => {
