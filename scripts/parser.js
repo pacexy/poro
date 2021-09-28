@@ -17,10 +17,10 @@ function transformType(type) {
   )
 }
 
-function dtoToInterface(element) {
+function dtoToType(element) {
   try {
-    const interfaceName = element.firstElementChild.textContent
-    const interfaceDesc = removeRedundantSpace(
+    const typeName = element.firstElementChild.textContent
+    const typeDesc = removeRedundantSpace(
       element.firstElementChild.nextSibling.textContent,
     )
 
@@ -40,12 +40,12 @@ ${property}`
       })
       .join('\n')
 
-    const def = `export interface ${interfaceName} {
+    const def = `export type ${typeName} = {
   ${content}
 }`
     return {
-      [interfaceName]: interfaceDesc
-        ? `/** ${interfaceDesc} */
+      [typeName]: typeDesc
+        ? `/** ${typeDesc} */
 ${def}`
         : def,
     }
@@ -79,7 +79,7 @@ function parse() {
           dtoNodes.forEach((dtoNode) => {
             dtos = {
               ...dtos,
-              ...dtoToInterface(dtoNode),
+              ...dtoToType(dtoNode),
             }
           })
 

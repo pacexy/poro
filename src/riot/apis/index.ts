@@ -10,7 +10,6 @@ import {
   LeagueEntryDTO,
   LeagueListDTO,
   MatchDto,
-  MatchTimelineDto,
   PlatformDataDto,
   PlayerDto,
   SummonerDTO,
@@ -393,7 +392,8 @@ function createEndpoints(limiter: RiotRateLimiter) {
     ) => ({
       /** Get a match timeline by match id */
       get() {
-        return limiter.execute<MatchTimelineDto>(generalRegion, realPath, path)
+        // TODO: add `MatchTimelineDto` when it is finalized
+        return limiter.execute(generalRegion, realPath, path)
       },
     }),
 

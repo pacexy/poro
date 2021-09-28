@@ -165,347 +165,207 @@ export type UpdateDto = {
 }
 
 export type MatchDto = {
-  gameId: number
-  /** Participant identity information. Participant identity information is purposefully excluded for custom games. */
-  participantIdentities: ParticipantIdentityDto[]
-  /** Please refer to the Game Constants documentation. */
-  queueId: number
-  /** Please refer to the Game Constants documentation. */
-  gameType: string
-  /** Match duration in seconds. */
+  /** Match metadata. */
+  metadata: MetadataDto
+  /** Match info. */
+  info: InfoDto
+}
+
+export type MetadataDto = {
+  /** Match data version. */
+  dataVersion: string
+  /** Match id. */
+  matchId: string
+  /** A list of participant PUUIDs. */
+  participants: string[]
+}
+
+export type InfoDto = {
+  /** Unix timestamp for when the game is created (i.e., the loading screen). */
+  gameCreation: number
+  /** Game length in milliseconds. */
   gameDuration: number
-  /** Team information. */
-  teams: TeamStatsDto[]
+  gameId: number
+  /** Refer to the Game Constants documentation. */
+  gameMode: string
+  gameName: string
+  /** Unix timestamp for when match actually starts. */
+  gameStartTimestamp: number
+  gameType: string
+  /** The first two parts can be used to determine the patch a game was played on. */
+  gameVersion: string
+  /** Refer to the Game Constants documentation. */
+  mapId: number
+  participants: ParticipantDto[]
   /** Platform where the match was played. */
   platformId: string
-  /** Designates the timestamp when champion select ended and the loading screen appeared, NOT when the game timer was at 0:00. */
-  gameCreation: number
-  /** Please refer to the Game Constants documentation. */
-  seasonId: number
-  /** The major.minor version typically indicates the patch the match was played on. */
-  gameVersion: string
-  /** Please refer to the Game Constants documentation. */
-  mapId: number
-  /** Please refer to the Game Constants documentation. */
-  gameMode: string
-  /** Participant information. */
-  participants: ParticipantDto[]
-}
-
-export type ParticipantIdentityDto = {
-  participantId: number
-  /** Player information not included in the response for custom matches. Custom matches are considered private unless a tournament code was used to create the match. */
-  player: {
-    profileIcon: number
-    /** Player's original accountId. */
-    accountId: string
-    matchHistoryUri: string
-    /** Player's current accountId when the match was played. */
-    currentAccountId: string
-    /** Player's current platformId when the match was played. */
-    currentPlatformId: string
-    summonerName: string
-    /** Player's summonerId (Encrypted) */
-    summonerId: string
-    /** Player's original platformId. */
-    platformId: string
-  }
-}
-
-export type TeamStatsDto = {
-  /** Number of towers the team destroyed. */
-  towerKills: number
-  /** Number of times the team killed Rift Herald. */
-  riftHeraldKills: number
-  /** Flag indicating whether or not the team scored the first blood. */
-  firstBlood: boolean
-  /** Number of inhibitors the team destroyed. */
-  inhibitorKills: number
-  /** If match queueId has a draft, contains banned champion data, otherwise empty. */
-  bans: TeamBansDto[]
-  /** Flag indicating whether or not the team scored the first Baron kill. */
-  firstBaron: boolean
-  /** Flag indicating whether or not the team scored the first Dragon kill. */
-  firstDragon: boolean
-  /** For Dominion matches, specifies the points the team had at game end. */
-  dominionVictoryScore: number
-  /** Number of times the team killed Dragon. */
-  dragonKills: number
-  /** Number of times the team killed Baron. */
-  baronKills: number
-  /** Flag indicating whether or not the team destroyed the first inhibitor. */
-  firstInhibitor: boolean
-  /** Flag indicating whether or not the team destroyed the first tower. */
-  firstTower: boolean
-  /** Number of times the team killed Vilemaw. */
-  vilemawKills: number
-  /** Flag indicating whether or not the team scored the first Rift Herald kill. */
-  firstRiftHerald: boolean
-  /** 100 for blue side. 200 for red side. */
-  teamId: number
-  /** String indicating whether or not the team won. There are only two values visibile in public match history. (Legal values:  Fail,  Win) */
-  win: string
-}
-
-export type TeamBansDto = {
-  /** Banned championId. */
-  championId: number
-  /** Turn during which the champion was banned. */
-  pickTurn: number
+  /** Refer to the Game Constants documentation. */
+  queueId: number
+  teams: MatchTeamDto[]
+  /** Tournament code used to generate the match. */
+  tournamentCode: string
 }
 
 export type ParticipantDto = {
-  participantId: number
-  championId: number
-  /** List of legacy Rune information. Not included for matches played with Runes Reforged. */
-  runes: RuneDto[]
-  /** Participant statistics. */
-  stats: ParticipantStatsDto
-  /** 100 for blue side. 200 for red side. */
-  teamId: number
-  /** Participant timeline data. */
-  timeline: ParticipantTimelineDto
-  /** First Summoner Spell id. */
-  spell1Id: number
-  /** Second Summoner Spell id. */
-  spell2Id: number
-  /** Highest ranked tier achieved for the previous season in a specific subset of queueIds, if any, otherwise null. Used to display border in game loading screen. Please refer to the Ranked Info documentation. (Legal values:  CHALLENGER,  MASTER,  DIAMOND,  PLATINUM,  GOLD,  SILVER,  BRONZE,  UNRANKED) */
-  highestAchievedSeasonTier: string
-  /** List of legacy Mastery information. Not included for matches played with Runes Reforged. */
-  masteries: MasteryDto[]
-}
-
-export type RuneDto = {
-  runeId: number
-  rank: number
-}
-
-export type ParticipantStatsDto = {
-  item0: number
-  item2: number
-  totalUnitsHealed: number
-  item1: number
-  largestMultiKill: number
-  goldEarned: number
-  firstInhibitorKill: boolean
-  physicalDamageTaken: number
-  nodeNeutralizeAssist: number
-  totalPlayerScore: number
-  champLevel: number
-  damageDealtToObjectives: number
-  totalDamageTaken: number
-  neutralMinionsKilled: number
-  deaths: number
-  tripleKills: number
-  magicDamageDealtToChampions: number
-  wardsKilled: number
-  pentaKills: number
-  damageSelfMitigated: number
-  largestCriticalStrike: number
-  nodeNeutralize: number
-  totalTimeCrowdControlDealt: number
-  firstTowerKill: boolean
-  magicDamageDealt: number
-  totalScoreRank: number
-  nodeCapture: number
-  wardsPlaced: number
-  totalDamageDealt: number
-  timeCCingOthers: number
-  magicalDamageTaken: number
-  largestKillingSpree: number
-  totalDamageDealtToChampions: number
-  physicalDamageDealtToChampions: number
-  neutralMinionsKilledTeamJungle: number
-  totalMinionsKilled: number
-  firstInhibitorAssist: boolean
-  visionWardsBoughtInGame: number
-  objectivePlayerScore: number
-  kills: number
-  firstTowerAssist: boolean
-  combatPlayerScore: number
-  inhibitorKills: number
-  turretKills: number
-  participantId: number
-  trueDamageTaken: number
-  firstBloodAssist: boolean
-  nodeCaptureAssist: number
   assists: number
-  teamObjective: number
-  altarsNeutralized: number
-  goldSpent: number
+  baronKills: number
+  bountyLevel: number
+  champExperience: number
+  champLevel: number
+  championId: number
+  championName: string
+  /** This field is currently only utilized for Kayn's transformations. (Legal values: 0 - None, 1 - Slayer, 2 - Assassin) */
+  championTransform: number
+  consumablesPurchased: number
+  damageDealtToBuildings: number
+  damageDealtToObjectives: number
   damageDealtToTurrets: number
-  altarsCaptured: number
-  win: boolean
+  damageSelfMitigated: number
+  deaths: number
+  detectorWardsPlaced: number
+  doubleKills: number
+  dragonKills: number
+  firstBloodAssist: boolean
+  firstBloodKill: boolean
+  firstTowerAssist: boolean
+  firstTowerKill: boolean
+  gameEndedInEarlySurrender: boolean
+  gameEndedInSurrender: boolean
+  goldEarned: number
+  goldSpent: number
+  /** Both individualPosition and teamPosition are computed by the game server and are different versions of the most likely position played by a player. The individualPosition is the best guess for which position the player actually played in isolation of anything else. The teamPosition is the best guess for which position the player actually played if we add the constraint that each team must have one top player, one jungle, one middle, etc. Generally the recommendation is to use the teamPosition field over the individualPosition field. */
+  individualPosition: string
+  inhibitorKills: number
+  inhibitorTakedowns: number
+  inhibitorsLost: number
+  item0: number
+  item1: number
+  item2: number
+  item3: number
+  item4: number
+  item5: number
+  item6: number
+  itemsPurchased: number
+  killingSprees: number
+  kills: number
+  lane: string
+  largestCriticalStrike: number
+  largestKillingSpree: number
+  largestMultiKill: number
+  longestTimeSpentLiving: number
+  magicDamageDealt: number
+  magicDamageDealtToChampions: number
+  magicDamageTaken: number
+  neutralMinionsKilled: number
+  nexusKills: number
+  nexusTakedowns: number
+  nexusLost: number
+  objectivesStolen: number
+  objectivesStolenAssists: number
+  participantId: number
+  pentaKills: number
+  perks: PerksDto
+  physicalDamageDealt: number
+  physicalDamageDealtToChampions: number
+  physicalDamageTaken: number
+  profileIcon: number
+  puuid: string
+  quadraKills: number
+  riotIdName: string
+  riotIdTagline: string
+  role: string
+  sightWardsBoughtInGame: number
+  spell1Casts: number
+  spell2Casts: number
+  spell3Casts: number
+  spell4Casts: number
+  summoner1Casts: number
+  summoner1Id: number
+  summoner2Casts: number
+  summoner2Id: number
+  summonerId: string
+  summonerLevel: number
+  summonerName: string
+  teamEarlySurrendered: boolean
+  teamId: number
+  /** Both individualPosition and teamPosition are computed by the game server and are different versions of the most likely position played by a player. The individualPosition is the best guess for which position the player actually played in isolation of anything else. The teamPosition is the best guess for which position the player actually played if we add the constraint that each team must have one top player, one jungle, one middle, etc. Generally the recommendation is to use the teamPosition field over the individualPosition field. */
+  teamPosition: string
+  timeCCingOthers: number
+  timePlayed: number
+  totalDamageDealt: number
+  totalDamageDealtToChampions: number
+  totalDamageShieldedOnTeammates: number
+  totalDamageTaken: number
   totalHeal: number
+  totalHealsOnTeammates: number
+  totalMinionsKilled: number
+  totalTimeCCDealt: number
+  totalTimeSpentDead: number
+  totalUnitsHealed: number
+  tripleKills: number
+  trueDamageDealt: number
+  trueDamageDealtToChampions: number
+  trueDamageTaken: number
+  turretKills: number
+  turretTakedowns: number
+  turretsLost: number
   unrealKills: number
   visionScore: number
-  physicalDamageDealt: number
-  firstBloodKill: boolean
-  longestTimeSpentLiving: number
-  killingSprees: number
-  sightWardsBoughtInGame: number
-  trueDamageDealtToChampions: number
-  neutralMinionsKilledEnemyJungle: number
-  doubleKills: number
-  trueDamageDealt: number
-  quadraKills: number
-  item4: number
-  item3: number
-  item6: number
-  item5: number
-  playerScore0: number
-  playerScore1: number
-  playerScore2: number
-  playerScore3: number
-  playerScore4: number
-  playerScore5: number
-  playerScore6: number
-  playerScore7: number
-  playerScore8: number
-  playerScore9: number
-  /** Primary path keystone rune. */
-  perk0: number
-  /** Post game rune stats. */
-  perk0Var1: number
-  /** Post game rune stats. */
-  perk0Var2: number
-  /** Post game rune stats. */
-  perk0Var3: number
-  /** Primary path rune. */
-  perk1: number
-  /** Post game rune stats. */
-  perk1Var1: number
-  /** Post game rune stats. */
-  perk1Var2: number
-  /** Post game rune stats. */
-  perk1Var3: number
-  /** Primary path rune. */
-  perk2: number
-  /** Post game rune stats. */
-  perk2Var1: number
-  /** Post game rune stats. */
-  perk2Var2: number
-  /** Post game rune stats. */
-  perk2Var3: number
-  /** Primary path rune. */
-  perk3: number
-  /** Post game rune stats. */
-  perk3Var1: number
-  /** Post game rune stats. */
-  perk3Var2: number
-  /** Post game rune stats. */
-  perk3Var3: number
-  /** Secondary path rune. */
-  perk4: number
-  /** Post game rune stats. */
-  perk4Var1: number
-  /** Post game rune stats. */
-  perk4Var2: number
-  /** Post game rune stats. */
-  perk4Var3: number
-  /** Secondary path rune. */
-  perk5: number
-  /** Post game rune stats. */
-  perk5Var1: number
-  /** Post game rune stats. */
-  perk5Var2: number
-  /** Post game rune stats. */
-  perk5Var3: number
-  /** Primary rune path */
-  perkPrimaryStyle: number
-  /** Secondary rune path */
-  perkSubStyle: number
-  /** Stat rune */
-  statPerk0: number
-  /** Stat rune */
-  statPerk1: number
-  /** Stat rune */
-  statPerk2: number
+  visionWardsBoughtInGame: number
+  wardsKilled: number
+  wardsPlaced: number
+  win: boolean
 }
 
-export type ParticipantTimelineDto = {
-  participantId: number
-  /** Creep score difference versus the calculated lane opponent(s) for a specified period. */
-  csDiffPerMinDeltas: Record<string, number>
-  /** Damage taken for a specified period. */
-  damageTakenPerMinDeltas: Record<string, number>
-  /** Participant's calculated role. (Legal values:  DUO,  NONE,  SOLO,  DUO_CARRY,  DUO_SUPPORT) */
-  role: string
-  /** Damage taken difference versus the calculated lane opponent(s) for a specified period. */
-  damageTakenDiffPerMinDeltas: Record<string, number>
-  /** Experience change for a specified period. */
-  xpPerMinDeltas: Record<string, number>
-  /** Experience difference versus the calculated lane opponent(s) for a specified period. */
-  xpDiffPerMinDeltas: Record<string, number>
-  /** Participant's calculated lane. MID and BOT are legacy values. (Legal values:  MID,  MIDDLE,  TOP,  JUNGLE,  BOT,  BOTTOM) */
-  lane: string
-  /** Creeps for a specified period. */
-  creepsPerMinDeltas: Record<string, number>
-  /** Gold for a specified period. */
-  goldPerMinDeltas: Record<string, number>
+export type PerksDto = {
+  statPerks: PerkStatsDto
+  styles: PerkStyleDto[]
 }
 
-export type MasteryDto = {
-  rank: number
-  masteryId: number
+export type PerkStatsDto = {
+  defense: number
+  flex: number
+  offense: number
 }
 
-export type MatchTimelineDto = {
-  frames: MatchFrameDto[]
-  frameInterval: number
+export type PerkStyleDto = {
+  description: string
+  selections: PerkStyleSelectionDto[]
+  style: number
 }
 
-export type MatchFrameDto = {
-  participantFrames: Record<string, MatchParticipantFrameDto>
-  events: MatchEventDto[]
-  timestamp: number
+export type PerkStyleSelectionDto = {
+  perk: number
+  var1: number
+  var2: number
+  var3: number
 }
 
-export type MatchParticipantFrameDto = {
-  participantId: number
-  minionsKilled: number
-  teamScore: number
-  dominionScore: number
-  totalGold: number
-  level: number
-  xp: number
-  currentGold: number
-  position: MatchPositionDto
-  jungleMinionsKilled: number
-}
-
-export type MatchPositionDto = {
-  x: number
-  y: number
-}
-
-export type MatchEventDto = {
-  laneType: string
-  skillSlot: number
-  ascendedType: string
-  creatorId: number
-  afterId: number
-  eventType: string
-  /** (Legal values:  CHAMPION_KILL,  WARD_PLACED,  WARD_KILL,  BUILDING_KILL,  ELITE_MONSTER_KILL,  ITEM_PURCHASED,  ITEM_SOLD,  ITEM_DESTROYED,  ITEM_UNDO,  SKILL_LEVEL_UP,  ASCENDED_EVENT,  CAPTURE_POINT,  PORO_KING_SUMMON) */
-  type: string
-  levelUpType: string
-  wardType: string
-  participantId: number
-  towerType: string
-  itemId: number
-  beforeId: number
-  pointCaptured: string
-  monsterType: string
-  monsterSubType: string
+export type MatchTeamDto = {
+  bans: BanDto[]
+  objectives: ObjectivesDto
   teamId: number
-  position: MatchPositionDto
-  killerId: number
-  timestamp: number
-  assistingParticipantIds: number[]
-  buildingType: string
-  victimId: number
+  win: boolean
 }
 
+export type BanDto = {
+  championId: number
+  pickTurn: number
+}
+
+export type ObjectivesDto = {
+  baron: ObjectiveDto
+  champion: ObjectiveDto
+  dragon: ObjectiveDto
+  inhibitor: ObjectiveDto
+  riftHerald: ObjectiveDto
+  tower: ObjectiveDto
+}
+
+export type ObjectiveDto = {
+  first: boolean
+  kills: number
+}
 export type CurrentGameInfo = {
   /** The ID of the game */
   gameId: number
