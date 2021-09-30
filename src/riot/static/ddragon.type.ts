@@ -334,7 +334,7 @@ export type RunesReforgedJSON = {
   slots: {
     runes: Rune[]
   }[]
-}
+}[]
 
 export type Rune = {
   id: number
