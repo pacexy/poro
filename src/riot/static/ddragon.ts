@@ -1,19 +1,8 @@
-import { Version, VersionLanguage } from './utils'
+import { Image } from './ddragon.type'
+import { VersionLanguage } from './utils'
 
 export const DDRAGON_DOMAIN = 'ddragon.leagueoflegends.com'
 export const DDRAGON_BASE_URL = `https://${DDRAGON_DOMAIN}`
-
-class Image extends Version {
-  private readonly urlPrefix = DDRAGON_BASE_URL + `/cdn/${this.version}`
-  private readonly ext = '.png'
-
-  spell(spellName: string) {
-    const filename = spellName.endsWith(this.ext)
-      ? spellName
-      : spellName + this.ext
-    return this.urlPrefix + `/img/spell/${filename}`
-  }
-}
 
 type MetaFile =
   | `champion/${string}`
@@ -29,11 +18,16 @@ type MetaFile =
   | 'summoner'
 
 export class DataDragon extends VersionLanguage {
+  private readonly prefixImmutable = DDRAGON_BASE_URL + `/cdn`
+  private readonly prefix = DDRAGON_BASE_URL + `/cdn/${this.version}`
+
   meta(file: MetaFile) {
-    return (
-      DDRAGON_BASE_URL +
-      `/cdn/${this.version}/data/${this.language}/${file}.json`
-    )
+    return this.prefix + `/data/${this.language}/${file}.json`
   }
-  image = new Image(this.version)
+  image(img: Pick<Image, 'group' | 'full'>) {
+    return this.prefix + `/img/${img.group}/${img.full}`
+  }
+  imageImmutable(path: string) {
+    return this.prefixImmutable + '/img/' + path
+  }
 }
