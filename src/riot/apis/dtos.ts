@@ -181,15 +181,17 @@ export type MetadataDto = {
 }
 
 export type InfoDto = {
-  /** Unix timestamp for when the game is created (i.e., the loading screen). */
+  /** Unix timestamp for when the game is created on the game server (i.e., the loading screen). */
   gameCreation: number
-  /** Game length in milliseconds. */
+  /** Prior to patch 11.20, this field returns the game length in milliseconds calculated from gameEndTimestamp - gameStartTimestamp. Post patch 11.20, this field returns the max timePlayed of any participant in the game in seconds, which makes the behavior of this field consistent with that of match-v4. The best way to handling the change in this field is to treat the value as milliseconds if the gameEndTimestamp field isn't in the response and to treat the value as seconds if gameEndTimestamp is in the response. */
   gameDuration: number
+  /** Unix timestamp for when match ends on the game server. This timestamp can occasionally be significantly longer than when the match "ends". The most reliable way of determining the timestamp for the end of the match would be to add the max time played of any participant to the gameStartTimestamp. This field was added to match-v5 in patch 11.20 on Oct 5th, 2021. */
+  gameEndTimestamp: number
   gameId: number
   /** Refer to the Game Constants documentation. */
   gameMode: string
   gameName: string
-  /** Unix timestamp for when match actually starts. */
+  /** Unix timestamp for when match starts on the game server. */
   gameStartTimestamp: number
   gameType: string
   /** The first two parts can be used to determine the patch a game was played on. */
@@ -202,7 +204,7 @@ export type InfoDto = {
   /** Refer to the Game Constants documentation. */
   queueId: number
   teams: MatchTeamDto[]
-  /** Tournament code used to generate the match. */
+  /** Tournament code used to generate the match. This field was added to match-v5 in patch 11.13 on June 23rd, 2021. */
   tournamentCode: string
 }
 
@@ -212,6 +214,7 @@ export type ParticipantDto = {
   bountyLevel: number
   champExperience: number
   champLevel: number
+  /** Prior to patch 11.4, on Feb 18th, 2021, this field returned invalid championIds. We recommend determining the champion based on the championName field for matches played prior to patch 11.4. */
   championId: number
   championName: string
   /** This field is currently only utilized for Kayn's transformations. (Legal values: 0 - None, 1 - Slayer, 2 - Assassin) */
@@ -366,6 +369,7 @@ export type ObjectiveDto = {
   first: boolean
   kills: number
 }
+
 export type CurrentGameInfo = {
   /** The ID of the game */
   gameId: number
