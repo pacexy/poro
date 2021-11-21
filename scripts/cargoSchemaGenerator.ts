@@ -72,14 +72,14 @@ function updateString(data: Data) {
   const map: Record<string, any> = {
     String: "''",
     Text: "''",
-    Date: "'Date'",
+    Date: 'new Date()',
     Boolean: false,
     Integer: 0,
     Float: 1,
     Wikitext: "''",
     'Wikitext string': "''",
     Page: "''",
-    Datetime: "'Datetime'",
+    Datetime: 'new Date()',
   }
 
   const content = data.children
@@ -132,7 +132,7 @@ async function generate() {
     const data = await parse(table)
     updateString(transform(data))
     // eslint-disable-next-line no-console
-    console.log('generate', table, 'success')
+    console.log('√', table)
   }
   post()
 
