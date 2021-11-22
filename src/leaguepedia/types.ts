@@ -269,8 +269,11 @@ export const schemaMap = {
     EntityName: '', // String
     EntityPage: '', // String
     EntityType: '', // String
+    Display: '', // String
     IsLowercase: false, // Boolean
     DisambigSentence: '', // Wikitext
+    AnnounceNew: false, // Boolean
+    DontAnnounceNew: false, // Boolean
     _pageName: '',
     _pageTitle: '',
     _pageNamespace: 0,
@@ -561,14 +564,12 @@ export const schemaMap = {
     N_TabInPage: 0, // Integer
     N_GameInMatch: 0, // Integer
     N_Page: 0, // Integer
-    ScoreboardID_Wiki: '', // String
-    ScoreboardID_Riot: '', // String
-    GameID_Wiki: '', // String
     GameId: '', // String
-    UniqueMatch: '', // String
     MatchId: '', // String
-    UniqueLine: '', // String
     RiotPlatformGameId: '', // String
+    RiotPlatformId: '', // String
+    RiotGameId: '', // String
+    RiotHash: '', // String
     WrittenSummary: '', // Text
     _pageName: '',
     _pageTitle: '',
@@ -589,6 +590,24 @@ export const schemaMap = {
     Cycle6: 0, // Integer
     Cycle7: 0, // Integer
     Cycle8: 0, // Integer
+    Total: 0, // Integer
+    Role: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  NASGLadder5Cycles: {
+    Display: '', // String
+    Link: '', // String
+    Year: '', // String
+    Cycle1: 0, // Integer
+    Cycle2: 0, // Integer
+    Cycle3: 0, // Integer
+    Cycle4: 0, // Integer
+    Cycle5: 0, // Integer
     Total: 0, // Integer
     Role: '', // String
     _pageName: '',
@@ -794,6 +813,29 @@ export const schemaMap = {
     _ID: 0,
   },
 
+  PlayerCompetitiveRulings: {
+    Player: '', // String
+    Team: '', // String
+    PlayerRegion: '', // String
+    RulingRegion: '', // String
+    Date: new Date(), // Date
+    Link: '', // Wikitext
+    Rules: [''], // List of String
+    Fine: 0, // Integer
+    FineUnit: '', // String
+    NGames: 0, // Integer
+    Events: [''], // List of String
+    Suspension: '', // String
+    SuspensionStart: new Date(), // Date
+    SupsensionEnd: new Date(), // Date
+    Notes: '', // Text
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
   PlayerImages: {
     FileName: '', // String
     Link: '', // String
@@ -909,6 +951,24 @@ export const schemaMap = {
     IsLowercase: false, // Boolean
     IsAutoTeam: false, // Boolean
     IsLowContent: false, // Boolean
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  PostgameJsonMetadata: {
+    RiotPlatformGameId: '', // String
+    RiotPlatformId: '', // String
+    RiotGameId: '', // String
+    RiotHash: '', // String
+    GameId: '', // String
+    MatchId: '', // String
+    N_GameInMatch: 0, // Integer
+    OverviewPage: '', // String
+    StatsPage: '', // String
+    TimelinePage: '', // String
     _pageName: '',
     _pageTitle: '',
     _pageNamespace: 0,
@@ -1051,6 +1111,27 @@ export const schemaMap = {
     _ID: 0,
   },
 
+  RunesDataPages: {
+    OverviewPage: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  ScoreboardCounters: {
+    OverviewPage: '', // String
+    Tab: '', // String
+    N_ScoreboardPage: 0, // Integer
+    N_MatchInPage: 0, // Integer
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
   ScoreboardGames: {
     OverviewPage: '', // String
     Tournament: '', // String
@@ -1094,16 +1175,13 @@ export const schemaMap = {
     N_MatchInPage: 0, // Integer
     N_GameInMatch: 0, // Integer
     Gamename: '', // String
-    UniqueGame: '', // String
     UniqueLine: '', // String
     GameId: '', // String
     MatchId: '', // String
-    ScoreboardID_Wiki: '', // String
-    ScoreboardID_Riot: '', // String
-    Note1: '', // String
-    Note2: '', // String
-    Note3: '', // String
-    Note4: '', // String
+    RiotPlatformGameId: '', // String
+    RiotPlatformId: '', // String
+    RiotGameId: '', // String
+    RiotHash: '', // String
     _pageName: '',
     _pageTitle: '',
     _pageNamespace: 0,
@@ -1122,6 +1200,7 @@ export const schemaMap = {
     SummonerSpells: [''], // List of String
     Gold: 0, // Integer
     CS: 0, // Integer
+    DamageToChampions: 0, // Integer
     Items: [''], // List of String
     Trinket: '', // String
     KeystoneMastery: '', // String
@@ -1309,6 +1388,7 @@ export const schemaMap = {
     Tournament: '', // String
     Caption: '', // Text
     SortDate: new Date(), // Date
+    Hide: false, // Boolean
     _pageName: '',
     _pageTitle: '',
     _pageNamespace: 0,
@@ -1546,6 +1626,7 @@ export const schemaMap = {
     Organizers: [''], // List of String
     StandardName: '', // String
     StandardName_Redirect: '', // String
+    BasePage: '', // String
     Split: '', // String
     SplitNumber: 0, // Integer
     TournamentLevel: '', // String
