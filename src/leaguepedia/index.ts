@@ -64,11 +64,11 @@ export class Cargo<P extends string = ''> {
         case 'object': {
           if (defaultValue instanceof Date) {
             newObj[key] = value ? new Date(value) : null
-            break
+          } else {
+            newObj[key] = value.map((item: any) => String(item))
           }
+          break
         }
-        // array will be processed by default
-        // eslint-disable-next-line no-fallthrough
         default: {
           newObj[key] = value
         }
