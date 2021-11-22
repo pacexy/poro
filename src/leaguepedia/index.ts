@@ -13,7 +13,7 @@ import {
 
 const LEAGUEPEDIA_BASE_URL = 'https://lol.fandom.com'
 
-export class Cargo<P extends string = ''> {
+export class CargoClient<P extends string = ''> {
   private readonly metadataPrefix: string
 
   constructor({ metadataPrefix }: Options<P> = {}) {

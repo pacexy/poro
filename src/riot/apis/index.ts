@@ -42,20 +42,20 @@ type UrlParameters<P> = PathParametersUnion<P> extends never
       ...OriginPrefix<P>
     ]
 
-interface ClientConfig extends LimiterConfig {
+interface RiotClientConfig extends LimiterConfig {
   auth: string
   platform?: Platform
   region?: Region
 }
 
-export class Client {
+export class RiotClient {
   readonly axiosInstance = axios.create()
   private readonly limiter
   private readonly endpoints
   private readonly platform
   private readonly region
 
-  constructor({ auth, platform, region, ...limiterConfig }: ClientConfig) {
+  constructor({ auth, platform, region, ...limiterConfig }: RiotClientConfig) {
     this.axiosInstance.defaults.headers.common['X-Riot-Token'] = auth
     this.limiter = new RiotRateLimiter(this.axiosInstance, limiterConfig)
     this.endpoints = createEndpoints(this.limiter)
