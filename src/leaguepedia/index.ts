@@ -1,13 +1,13 @@
 import axios from 'axios'
 
 import { generateUrl } from './generateUrl'
+import { schemaMap } from './schema'
 import {
   Field,
   Item,
   Options,
   Parameter,
   PrefixMetaProperties,
-  schemaMap,
   Table,
 } from './types'
 
