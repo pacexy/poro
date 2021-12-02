@@ -1,4 +1,4 @@
-import { general, DataDragon, CommunityDragon, Client, Riot } from '../src'
+import { general, DataDragon, CommunityDragon, RiotClient, Riot } from '../src'
 
 import { auth } from './env'
 
@@ -29,7 +29,7 @@ describe('static files', () => {
 
 describe('api client', () => {
   it('league-exp', () => {
-    const client = new Client({
+    const client = new RiotClient({
       auth,
       platform: Riot.Platform.KR,
       region: Riot.Region.ASIA,
@@ -50,7 +50,7 @@ describe('api client', () => {
 
 describe('set region/platform correctly', () => {
   it('default region', () => {
-    const client = new Client({
+    const client = new RiotClient({
       auth: 'mock',
     })
 
@@ -65,7 +65,7 @@ describe('set region/platform correctly', () => {
   })
 
   it('default platform', () => {
-    const client = new Client({
+    const client = new RiotClient({
       auth: 'mock',
     })
 
@@ -83,7 +83,7 @@ describe('set region/platform correctly', () => {
   })
 
   it('class-scoped region', () => {
-    const client = new Client({
+    const client = new RiotClient({
       auth: 'mock',
       region: Riot.Region.ASIA,
     })
@@ -99,7 +99,7 @@ describe('set region/platform correctly', () => {
   })
 
   it('class-scoped platform', () => {
-    const client = new Client({
+    const client = new RiotClient({
       auth: 'mock',
       platform: Riot.Platform.KR,
     })
@@ -118,7 +118,7 @@ describe('set region/platform correctly', () => {
   })
 
   it('method-scoped region', () => {
-    const client = new Client({
+    const client = new RiotClient({
       auth: 'mock',
       region: Riot.Region.EUROPE,
     })
@@ -134,7 +134,7 @@ describe('set region/platform correctly', () => {
   })
 
   it('method-scoped platform', () => {
-    const client = new Client({
+    const client = new RiotClient({
       auth: 'mock',
       platform: Riot.Platform.RU,
     })
@@ -157,7 +157,7 @@ describe('set region/platform correctly', () => {
 describe('rate limit', () => {
   it('app < method', () => {
     // App rate limit: 100:120 spread to 1:1200ms
-    const client = new Client({ auth })
+    const client = new RiotClient({ auth })
     const promises: Promise<any>[] = []
     let lastResolveTime = Date.now()
 
@@ -182,7 +182,7 @@ describe('rate limit', () => {
 
   it('app > method', () => {
     // App rate limit: 100:120 spread to 1:1200ms
-    const client = new Client({ auth })
+    const client = new RiotClient({ auth })
     const promises: Promise<any>[] = []
     let lastResolveTime = Date.now()
 
@@ -206,7 +206,7 @@ describe('rate limit', () => {
   })
 
   it('multiple regions', () => {
-    const client = new Client({ auth })
+    const client = new RiotClient({ auth })
     const promises: Promise<any>[] = []
 
     Object.values(Riot.Platform).forEach((platform) => {
@@ -231,7 +231,7 @@ describe('rate limit', () => {
   })
 
   it('multiple methods', () => {
-    const client = new Client({ auth })
+    const client = new RiotClient({ auth })
     const promises: Promise<any>[] = []
 
     const startTime = Date.now()

@@ -4,9 +4,9 @@ import path from 'path'
 import * as cheerio from 'cheerio'
 import { isString } from 'lodash'
 
-import { Cargo } from '../src/leaguepedia/index'
+import { CargoClient } from '../src/leaguepedia/index'
 
-const cargo = new Cargo()
+const cargo = new CargoClient()
 const axios = cargo.axiosInstance
 const BASE_URL = '/wiki/Special:CargoTables'
 

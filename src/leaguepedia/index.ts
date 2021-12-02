@@ -1,19 +1,19 @@
 import axios from 'axios'
 
 import { generateUrl } from './generateUrl'
+import { schemaMap } from './schema'
 import {
   Field,
   Item,
   Options,
   Parameter,
   PrefixMetaProperties,
-  schemaMap,
   Table,
 } from './types'
 
 const LEAGUEPEDIA_BASE_URL = 'https://lol.fandom.com'
 
-export class Cargo<P extends string = ''> {
+export class CargoClient<P extends string = ''> {
   private readonly metadataPrefix: string
 
   constructor({ metadataPrefix }: Options<P> = {}) {
@@ -64,11 +64,11 @@ export class Cargo<P extends string = ''> {
         case 'object': {
           if (defaultValue instanceof Date) {
             newObj[key] = value ? new Date(value) : null
-            break
+          } else {
+            newObj[key] = value.map((item: any) => String(item))
           }
+          break
         }
-        // array will be processed by default
-        // eslint-disable-next-line no-fallthrough
         default: {
           newObj[key] = value
         }

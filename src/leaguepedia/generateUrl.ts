@@ -1,6 +1,7 @@
 import { URLSearchParams } from 'url'
 
-import { Field, schemaMap, Parameter, Table } from './types'
+import { schemaMap } from './schema'
+import { Field, Parameter, Table } from './types'
 
 function removeUndefinedProperty(obj: Record<string, any>) {
   Object.keys(obj).forEach((key) => {

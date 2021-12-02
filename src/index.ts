@@ -1,6 +1,3 @@
-export { Client } from './riot/apis'
-export * from './riot/apis/utils'
-
 export {
   CommunityDragon,
   CDRAGON_DOMAIN,
@@ -9,7 +6,10 @@ export {
 export { DataDragon, DDRAGON_DOMAIN } from './riot/static/ddragon'
 export { general } from './riot/static/general'
 
-export { Cargo } from './leaguepedia'
-export { schemaMap } from './leaguepedia/types'
+export { CargoClient } from './leaguepedia'
+export { schemaMap } from './leaguepedia/schema'
+export * as Cargo from './leaguepedia/types'
 
+export { RiotClient } from './riot/apis'
+export * from './riot/apis/utils'
 export * as Riot from './types'

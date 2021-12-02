@@ -1,8 +1,8 @@
-import { Cargo } from '../src'
+import { CargoClient } from '../src'
 
 describe('cargoQuery leaguepedia table items', () => {
   it('single table', () => {
-    const cargo = new Cargo()
+    const cargo = new CargoClient()
     return cargo
       .query({
         tables: ['Alphabets'],
@@ -15,7 +15,7 @@ describe('cargoQuery leaguepedia table items', () => {
   })
 
   it('specified fields', () => {
-    const cargo = new Cargo()
+    const cargo = new CargoClient()
     return cargo
       .query({
         tables: ['Teams'],
@@ -30,7 +30,7 @@ describe('cargoQuery leaguepedia table items', () => {
   })
 
   it('where', () => {
-    const cargo = new Cargo()
+    const cargo = new CargoClient()
     return cargo
       .query({
         tables: ['Teams'],
@@ -42,7 +42,7 @@ describe('cargoQuery leaguepedia table items', () => {
   })
 
   it('single join on left table', () => {
-    const cargo = new Cargo()
+    const cargo = new CargoClient()
     return cargo
       .query({
         tables: ['BroadcastMusicUsages', 'BroadcastMusicTracks'],
@@ -60,7 +60,7 @@ describe('cargoQuery leaguepedia table items', () => {
   })
 
   it('multiple join on left tables', () => {
-    const cargo = new Cargo()
+    const cargo = new CargoClient()
     return cargo
       .query({
         tables: ['MatchSchedule', 'Teams', 'Regions'],
@@ -83,7 +83,7 @@ describe('cargoQuery leaguepedia table items', () => {
   })
 
   it('group by and having', () => {
-    const cargo = new Cargo()
+    const cargo = new CargoClient()
     return cargo
       .query({
         tables: ['Pentakills'],
@@ -96,7 +96,7 @@ describe('cargoQuery leaguepedia table items', () => {
   })
 
   it('spaceToUnderscore', () => {
-    const cargo = new Cargo({ metadataPrefix: 'Cargo' })
+    const cargo = new CargoClient({ metadataPrefix: 'CargoClient' })
     return cargo
       .query({
         tables: ['GCDArchive'],
@@ -108,7 +108,7 @@ describe('cargoQuery leaguepedia table items', () => {
   })
 
   it('metadataPrefix', () => {
-    const cargo = new Cargo({ metadataPrefix: 'cargo' })
+    const cargo = new CargoClient({ metadataPrefix: 'cargo' })
     return cargo
       .query({
         tables: ['Teams'],
@@ -120,7 +120,7 @@ describe('cargoQuery leaguepedia table items', () => {
   })
 
   it('data convertion', () => {
-    const cargo = new Cargo({ metadataPrefix: 'cargo' })
+    const cargo = new CargoClient({ metadataPrefix: 'cargo' })
     return cargo
       .query({
         tables: ['Players'],
