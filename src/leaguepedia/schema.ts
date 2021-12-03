@@ -898,6 +898,7 @@ export const schemaMap = {
     OverviewPage: '', // String
     StatsPage: '', // String
     TimelinePage: '', // String
+    Version: '', // String
     _pageName: '',
     _pageTitle: '',
     _pageNamespace: 0,
