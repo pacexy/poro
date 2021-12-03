@@ -21,8 +21,8 @@ describe('static files', () => {
   })
   it('cdragon', () => {
     const cdragon = new CommunityDragon('latest', 'default')
-    expect(cdragon.summoner.profileIcon('1')).toBe(
-      'https://cdn.communitydragon.org/latest/profile-icon/1',
+    expect(cdragon.tier(Riot.Tier.CHALLENGER)).toBe(
+      'https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-static-assets/global/default/images/ranked-mini-regalia/challenger.png',
     )
   })
 })
@@ -37,9 +37,9 @@ describe('api client', () => {
 
     return client
       .path('/lol/league-exp/v4/entries/{queue}/{tier}/{division}', {
-        queue: 'RANKED_SOLO_5x5',
-        tier: 'CHALLENGER',
-        division: 'I',
+        queue: Riot.Queue.RANKED_SOLO_5x5,
+        tier: Riot.Tier.CHALLENGER,
+        division: Riot.Division.I,
       })
       .get({ query: {} })
       .then(({ data }) => {

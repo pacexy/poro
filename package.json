@@ -12,7 +12,7 @@
   "sideEffects": false,
   "scripts": {
     "format": "prettier --write src/**/*.ts",
-    "generate": "ts-node src/generator/generator.ts",
+    "generate-cargo-schema": "ts-node scripts/cargoSchemaGenerator.ts",
     "clean": "rimraf ./dist",
     "build": "yarn clean && tsc -p tsconfig.esm.json && tsc",
     "test": "jest",
