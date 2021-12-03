@@ -2,7 +2,7 @@
 
 - Leaguepedia API
 - Riot League of Legends API
-- CommunityDragon
+- Community Dragon
 - Data Dragon
 
 ## Install
@@ -11,98 +11,119 @@
 npm i poro
 ```
 
-You can update leaguepedia schema with:
-
-```sh
-npm run poro
-```
-
 ## Usage
 
 ### Leaguepedia
 
 ```ts
-import { cargoQuery } from 'poro'
+import { CargoClient } from 'poro'
 
-async function doSomething() {
-  // specify fields
-  const teams = await cargoQuery({
-    tables: ['Teams'],
-    fields: ['Teams.Name', 'Teams.Region'],
-  })
-  // filter
-  const g2 = await cargoQuery({
-    tables: ['Teams'],
-    where: 'Teams.Name = "G2 Esports"',
-  })
-  // join on
-  const broadcastMusicUsages = await cargoQuery({
-    tables: ['BroadcastMusicUsages', 'BroadcastMusicTracks'],
-    joinOn: [
-      {
-        left: 'BroadcastMusicUsages.TrackID',
-        right: 'BroadcastMusicTracks.TrackID',
-      },
-    ],
-  })
-  // group
-  const proplayers = await cargoQuery({
-    tables: ['Pentakills'],
-    groupBy: ['Pentakills.Name'],
-    having: 'COUNT(DateDisplay) > 10',
-  })
-}
+const cargo = new CargoClient()
+// specify fields
+const teams = await cargo.query({
+  tables: ['Teams'],
+  fields: ['Teams.Name', 'Teams.Region'],
+})
+// filter
+const g2 = await cargo.query({
+  tables: ['Teams'],
+  where: 'Teams.Name = "G2 Esports"',
+})
+// join on
+const broadcastMusicUsages = await cargo.query({
+  tables: ['BroadcastMusicUsages', 'BroadcastMusicTracks'],
+  joinOn: [
+    {
+      left: 'BroadcastMusicUsages.TrackID',
+      right: 'BroadcastMusicTracks.TrackID',
+    },
+  ],
+})
+// group
+const proplayers = await cargo.query({
+  tables: ['Pentakills'],
+  groupBy: ['Pentakills.Name'],
+  having: 'COUNT(DateDisplay) > 10',
+})
 ```
 
 ### Riot
 
 ```ts
-import { general, ddragon, cdragon, Client, Riot } from 'poro'
+import { RiotClient, Riot } from 'poro'
 
-async function doSomething() {
-  // General
-  fetch(general.gameModes)
-  // Data Dragon
-  fetch(ddragon.realm('na'))
-  // Community Dragon
-  fetch(cdragon.champion.championData('latest', 'Heimerdinger'))
-
-  // APIs
-  const client = new Client({
-    auth: 'RIOT-API-KEY',
-    platform: Riot.Platform.KR,
-    region: Riot.Region.ASIA,
+const riot = new RiotClient({
+  auth: 'RIOT-API-KEY',
+  platform: Riot.Platform.KR,
+  region: Riot.Region.ASIA,
+})
+const leagueEntries = await riot
+  .path('/lol/league-exp/v4/entries/{queue}/{tier}/{division}', {
+    queue: Riot.Queue.RANKED_SOLO_5x5,
+    tier: Riot.Tier.CHALLENGER,
+    division: Riot.Division.I,
   })
-  const leagueEntries = await client
-    .path('/lol/league-exp/v4/entries/{queue}/{tier}/{division}', {
-      queue: 'RANKED_SOLO_5x5',
-      tier: 'CHALLENGER',
-      division: 'I',
-    })
-    .get({ query: { page: 1 } })
+  .get({ query: { page: 1 } })
+```
+
+### General Data
+
+```ts
+import { general, Riot } from 'poro'
+
+// https://static.developer.riotgames.com/docs/lol/gameModes.json
+const gameModes = await axios<Riot.General.GameModes>(general.gameModes)
+
+// https://ddragon.leagueoflegends.com/realms/na.json
+const realm = await axios<Riot.General.Realm>(general.realm('na'))
+```
+
+### Data Dragon
+
+```ts
+import { DataDragon, Riot } from 'poro'
+
+const ddragon = new DataDragon('11.16.1', 'en_US')
+
+// https://ddragon.leagueoflegends.com/cdn/11.16.1/data/en_US/summoner.json
+const summoner = await axios<Riot.Data.SummonerJSON>(ddragon.meta('summoner'))
+```
+
+### Community Dragon
+
+```ts
+import { CommunityDragon, Riot } from 'poro'
+
+const cdragon = new CommunityDragon('latest', 'default')
+
+// https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-static-assets/global/default/images/ranked-mini-regalia/challenger.png
+cdragon.tier(Riot.Tier.CHALLENGER)
+```
+
+## APIs
+
+`CargoClient` and `RiotClient` are designed for server side and use axios to send requests.
+
+Types are out of box, so you don't have to define them yourself.
+
+### Leaguepedia
+
+> You can get the axios instance with `cargo.axiosInstance`.
+
+```ts
+interface CargoClientOptions {
+  // Prefix to field names starting with '_' (like '_ID', '_pageName', etc.)
+  metadataPrefix?: string
 }
 ```
 
-## Leaguepedia
+See the parameters needed for a query in [Cargo query](https://lol.fandom.com/wiki/Special:CargoQuery) (or [API sandbox](https://lol.fandom.com/wiki/Special:ApiSandbox))
 
-In [Cargo query](https://lol.fandom.com/wiki/Special:CargoQuery) (or [API sandbox](https://lol.fandom.com/wiki/Special:ApiSandbox)),
-you can see the parameters needed for a query.
-
-If you want to see all fields of a table, go to
+See all fields of a table in
 [Cargo tables](https://lol.fandom.com/wiki/Special:CargoTables).
 
-```typescript
-interface JoinOn {
-  left: Field
-  right: Field
-}
-
-interface OrderBy {
-  field: Field
-  desc?: boolean // defaults to `false`
-}
-
-interface Parameter {
+```ts
+interface CargoQueryParameter {
   tables: Table[]
   fields?: Field[] // defaults to all fields
   where?: string
@@ -114,14 +135,50 @@ interface Parameter {
   offset?: number // defaults to `0`
   format?: string // defaults to 'json'
 }
+
+interface JoinOn {
+  left: Field
+  right: Field
+}
+
+interface OrderBy {
+  field: Field
+  desc?: boolean // defaults to `false`
+}
 ```
 
-## Axios Instance
+### Riot
 
-Poro use `axios` as request library, you can get the axios instance by
+> You can get the axios instance with `riot.axiosInstance`.
 
-- `cargoQuery.axiosInstance`
-- `client.axiosInstance`.
+```ts
+interface RiotClientConfig extends LimiterConfig {
+  // Riot API KEY
+  auth: string
+  // Instance-scoped platform
+  platform?: Platform
+  // Instance-scoped region
+  region?: Region
+}
+
+interface LimiterConfig {
+  // Concurrency for each region
+  concurrency?: number
+  // If `true`, display debug info.
+  // If 'mock', display debug info and mock requests.
+  debug?: boolean | 'mock'
+}
+```
+
+Sometime you need method-scoped `platform` and `region`. Add it as the last parameter in `path` method and it will override the instance-scoped one.
+
+```ts
+riot.path(
+  '/lol/summoner/v4/summoners/{encryptedSummonerId}',
+  { encryptedSummonerId: '...' },
+  Riot.Platform.KR,
+)
+```
 
 ## Credits
 
