@@ -1,4 +1,5 @@
 import axios from 'axios'
+import axiosRetry from 'axios-retry'
 
 import { generateUrl } from './generateUrl'
 import { schemaMap } from './schema'
@@ -15,14 +16,26 @@ const LEAGUEPEDIA_BASE_URL = 'https://lol.fandom.com'
 
 export class CargoClient<P extends string = ''> {
   private readonly metadataPrefix: string
+  readonly axiosInstance = axios.create({
+    baseURL: LEAGUEPEDIA_BASE_URL,
+  })
 
   constructor({ metadataPrefix }: Options<P> = {}) {
     this.metadataPrefix = metadataPrefix ?? ''
-  }
 
-  axiosInstance = axios.create({
-    baseURL: LEAGUEPEDIA_BASE_URL,
-  })
+    axiosRetry(this.axiosInstance, {
+      retryCondition(err) {
+        const errCodes = ['ECONNRESET', 'ETIMEDOUT']
+        const errCode = err.code ?? ''
+
+        if (errCodes.includes(errCode)) {
+          return true
+        }
+
+        return false
+      },
+    })
+  }
 
   private spaceToUnderscore<T extends Record<string, any>>(obj: T) {
     // No index signature with a parameter of type 'string' was found on type '{}'.
