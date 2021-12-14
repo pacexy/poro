@@ -1,3 +1,12 @@
+export type DocFile = keyof DocFileSchemaMap
+export type DocFileSchemaMap = {
+  seasons: Season[]
+  queues: Queue[]
+  maps: Map[]
+  gameModes: GameMode[]
+  gameTypes: GameType[]
+}
+
 export type Season = {
   id: number
   season: string

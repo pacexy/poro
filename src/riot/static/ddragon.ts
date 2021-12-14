@@ -1,21 +1,8 @@
-import { Image } from './ddragon.type'
+import { Image, MetaFile } from './ddragon.type'
 import { VersionLanguage } from './utils'
 
 export const DDRAGON_DOMAIN = 'ddragon.leagueoflegends.com'
 export const DDRAGON_BASE_URL = `https://${DDRAGON_DOMAIN}`
-
-type MetaFile =
-  | `champion/${string}`
-  | 'champion'
-  | 'championFull'
-  | 'item'
-  | 'language'
-  | 'map'
-  | 'mission-assets'
-  | 'profileicon'
-  | 'runesReforged'
-  | 'sticker'
-  | 'summoner'
 
 export class DataDragon extends VersionLanguage {
   private readonly prefixImmutable = DDRAGON_BASE_URL + `/cdn`

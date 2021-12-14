@@ -6,7 +6,7 @@ jest.setTimeout(240 * 1000)
 
 describe('static files', () => {
   it('general', () => {
-    expect(general.gameModes).toBe(
+    expect(general.doc('gameModes')).toBe(
       'https://static.developer.riotgames.com/docs/lol/gameModes.json',
     )
     expect(general.realm('na')).toBe(

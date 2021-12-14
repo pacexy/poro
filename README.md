@@ -72,7 +72,7 @@ const leagueEntries = await riot
 import { general, Riot } from 'poro'
 
 // https://static.developer.riotgames.com/docs/lol/gameModes.json
-const gameModes = await axios<Riot.General.GameModes>(general.gameModes)
+const gameModes = await axios<Riot.General.GameModes>(general.doc('gameModes'))
 
 // https://ddragon.leagueoflegends.com/realms/na.json
 const realm = await axios<Riot.General.Realm>(general.realm('na'))
