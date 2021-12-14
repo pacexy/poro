@@ -1,3 +1,18 @@
+export type MetaFile = keyof MetaFileSchemaMap
+export type MetaFileSchemaMap = {
+  [K: `champion/${string}`]: ChampionNameJSON
+  champion: ChampionJSON
+  championFull: ChampionFullJSON
+  item: ItemJSON
+  language: LanguageJSON
+  map: MapJSON
+  'mission-assets': MissionAssetJSON
+  profileicon: ProfileIcon
+  runesReforged: RunesReforgedJSON
+  sticker: StickerJSON
+  summoner: SummonerJSON
+}
+
 export type Image = {
   full: string
   sprite: string
