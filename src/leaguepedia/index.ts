@@ -76,7 +76,7 @@ export class CargoClient<P extends string = ''> {
         }
         case 'object': {
           if (defaultValue instanceof Date) {
-            newObj[key] = value ? new Date(value) : null
+            newObj[key] = value ? new Date(value + 'Z') : null
           } else {
             newObj[key] = value.map((item: any) => String(item))
           }

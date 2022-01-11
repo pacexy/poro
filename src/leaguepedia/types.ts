@@ -13,6 +13,7 @@ export type PrefixMetadata<S, P extends string> = S extends `_${infer Name}`
 
 export type PrefixMetaProperties<O, P extends string> = {
   // https://github.com/sindresorhus/type-fest/blob/6de66eb8c26cd37adda7213cdbfb5e8246af8328/source/camel-case.d.ts#L47
+  // https://www.typescriptlang.org/docs/handbook/2/mapped-types.html#key-remapping-via-as
   [K in keyof O as PrefixMetadata<K, P>]: O[K]
 }
 
