@@ -212,6 +212,7 @@ export type ParticipantDto = {
   assists: number
   baronKills: number
   bountyLevel: number
+  challenges: ChallengesDTO
   champExperience: number
   champLevel: number
   /** Prior to patch 11.4, on Feb 18th, 2021, this field returned invalid championIds. We recommend determining the champion based on the championName field for matches played prior to patch 11.4. */
@@ -318,6 +319,107 @@ export type ParticipantDto = {
   wardsKilled: number
   wardsPlaced: number
   win: boolean
+}
+
+export interface ChallengesDTO {
+  '12AssistStreakCount': number
+  abilityUses: number
+  acesBefore15Minutes: number
+  alliedJungleMonsterKills: number
+  baronTakedowns: number
+  blastConeOppositeOpponentCount: number
+  bountyGold: number
+  buffsStolen: number
+  controlWardsPlaced: number
+  damagePerMinute: number
+  damageTakenOnTeamPercentage: number
+  dancedWithRiftHerald: number
+  deathsByEnemyChamps: number
+  doubleAces: number
+  dragonTakedowns: number
+  earlyLaningPhaseGoldExpAdvantage: number
+  effectiveHealAndShielding: number
+  elderDragonKillsWithOpposingSoul: number
+  elderDragonMultikills: number
+  enemyChampionImmobilizations: number
+  enemyJungleMonsterKills: number
+  epicMonsterKillsNearEnemyJungler: number
+  epicMonsterKillsWithin30SecondsOfSpawn: number
+  epicMonsterSteals: number
+  flawlessAces: number
+  fullTeamTakedown: number
+  gameLength: number
+  getTakedownsInAllLanesEarlyJungleAsLaner: number
+  goldPerMinute: number
+  hadAfkTeammate: number
+  hadOpenNexus: number
+  initialBuffCount: number
+  initialCrabCount: number
+  jungleCsBefore10Minutes: number
+  junglerKillsEarlyJungle: number
+  junglerTakedownsNearDamagedEpicMonster: number
+  kda: number
+  killParticipation: number
+  killsNearEnemyTurret: number
+  killsOnLanersEarlyJungleAsJungler: number
+  killsOnOtherLanesEarlyJungleAsLaner: number
+  killsOnRecentlyHealedByAramPack: number
+  killsUnderOwnTurret: number
+  killsWithHelpFromEpicMonster: number
+  laneMinionsFirst10Minutes: number
+  laningPhaseGoldExpAdvantage: number
+  legendaryCount: number
+  lostAnInhibitor: number
+  maxCsAdvantageOnLaneOpponent: number
+  maxKillDeficit: number
+  maxLevelLeadLaneOpponent: number
+  moreEnemyJungleThanOpponent: number
+  mostWardsDestroyedOneSweeper: number
+  multiKillOneSpell: number
+  multikills: number
+  multikillsAfterAggressiveFlash: number
+  mythicItemUsed: number
+  outerTurretExecutesBefore10Minutes: number
+  outnumberedKills: number
+  outnumberedNexusKill: number
+  perfectDragonSoulsTaken: number
+  perfectGame: number
+  poroExplosions: number
+  riftHeraldTakedowns: number
+  scuttleCrabKills: number
+  shortestTimeToAceFromFirstTakedown?: number
+  skillshotsDodged: number
+  skillshotsHit: number
+  snowballsHit: number
+  soloBaronKills: number
+  soloKills: number
+  stealthWardsPlaced: number
+  survivedSingleDigitHpCount: number
+  takedownOnFirstTurret: number
+  takedowns: number
+  takedownsAfterGainingLevelAdvantage: number
+  takedownsBeforeJungleMinionSpawn: number
+  takedownsFirst25Minutes: number
+  takedownsInAlcove: number
+  takedownsInEnemyFountain: number
+  teamBaronKills: number
+  teamDamagePercentage: number
+  teamElderDragonKills: number
+  teamRiftHeraldKills: number
+  teleportTakedowns?: number
+  turretPlatesTaken: number
+  turretTakedowns: number
+  turretsTakenWithRiftHerald: number
+  twentyMinionsIn3SecondsCount: number
+  unseenRecalls: number
+  visionScoreAdvantageLaneOpponent: number
+  visionScorePerMinute: number
+  wardTakedowns: number
+  wardTakedownsBefore20M: number
+  wardsGuarded: number
+  highestCrowdControlScore?: number
+  highestChampionDamage?: number
+  firstTurretKilledTime?: number
 }
 
 export type PerksDto = {
