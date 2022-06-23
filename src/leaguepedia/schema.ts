@@ -57,6 +57,18 @@ export const schemaMap = {
     _ID: 0,
   },
 
+  CargoFields: {
+    CargoTable: '', // String
+    Name: '', // String
+    FieldType: '', // String
+    Description: '', // Text
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
   ChampionFlashcards: {
     Year: 0, // Integer
     Champion: '', // String
@@ -186,6 +198,17 @@ export const schemaMap = {
     DisambigType: '', // String
     N_LineInPage: '', // String
     DisambigID: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  EmptySubpages: {
+    SubpageType: '', // String
+    BasePage: '', // String
+    FullSubpageString: '', // String
     _pageName: '',
     _pageTitle: '',
     _pageNamespace: 0,
@@ -332,6 +355,34 @@ export const schemaMap = {
     _ID: 0,
   },
 
+  LadderRankingCycles: {
+    Player: '', // String
+    RankingId: '', // String
+    N_Cycle: 0, // Integer
+    Rank: 0, // Integer
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  LadderRankings: {
+    Player: '', // String
+    LadderName: '', // String
+    PointsTotal: 0, // Integer
+    Role: '', // String
+    Year: 0, // Integer
+    Team: '', // String
+    Tournament: '', // String
+    RankingId: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
   LeagueGroups: {
     LongName: '', // String
     ShortName: '', // String
@@ -401,6 +452,7 @@ export const schemaMap = {
     Team1Advantage: 0, // Integer
     Team2Advantage: 0, // Integer
     FF: 0, // Integer
+    IsNullified: false, // Boolean
     Player1: '', // String
     Player2: '', // String
     MatchDay: 0, // Integer
@@ -453,8 +505,6 @@ export const schemaMap = {
     Footnote: '', // Text
     UniqueMatch: '', // String
     MatchId: '', // String
-    UserSignup: '', // String
-    Tags: [''], // List of String
     _pageName: '',
     _pageTitle: '',
     _pageNamespace: 0,
@@ -466,6 +516,8 @@ export const schemaMap = {
     Blue: '', // String
     Red: '', // String
     Winner: 0, // Integer
+    BlueScore: 0, // Integer
+    RedScore: 0, // Integer
     BlueFinal: '', // String
     RedFinal: '', // String
     BlueFootnote: '', // Text
@@ -499,6 +551,10 @@ export const schemaMap = {
     RiotPlatformId: '', // String
     RiotGameId: '', // String
     RiotHash: '', // String
+    RiotVersion: 0, // Integer
+    HasRpgidInput: false, // Boolean
+    IgnoreRpgid: false, // Boolean
+    VersionedRpgid: '', // String
     WrittenSummary: '', // Text
     _pageName: '',
     _pageTitle: '',
@@ -636,6 +692,7 @@ export const schemaMap = {
     OverviewPage: '', // String
     N_TeamInPage: 0, // Integer
     Pool: '', // String
+    GroupName: '', // String
     Args: '', // Text
     _pageName: '',
     _pageTitle: '',
@@ -898,7 +955,8 @@ export const schemaMap = {
     OverviewPage: '', // String
     StatsPage: '', // String
     TimelinePage: '', // String
-    Version: '', // String
+    RiotVersion: '', // String
+    VersionedRpgid: '', // String
     _pageName: '',
     _pageTitle: '',
     _pageNamespace: 0,
@@ -1099,7 +1157,7 @@ export const schemaMap = {
     Patch: '', // String
     PatchSort: '', // String
     MatchHistory: '', // String
-    VOD: '', // String
+    VOD: '', // Wikitext
     N_Page: 0, // Integer
     N_MatchInTab: 0, // Integer
     N_MatchInPage: 0, // Integer
@@ -1112,6 +1170,7 @@ export const schemaMap = {
     RiotPlatformId: '', // String
     RiotGameId: '', // String
     RiotHash: '', // String
+    RiotVersion: 0, // Integer
     _pageName: '',
     _pageTitle: '',
     _pageNamespace: 0,
@@ -1131,6 +1190,7 @@ export const schemaMap = {
     Gold: 0, // Integer
     CS: 0, // Integer
     DamageToChampions: 0, // Integer
+    VisionScore: 0, // Integer
     Items: [''], // List of String
     Trinket: '', // String
     KeystoneMastery: '', // String
@@ -1151,9 +1211,6 @@ export const schemaMap = {
     Role_Number: 0, // Integer
     IngameRole: '', // String
     Side: 0, // Integer
-    GameIDWiki: '', // String
-    GameIDRiot: '', // String
-    UniqueGame: '', // String
     UniqueLine: '', // String
     UniqueLineVs: '', // String
     UniqueRole: '', // String
@@ -1297,6 +1354,19 @@ export const schemaMap = {
     _ID: 0,
   },
 
+  TeamRegionChanges: {
+    Team: '', // String
+    Player: '', // String
+    NewsId: '', // String
+    RegionOld: '', // String
+    RegionNew: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
   TeamRenames: {
     Date: new Date(), // Datetime
     OriginalName: '', // String
@@ -1319,6 +1389,45 @@ export const schemaMap = {
     Caption: '', // Text
     SortDate: new Date(), // Date
     Hide: false, // Boolean
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  Teamnames: {
+    Link: '', // String
+    Longname: '', // String
+    Short: '', // String
+    Medium: '', // String
+    Exception: false, // Boolean
+    Dark: false, // Boolean
+    Black: false, // Boolean
+    Sprite: 0, // Integer
+    Inputs: '', // String
+    TeamnameId: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  TeamnamesInputs: {
+    Link: '', // String
+    Input: '', // String
+    TeamnameId: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  TeamnamesPages: {
+    SortPriority: 0, // Integer
+    Subpage: '', // String
     _pageName: '',
     _pageTitle: '',
     _pageNamespace: 0,
@@ -1402,6 +1511,15 @@ export const schemaMap = {
     NextIsRetired: false, // Boolean
     NextIsWildrift: false, // Boolean
     IsCurrent: false, // Boolean
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  Tooltips: {
+    TooltipExists: false, // Boolean
     _pageName: '',
     _pageTitle: '',
     _pageNamespace: 0,
@@ -1525,6 +1643,16 @@ export const schemaMap = {
     _ID: 0,
   },
 
+  TournamentScriptsToSkip: {
+    OverviewPage: '', // String
+    Script: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
   TournamentTabs: {
     BasePage: '', // String
     BasePageDisplay: '', // String
@@ -1553,7 +1681,7 @@ export const schemaMap = {
     Links: '', // String
     Sponsors: '', // String
     Organizer: '', // String
-    Organizers: [''], // List of String
+    Organizers: '', // Text
     StandardName: '', // String
     StandardName_Redirect: '', // String
     BasePage: '', // String
