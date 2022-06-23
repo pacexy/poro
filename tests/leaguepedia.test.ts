@@ -45,17 +45,19 @@ describe('cargoQuery leaguepedia table items', () => {
     const cargo = new CargoClient()
     return cargo
       .query({
-        tables: ['BroadcastMusicUsages', 'BroadcastMusicTracks'],
+        tables: ['Tournaments', 'ScoreboardGames'],
+        fields: ['ScoreboardGames.Team1', 'Tournaments.Name'],
         joinOn: [
           {
-            left: 'BroadcastMusicUsages.TrackID',
-            right: 'BroadcastMusicTracks.TrackID',
+            left: 'Tournaments.OverviewPage',
+            right: 'ScoreboardGames.OverviewPage',
           },
         ],
-        limit: 2,
+        limit: 1,
       })
       .then(({ data }) => {
-        expect(data).toHaveLength(2)
+        expect(data[0]).toHaveProperty('Team1')
+        expect(data[0]).toHaveProperty('Name')
       })
   })
 
@@ -63,22 +65,57 @@ describe('cargoQuery leaguepedia table items', () => {
     const cargo = new CargoClient()
     return cargo
       .query({
-        tables: ['MatchSchedule', 'Teams', 'Regions'],
+        tables: [
+          'ScoreboardGames',
+          'Tournaments',
+          'Leagues',
+          'MatchScheduleGame',
+          'MatchSchedule',
+          'PicksAndBansS7',
+        ],
         joinOn: [
           {
-            left: 'MatchSchedule.Team1',
-            right: 'Teams.Name',
+            left: 'Tournaments.League',
+            right: 'Leagues.League',
           },
           {
-            left: 'Teams.Region',
-            // autocomplete can't exclude fields perfectly
-            right: 'Regions.RegionMedium',
+            left: 'ScoreboardGames.OverviewPage',
+            right: 'Tournaments.OverviewPage',
+          },
+          {
+            left: 'ScoreboardGames.GameId',
+            right: 'MatchScheduleGame.GameId',
+          },
+
+          {
+            left: 'MatchScheduleGame.MatchId',
+            right: 'MatchSchedule.MatchId',
+          },
+          {
+            left: 'ScoreboardGames.GameId',
+            right: 'PicksAndBansS7.GameId',
           },
         ],
-        limit: 2,
+        fields: [
+          'MatchScheduleGame.OverviewPage',
+          'ScoreboardGames.GameId',
+          'ScoreboardGames.Team1',
+          'ScoreboardGames.Team2',
+          'ScoreboardGames.Winner',
+          'ScoreboardGames.N_GameInMatch',
+          'ScoreboardGames.Gamelength',
+          'ScoreboardGames.Patch',
+          'ScoreboardGames.RiotPlatformGameId',
+          'MatchSchedule.DateTime_UTC',
+          'PicksAndBansS7.Team1Role1', // Not in response
+        ],
+        limit: 1,
       })
       .then(({ data }) => {
-        expect(data).toHaveLength(2)
+        expect(data[0]).toHaveProperty('OverviewPage')
+        expect(data[0]).toHaveProperty('GameId')
+        expect(data[0]).toHaveProperty('DateTime_UTC')
+        expect(data[0]).toHaveProperty('Team1Role1')
       })
   })
 

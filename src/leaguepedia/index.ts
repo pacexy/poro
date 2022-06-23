@@ -52,40 +52,41 @@ export class CargoClient<P extends string = ''> {
     tables: T[],
   ) {
     const newObj: Record<string, any> = {}
-    const defaultTable = tables[0]
-    const schema = schemaMap[defaultTable]
 
-    Object.entries(obj).forEach(([key, value]) => {
-      if (!(key in schema)) return
-      const defaultValue = schema[key as keyof typeof schema]
-      switch (typeof defaultValue) {
-        case 'boolean': {
-          // leaguepedia use bit(1) to store boolean
-          newObj[key] = typeof value === 'number' ? Boolean(value) : null
-          break
-        }
-        case 'number': {
-          const n = defaultValue ? parseFloat(value) : parseInt(value)
-          newObj[key] = isNaN(n) ? null : n
-          break
-        }
-        case 'string': {
-          const s = String(value)
-          newObj[key] = s === '' ? null : s
-          break
-        }
-        case 'object': {
-          if (defaultValue instanceof Date) {
-            newObj[key] = value ? new Date(value + 'Z') : null
-          } else {
-            newObj[key] = value.map((item: any) => String(item))
+    tables.forEach((t) => {
+      const schema = schemaMap[t]
+      Object.entries(obj).forEach(([key, value]) => {
+        if (!(key in schema)) return
+        const defaultValue = schema[key as keyof typeof schema]
+        switch (typeof defaultValue) {
+          case 'boolean': {
+            // leaguepedia use bit(1) to store boolean
+            newObj[key] = typeof value === 'number' ? Boolean(value) : null
+            break
           }
-          break
+          case 'number': {
+            const n = defaultValue ? parseFloat(value) : parseInt(value)
+            newObj[key] = isNaN(n) ? null : n
+            break
+          }
+          case 'string': {
+            const s = String(value)
+            newObj[key] = s === '' ? null : s
+            break
+          }
+          case 'object': {
+            if (defaultValue instanceof Date) {
+              newObj[key] = value ? new Date(value + 'Z') : null
+            } else {
+              newObj[key] = value.map((item: any) => String(item))
+            }
+            break
+          }
+          default: {
+            newObj[key] = value
+          }
         }
-        default: {
-          newObj[key] = value
-        }
-      }
+      })
     })
 
     return newObj as O
