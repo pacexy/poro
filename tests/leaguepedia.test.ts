@@ -140,7 +140,7 @@ describe('cargoQuery leaguepedia table items', () => {
         limit: 1,
       })
       .then(({ data }) => {
-        expect(typeof data[0].Diff_URL === 'string').toBe(true)
+        expect(data[0]).toHaveProperty('Diff_URL')
       })
   })
 

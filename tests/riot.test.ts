@@ -51,7 +51,7 @@ describe('api client', () => {
 describe('set region/platform correctly', () => {
   it('default region', () => {
     const client = new RiotClient({
-      auth: 'mock',
+      auth,
     })
 
     return client
@@ -66,7 +66,7 @@ describe('set region/platform correctly', () => {
 
   it('default platform', () => {
     const client = new RiotClient({
-      auth: 'mock',
+      auth,
     })
 
     return client
@@ -84,7 +84,7 @@ describe('set region/platform correctly', () => {
 
   it('class-scoped region', () => {
     const client = new RiotClient({
-      auth: 'mock',
+      auth,
       region: Riot.Region.ASIA,
     })
 
@@ -100,7 +100,7 @@ describe('set region/platform correctly', () => {
 
   it('class-scoped platform', () => {
     const client = new RiotClient({
-      auth: 'mock',
+      auth,
       platform: Riot.Platform.KR,
     })
 
@@ -119,7 +119,7 @@ describe('set region/platform correctly', () => {
 
   it('method-scoped region', () => {
     const client = new RiotClient({
-      auth: 'mock',
+      auth,
       region: Riot.Region.EUROPE,
     })
 
@@ -135,7 +135,7 @@ describe('set region/platform correctly', () => {
 
   it('method-scoped platform', () => {
     const client = new RiotClient({
-      auth: 'mock',
+      auth,
       platform: Riot.Platform.RU,
     })
 
