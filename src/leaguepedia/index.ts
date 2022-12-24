@@ -70,8 +70,7 @@ export class CargoClient<P extends string = ''> {
             break
           }
           case 'string': {
-            const s = String(value)
-            newObj[key] = s === '' ? null : s
+            newObj[key] = value ? String(value) : null
             break
           }
           case 'object': {

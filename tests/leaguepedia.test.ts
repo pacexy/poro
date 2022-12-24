@@ -155,21 +155,34 @@ describe('cargoQuery leaguepedia table items', () => {
         expect(typeof data[0].cargo_ID === 'number').toBe(true)
       })
   })
+})
 
-  it('data convertion', () => {
-    const cargo = new CargoClient({ metadataPrefix: 'cargo' })
-    return cargo
-      .query({
-        tables: ['Players'],
-        limit: 5,
-      })
-      .then(({ data }) => {
-        expect(data.some((player) => player.Birthdate instanceof Date)).toBe(
-          true,
-        )
-        expect(data.every((player) => Array.isArray(player.FavChamps))).toBe(
-          true,
-        )
-      })
+describe('data convertion', () => {
+  const cargo = new CargoClient({ metadataPrefix: 'cargo' })
+  const query = cargo.query({
+    tables: ['Players'],
+    limit: 5,
+  })
+
+  it('should convert string', () => {
+    return query.then(({ data }) => {
+      expect(
+        data
+          .map((p) => p.Twitter)
+          .some((twitter) => twitter === null || typeof twitter === 'string'),
+      ).toBe(true)
+    })
+  })
+
+  it('should convert date', () => {
+    return query.then(({ data }) => {
+      expect(data.some((player) => player.Birthdate instanceof Date)).toBe(true)
+    })
+  })
+
+  it('should convert array', () => {
+    return query.then(({ data }) => {
+      expect(data.every((player) => Array.isArray(player.FavChamps))).toBe(true)
+    })
   })
 })
