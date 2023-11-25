@@ -76,9 +76,13 @@ export async function genEndpointsInPage(page: string) {
 export async function genEndpoints() {
   const pages = await fetchPageNames()
   console.log('pages', pages)
-  const result = await Promise.all(pages.map(genEndpointsInPage))
+  const results = []
+  // execute in sequence to ensure DTOs are generated in order
+  for (const page of pages) {
+    results.push(await genEndpointsInPage(page))
+  }
   return {
-    content: result.join('\n\n'),
+    content: results.join('\n\n'),
     dtos: Object.values(dtoMap).join('\n'),
   }
 }
