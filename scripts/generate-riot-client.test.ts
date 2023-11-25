@@ -64,7 +64,7 @@ describe('generate-riot-client', () => {
         },
       }),
           // #endregion
-            ",
+          ",
         "dtos": "
           // #region ACCOUNT-V1
             export interface AccountDto  {

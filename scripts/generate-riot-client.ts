@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import * as cheerio from 'cheerio'
+import { JSDOM } from 'jsdom'
 import { isString } from 'lodash'
 import { RiotClient } from 'src'
 
@@ -13,17 +13,14 @@ const ignoredApiPrefixes = ['tft', 'lor', 'val']
 export function fetchApiNames() {
   return axios.get(BASE_URL + '/apis').then(({ data }) => {
     console.time('parse html')
-    const $ = cheerio.load(data)
+    const jsdom = new JSDOM(data)
+    const document = jsdom.window.document
     console.timeEnd('parse html')
 
     console.time('parse api names')
-    const apiList = $('ul.app-nav-bar a').toArray()
+    const apiList = Array.from(document.querySelectorAll('ul.app-nav-bar a'))
     const apiNames = apiList
-      .map((a) => {
-        if (a.type === 'tag') {
-          return a.attribs['api-name']
-        }
-      })
+      .map((a) => a.getAttribute('api-name'))
       .filter(isString)
     console.timeEnd('parse api names')
 
@@ -34,28 +31,33 @@ export function fetchApiNames() {
 export function genEndpoints(apiName: string) {
   return axios.get(`${BASE_URL}/api-details/${apiName}`).then(({ data }) => {
     console.time('parse html')
-    const $ = cheerio.load(data.html)
+    const jsdom = new JSDOM(data.html)
+    const document = jsdom.window.document
     console.timeEnd('parse html')
 
     console.time('parse endpoints')
     const dtoMap = {}
-    const operationNodes = $('.operation').toArray()
+
+    const operationNodes = Array.from(document.querySelectorAll('.operation'))
     const endpoints = operationNodes
       .map((node) => {
-        const path = $(node).find('.path').text().trim()
-        const method = $(node).find('.http_method').text().trim().toLowerCase()
-        const desc = $(node).find('.options').text().trim()
+        const path = node.querySelector('.path')?.textContent?.trim()
+        const method = node
+          .querySelector('.http_method')
+          ?.textContent?.trim()
+          .toLowerCase()
+        const desc = node.querySelector('.options')?.textContent?.trim()
 
-        const [returnTypeNode, ...dtoNodes] = $(node)
-          .find('.response_body')
-          .toArray()
-        const returnType = $(returnTypeNode)
-          .text()
-          .trim()
+        const responseBodies = Array.from(
+          node.querySelectorAll('.response_body'),
+        )
+        const returnTypeNode = responseBodies.shift()
+        const returnType = returnTypeNode?.textContent
+          ?.trim()
           .replace(/Return value: (\w+)/, '$1')
 
-        dtoNodes.forEach((dtoNode) => {
-          Object.assign(dtoMap, dtoToType($, dtoNode))
+        responseBodies.forEach((dtoNode) => {
+          Object.assign(dtoMap, dtoToType(dtoNode))
         })
 
         return `'${path}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({\n/** ${desc} */\n${method}() {\n  return limiter.execute${
@@ -68,7 +70,7 @@ export function genEndpoints(apiName: string) {
     // #region ${apiName.toUpperCase()}
       ${endpoints}
     // #endregion
-      `
+    `
 
     const dtos = `
     // #region ${apiName.toUpperCase()}
@@ -105,7 +107,8 @@ export async function main() {
 }
 
 // utils
-function removeRedundantSpace(str: string) {
+function removeRedundantSpace(str?: string | null) {
+  if (!str) return ''
   return str.trim().split(' ').filter(Boolean).join(' ')
 }
 
@@ -122,21 +125,22 @@ function transformType(type: string) {
   )
 }
 
-function dtoToType(
-  $: cheerio.Root,
-  element: cheerio.Element,
-): Record<string, string> | void {
+function dtoToType(element: Element) {
   try {
-    const typeName = $(element).find('h5').text()
+    const typeName = element.querySelector('h5')?.textContent
     if (!typeName) return
 
-    const typeDesc = removeRedundantSpace($(element).find('h5').next().text())
+    const typeDesc = removeRedundantSpace(
+      element.querySelector('h5')?.nextElementSibling?.textContent,
+    )
 
-    const propertyNodes = $(element).find('table > tbody').children().toArray()
+    const propertyNodes = Array.from(
+      element.querySelectorAll('table > tbody > tr'),
+    )
     const content = propertyNodes
       .map((propertyNode) => {
-        const children = $(propertyNode).children().toArray()
-        return children.map((child) => removeRedundantSpace($(child).text()))
+        const children = Array.from(propertyNode.children)
+        return children.map((child) => removeRedundantSpace(child.textContent))
       })
       .map(([name, type, desc]) => {
         const property = `${name}: ${transformType(type)}`
