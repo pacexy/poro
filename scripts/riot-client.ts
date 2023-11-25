@@ -23,7 +23,9 @@
     return limiter.execute<ActiveShardDto>(generalRegion, realPath, path)
   },
 }),
-// #endregion// #region CHAMPION-MASTERY-V4
+// #endregion
+
+// #region CHAMPION-MASTERY-V4
 '/lol/champion-mastery/v4/champion-masteries/by-puuid/{encryptedPUUID}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
   /* Get all champion mastery entries sorted by number of champion points descending. */
   get() {
@@ -72,14 +74,18 @@
     return limiter.execute<number>(generalRegion, realPath, path)
   },
 }),
-// #endregion// #region CHAMPION-V3
+// #endregion
+
+// #region CHAMPION-V3
 '/lol/platform/v3/champion-rotations': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
   /* Returns champion rotations, including free-to-play and low-level free-to-play rotations (REST) */
   get() {
     return limiter.execute<ChampionInfo>(generalRegion, realPath, path)
   },
 }),
-// #endregion// #region CLASH-V1
+// #endregion
+
+// #region CLASH-V1
 '/lol/clash/v1/players/by-summoner/{summonerId}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
   /* Get players by summoner ID. */
   get() {
@@ -110,14 +116,18 @@
     return limiter.execute<TournamentDto>(generalRegion, realPath, path)
   },
 }),
-// #endregion// #region LEAGUE-EXP-V4
+// #endregion
+
+// #region LEAGUE-EXP-V4
 '/lol/league-exp/v4/entries/{queue}/{tier}/{division}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
   /* Get all the league entries. */
   get() {
     return limiter.execute<LeagueEntryDTO[]>(generalRegion, realPath, path)
   },
 }),
-// #endregion// #region LEAGUE-V4
+// #endregion
+
+// #region LEAGUE-V4
 '/lol/league/v4/challengerleagues/by-queue/{queue}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
   /* Get the challenger league for given queue. */
   get() {
@@ -154,7 +164,9 @@
     return limiter.execute<LeagueListDTO>(generalRegion, realPath, path)
   },
 }),
-// #endregion// #region LOL-CHALLENGES-V1
+// #endregion
+
+// #region LOL-CHALLENGES-V1
 '/lol/challenges/v1/challenges/config': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
   /* List of all basic challenge configuration information (includes all translations for names and descriptions) */
   get() {
@@ -191,21 +203,27 @@
     return limiter.execute<PlayerInfoDto>(generalRegion, realPath, path)
   },
 }),
-// #endregion// #region LOL-STATUS-V3
+// #endregion
+
+// #region LOL-STATUS-V3
 '/lol/status/v3/shard-data': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
   /* Get League of Legends status for the given shard. */
   get() {
     return limiter.execute<ShardStatus>(generalRegion, realPath, path)
   },
 }),
-// #endregion// #region LOL-STATUS-V4
+// #endregion
+
+// #region LOL-STATUS-V4
 '/lol/status/v4/platform-data': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
   /* Get League of Legends status for the given platform. */
   get() {
     return limiter.execute<PlatformDataDto>(generalRegion, realPath, path)
   },
 }),
-// #endregion// #region MATCH-V5
+// #endregion
+
+// #region MATCH-V5
 '/lol/match/v5/matches/by-puuid/{puuid}/ids': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
   /* Get a list of match ids by puuid */
   get() {
@@ -224,7 +242,9 @@
     return limiter.execute<MatchTimelineDto>(generalRegion, realPath, path)
   },
 }),
-// #endregion// #region SPECTATOR-V4
+// #endregion
+
+// #region SPECTATOR-V4
 '/lol/spectator/v4/active-games/by-summoner/{encryptedSummonerId}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
   /* Get current game information for the given summoner ID. */
   get() {
@@ -237,7 +257,9 @@
     return limiter.execute<FeaturedGames>(generalRegion, realPath, path)
   },
 }),
-// #endregion// #region SUMMONER-V4
+// #endregion
+
+// #region SUMMONER-V4
 '/fulfillment/v1/summoners/by-puuid/{rsoPUUID}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
   /* Get a summoner by its RSO encrypted PUUID. */
   get() {

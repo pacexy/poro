@@ -25,20 +25,15 @@ const s = {
 }
 
 export async function fetchPageNames() {
+  console.time('fetch page names')
   const { data } = await axios.get(BASE_URL + '/apis')
-  console.time('parse html')
-  const jsdom = new JSDOM(data)
-  const document = jsdom.window.document
-  console.timeEnd('parse html')
+  const document = createDocument(data)
+  console.time('fetch page names')
 
-  console.time('parse api names')
-  const pageNames = $$(document, s.PAGE_NAMEs)
+  return $$(document, s.PAGE_NAMEs)
     .map((a) => a.getAttribute('api-name'))
     .filter(isString)
     .filter((n) => !ignoredApiPrefixes.some((p) => n.startsWith(p)))
-  console.timeEnd('parse api names')
-
-  return pageNames
 }
 
 function genEndpoint(el: Element) {
@@ -63,39 +58,29 @@ function genEndpoint(el: Element) {
 }
 
 export async function genEndpointsInPage(page: string) {
+  console.time(page)
   const { data } = await axios.get(BASE_URL + `/api-details/${page}`)
-  console.time('parse html')
-  const jsdom = new JSDOM(data.html)
-  const document = jsdom.window.document
-  console.timeEnd('parse html')
-
-  console.time('parse endpoints')
+  const document = createDocument(data.html)
   const endpoints = $$(document, s.ENDPOINTs)
     .map((el) => genEndpoint(el))
     .join('\n')
+  console.timeEnd(page)
 
-  const content = [
-    `// #region ${page.toUpperCase()}`,
+  return [
+    `// #region ${page.toUpperCase()}`, //
     endpoints,
     `// #endregion`,
   ].join('\n')
-  console.timeEnd('parse endpoints')
-
-  return content
 }
 
 export async function genEndpoints() {
-  const pageNames = await fetchPageNames()
-  console.log('pageNames', pageNames)
-
-  let content = ''
-  for (const pageName of pageNames) {
-    console.log('genEndpoints', pageName)
-    const result = await genEndpointsInPage(pageName)
-    content += result
+  const pages = await fetchPageNames()
+  console.log('pages', pages)
+  const result = await Promise.all(pages.map(genEndpointsInPage))
+  return {
+    content: result.join('\n\n'),
+    dtos: Object.values(dtoMap).join('\n'),
   }
-
-  return { content, dtos: Object.values(dtoMap).join('\n') }
 }
 
 function transformType(type: string) {
@@ -141,6 +126,11 @@ function dtoToType(el: Element) {
 }
 
 // utils
+function createDocument(html: string) {
+  const jsdom = new JSDOM(html)
+  return jsdom.window.document
+}
+
 function removeRedundantSpace(str?: string | null) {
   if (!str) return ''
   return str.trim().split(' ').filter(Boolean).join(' ')
