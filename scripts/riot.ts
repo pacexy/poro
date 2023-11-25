@@ -8,6 +8,7 @@ const riot = new RiotClient({
 const axios = riot.axiosInstance
 const BASE_URL = 'https://developer.riotgames.com'
 const ignoredApiPrefixes = ['tft', 'lor', 'val', 'tournament']
+const dtoMap = {}
 
 export function fetchApiNames() {
   return axios.get(BASE_URL + '/apis').then(({ data }) => {
@@ -30,6 +31,29 @@ export function fetchApiNames() {
   })
 }
 
+function genEndpoint(el: Element) {
+  const path = text($(el, '.path'))
+  const method = text($(el, '.http_method'))?.toLowerCase()
+  const desc = text($(el, '.options'))
+
+  const [returnTypeNode, ...dtoNodes] = $$(el, '.response_body')
+  const returnType = text(returnTypeNode)?.replace(/Return value: (\w+)/, '$1')
+
+  dtoNodes.forEach((dtoNode) => {
+    Object.assign(dtoMap, dtoToType(dtoNode))
+  })
+
+  const generic = returnType ? `<${transformType(returnType)}>` : ''
+  return [
+    `'${path}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({`,
+    `  /* ${desc} */`,
+    `  ${method}() {`,
+    `    return limiter.execute${generic}(generalRegion, realPath, path)`,
+    `  },`,
+    `}),`,
+  ].join('\n')
+}
+
 export function genEndpoints(apiName: string) {
   return axios.get(`${BASE_URL}/api-details/${apiName}`).then(({ data }) => {
     console.time('parse html')
@@ -38,34 +62,8 @@ export function genEndpoints(apiName: string) {
     console.timeEnd('parse html')
 
     console.time('parse endpoints')
-    const dtoMap = {}
-
     const endpoints = $$(document, '.operation')
-      .map((node) => {
-        const path = text($(node, '.path'))
-        const method = text($(node, '.http_method'))?.toLowerCase()
-        const desc = text($(node, '.options'))
-
-        const [returnTypeNode, ...dtoNodes] = $$(node, '.response_body')
-        const returnType = text(returnTypeNode)?.replace(
-          /Return value: (\w+)/,
-          '$1',
-        )
-
-        dtoNodes.forEach((dtoNode) => {
-          Object.assign(dtoMap, dtoToType(dtoNode))
-        })
-
-        const generic = returnType ? `<${transformType(returnType)}>` : ''
-        return [
-          `'${path}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({`,
-          `  /** ${desc} */`,
-          `  ${method}() {`,
-          `    return limiter.execute${generic}(generalRegion, realPath, path)`,
-          `  },`,
-          `}),`,
-        ].join('\n')
-      })
+      .map((el) => genEndpoint(el))
       .join('\n')
 
     const content = [
@@ -73,16 +71,9 @@ export function genEndpoints(apiName: string) {
       endpoints,
       `// #endregion`,
     ].join('\n')
-
-    const dtos = [
-      `// #region ${apiName.toUpperCase()}`,
-      Object.values(dtoMap).join('\n\n'),
-      `// #endregion`,
-    ].join('\n')
-
     console.timeEnd('parse endpoints')
 
-    return { content, dtos }
+    return content
   })
 }
 
@@ -91,16 +82,13 @@ export async function genApis() {
   console.log('apiNames', apiNames)
 
   let content = ''
-  let dtos = ''
-
   for (const apiName of apiNames) {
     console.log('genEndpoints', apiName)
     const result = await genEndpoints(apiName)
-    content += result.content
-    dtos += result.dtos
+    content += result
   }
 
-  return { content, dtos }
+  return { content, dtos: Object.values(dtoMap).join('\n') }
 }
 
 function transformType(type: string) {
@@ -173,7 +161,7 @@ function $$(el: Element | Document, selector: string) {
 function withComment(content: string, comment?: string) {
   if (!comment) return content
   return [
-    `/** ${comment} */`, //
+    `/* ${comment} */`, //
     content,
   ].join('\n')
 }
