@@ -1,30 +1,31 @@
 export interface AccountDto {
   puuid: string
-  /** This field may be excluded from the response if the account doesn't have a gameName. */
+  /* This field may be excluded from the response if the account doesn't have a gameName. */
   gameName: string
-  /** This field may be excluded from the response if the account doesn't have a tagLine. */
+  /* This field may be excluded from the response if the account doesn't have a tagLine. */
   tagLine: string
 }
+/* - This object contains single Champion Mastery information for player and champion combination. */
 export interface ChampionMasteryDto {
-  /** Player Universal Unique Identifier. Exact length of 78 characters. (Encrypted) */
+  /* Player Universal Unique Identifier. Exact length of 78 characters. (Encrypted) */
   puuid: string
-  /** Number of points needed to achieve next level. Zero if player reached maximum champion level for this champion. */
+  /* Number of points needed to achieve next level. Zero if player reached maximum champion level for this champion. */
   championPointsUntilNextLevel: number
-  /** Is chest granted for this champion or not in current season. */
+  /* Is chest granted for this champion or not in current season. */
   chestGranted: boolean
-  /** Champion ID for this entry. */
+  /* Champion ID for this entry. */
   championId: number
-  /** Last time this champion was played by this player - in Unix milliseconds time format. */
+  /* Last time this champion was played by this player - in Unix milliseconds time format. */
   lastPlayTime: number
-  /** Champion level for specified player and champion combination. */
+  /* Champion level for specified player and champion combination. */
   championLevel: number
-  /** Summoner ID for this entry. (Encrypted) */
+  /* Summoner ID for this entry. (Encrypted) */
   summonerId: string
-  /** Total number of champion points for this player and champion combination - they are used to determine championLevel. */
+  /* Total number of champion points for this player and champion combination - they are used to determine championLevel. */
   championPoints: number
-  /** Number of points earned since current level has been achieved. */
+  /* Number of points earned since current level has been achieved. */
   championPointsSinceLastLevel: number
-  /** The token earned for this champion at the current championLevel. When the championLevel is advanced the tokensEarned resets to 0. */
+  /* The token earned for this champion at the current championLevel. When the championLevel is advanced the tokensEarned resets to 0. */
   tokensEarned: number
 }
 export interface ChampionInfo {
@@ -34,9 +35,9 @@ export interface ChampionInfo {
 }
 export interface PlayerDto {
   summonerId: string
-  /** (Legal values: UNSELECTED, FILL, TOP, JUNGLE, MIDDLE, BOTTOM, UTILITY) */
+  /* (Legal values: UNSELECTED, FILL, TOP, JUNGLE, MIDDLE, BOTTOM, UTILITY) */
   position: string
-  /** (Legal values: CAPTAIN, MEMBER) */
+  /* (Legal values: CAPTAIN, MEMBER) */
   role: string
 }
 export interface TeamDto {
@@ -50,7 +51,7 @@ export interface TournamentDto {
   themeId: number
   nameKey: string
   nameKeySecondary: string
-  /** Tournament phase. */
+  /* Tournament phase. */
   schedule: TournamentPhaseDto[]
 }
 export interface TournamentPhaseDto {
@@ -61,17 +62,17 @@ export interface TournamentPhaseDto {
 }
 export interface LeagueEntryDTO {
   leagueId: string
-  /** Player's encrypted summonerId. */
+  /* Player's encrypted summonerId. */
   summonerId: string
   summonerName: string
   queueType: string
   tier: string
-  /** The player's division within a tier. */
+  /* The player's division within a tier. */
   rank: string
   leaguePoints: number
-  /** Winning team on Summoners Rift. */
+  /* Winning team on Summoners Rift. */
   wins: number
-  /** Losing team on Summoners Rift. */
+  /* Losing team on Summoners Rift. */
   losses: number
   hotStreak: boolean
   veteran: boolean
@@ -94,7 +95,7 @@ export interface LeagueListDTO {
 }
 export interface LeagueItemDTO {
   freshBlood: boolean
-  /** Winning team on Summoners Rift. */
+  /* Winning team on Summoners Rift. */
   wins: number
   summonerName: string
   miniSeries: MiniSeriesDTO
@@ -103,9 +104,9 @@ export interface LeagueItemDTO {
   hotStreak: boolean
   rank: string
   leaguePoints: number
-  /** Losing team on Summoners Rift. */
+  /* Losing team on Summoners Rift. */
   losses: number
-  /** Player's encrypted summonerId. */
+  /* Player's encrypted summonerId. */
   summonerId: string
 }
 export interface ChallengeConfigInfoDto {
@@ -118,13 +119,29 @@ export interface ChallengeConfigInfoDto {
   leaderboard: boolean
   thresholds: Record<string, number>
 }
+/* - DISABLED - not visible and not calculated,
+HIDDEN - not visible, but calculated,
+ENABLED - visible and calculated,
+ARCHIVED - visible, but not calculated */
 export interface State {}
+/* - LIFETIME - stats are incremented without reset,
+SEASON - stats are accumulated by season and reset at the beginning of new season */
 export interface Tracking {}
 export interface ApexPlayerInfoDto {
   puuid: string
   value: number
   position: number
 }
+/* - 0 NONE,
+1 IRON,
+2 BRONZE,
+3 SILVER,
+4 GOLD,
+5 PLATINUM,
+6 DIAMOND,
+7 MASTER,
+8 GRANDMASTER,
+9 CHALLENGER */
 export interface Level {}
 export interface PlayerInfoDto {
   challenges: ChallengeInfo[]
@@ -176,16 +193,16 @@ export interface PlatformDataDto {
 }
 export interface StatusDto {
   id: number
-  /** (Legal values: scheduled, in_progress, complete) */
+  /* (Legal values: scheduled, in_progress, complete) */
   maintenance_status: string
-  /** (Legal values: info, warning, critical) */
+  /* (Legal values: info, warning, critical) */
   incident_severity: string
   titles: ContentDto[]
   updates: UpdateDto[]
   created_at: string
   archive_at: string
   updated_at: string
-  /** (Legal values: windows, macos, android, ios, ps4, xbone, switch) */
+  /* (Legal values: windows, macos, android, ios, ps4, xbone, switch) */
   platforms: string[]
 }
 export interface ContentDto {
@@ -196,51 +213,51 @@ export interface UpdateDto {
   id: number
   author: string
   publish: boolean
-  /** (Legal values: riotclient, riotstatus, game) */
+  /* (Legal values: riotclient, riotstatus, game) */
   publish_locations: string[]
   translations: ContentDto[]
   created_at: string
   updated_at: string
 }
 export interface MatchDto {
-  /** Match metadata. */
+  /* Match metadata. */
   metadata: MetadataDto
-  /** Match info. */
+  /* Match info. */
   info: InfoDto
 }
 export interface MetadataDto {
-  /** Match data version. */
+  /* Match data version. */
   dataVersion: string
-  /** Match id. */
+  /* Match id. */
   matchId: string
-  /** A list of participant PUUIDs. */
+  /* A list of participant PUUIDs. */
   participants: string[]
 }
 export interface InfoDto {
-  /** Unix timestamp for when the game is created on the game server (i.e., the loading screen). */
+  /* Unix timestamp for when the game is created on the game server (i.e., the loading screen). */
   gameCreation: number
-  /** Prior to patch 11.20, this field returns the game length in milliseconds calculated from gameEndTimestamp - gameStartTimestamp. Post patch 11.20, this field returns the max timePlayed of any participant in the game in seconds, which makes the behavior of this field consistent with that of match-v4. The best way to handling the change in this field is to treat the value as milliseconds if the gameEndTimestamp field isn't in the response and to treat the value as seconds if gameEndTimestamp is in the response. */
+  /* Prior to patch 11.20, this field returns the game length in milliseconds calculated from gameEndTimestamp - gameStartTimestamp. Post patch 11.20, this field returns the max timePlayed of any participant in the game in seconds, which makes the behavior of this field consistent with that of match-v4. The best way to handling the change in this field is to treat the value as milliseconds if the gameEndTimestamp field isn't in the response and to treat the value as seconds if gameEndTimestamp is in the response. */
   gameDuration: number
-  /** Unix timestamp for when match ends on the game server. This timestamp can occasionally be significantly longer than when the match "ends". The most reliable way of determining the timestamp for the end of the match would be to add the max time played of any participant to the gameStartTimestamp. This field was added to match-v5 in patch 11.20 on Oct 5th, 2021. */
+  /* Unix timestamp for when match ends on the game server. This timestamp can occasionally be significantly longer than when the match "ends". The most reliable way of determining the timestamp for the end of the match would be to add the max time played of any participant to the gameStartTimestamp. This field was added to match-v5 in patch 11.20 on Oct 5th, 2021. */
   gameEndTimestamp: number
   gameId: number
-  /** Refer to the Game Constants documentation. */
+  /* Refer to the Game Constants documentation. */
   gameMode: string
   gameName: string
-  /** Unix timestamp for when match starts on the game server. */
+  /* Unix timestamp for when match starts on the game server. */
   gameStartTimestamp: number
   gameType: string
-  /** The first two parts can be used to determine the patch a game was played on. */
+  /* The first two parts can be used to determine the patch a game was played on. */
   gameVersion: string
-  /** Refer to the Game Constants documentation. */
+  /* Refer to the Game Constants documentation. */
   mapId: number
   participants: ParticipantDto[]
-  /** Platform where the match was played. */
+  /* Platform where the match was played. */
   platformId: string
-  /** Refer to the Game Constants documentation. */
+  /* Refer to the Game Constants documentation. */
   queueId: number
   teams: TeamDto[]
-  /** Tournament code used to generate the match. This field was added to match-v5 in patch 11.13 on June 23rd, 2021. */
+  /* Tournament code used to generate the match. This field was added to match-v5 in patch 11.13 on June 23rd, 2021. */
   tournamentCode: string
 }
 export interface ParticipantDto {
@@ -249,10 +266,10 @@ export interface ParticipantDto {
   bountyLevel: number
   champExperience: number
   champLevel: number
-  /** Prior to patch 11.4, on Feb 18th, 2021, this field returned invalid championIds. We recommend determining the champion based on the championName field for matches played prior to patch 11.4. */
+  /* Prior to patch 11.4, on Feb 18th, 2021, this field returned invalid championIds. We recommend determining the champion based on the championName field for matches played prior to patch 11.4. */
   championId: number
   championName: string
-  /** This field is currently only utilized for Kayn's transformations. (Legal values: 0 - None, 1 - Slayer, 2 - Assassin) */
+  /* This field is currently only utilized for Kayn's transformations. (Legal values: 0 - None, 1 - Slayer, 2 - Assassin) */
   championTransform: number
   consumablesPurchased: number
   damageDealtToBuildings: number
@@ -271,7 +288,7 @@ export interface ParticipantDto {
   gameEndedInSurrender: boolean
   goldEarned: number
   goldSpent: number
-  /** Both individualPosition and teamPosition are computed by the game server and are different versions of the most likely position played by a player. The individualPosition is the best guess for which position the player actually played in isolation of anything else. The teamPosition is the best guess for which position the player actually played if we add the constraint that each team must have one top player, one jungle, one middle, etc. Generally the recommendation is to use the teamPosition field over the individualPosition field. */
+  /* Both individualPosition and teamPosition are computed by the game server and are different versions of the most likely position played by a player. The individualPosition is the best guess for which position the player actually played in isolation of anything else. The teamPosition is the best guess for which position the player actually played if we add the constraint that each team must have one top player, one jungle, one middle, etc. Generally the recommendation is to use the teamPosition field over the individualPosition field. */
   individualPosition: string
   inhibitorKills: number
   inhibitorTakedowns: number
@@ -326,7 +343,7 @@ export interface ParticipantDto {
   summonerName: string
   teamEarlySurrendered: boolean
   teamId: number
-  /** Both individualPosition and teamPosition are computed by the game server and are different versions of the most likely position played by a player. The individualPosition is the best guess for which position the player actually played in isolation of anything else. The teamPosition is the best guess for which position the player actually played if we add the constraint that each team must have one top player, one jungle, one middle, etc. Generally the recommendation is to use the teamPosition field over the individualPosition field. */
+  /* Both individualPosition and teamPosition are computed by the game server and are different versions of the most likely position played by a player. The individualPosition is the best guess for which position the player actually played in isolation of anything else. The teamPosition is the best guess for which position the player actually played if we add the constraint that each team must have one top player, one jungle, one middle, etc. Generally the recommendation is to use the teamPosition field over the individualPosition field. */
   teamPosition: string
   timeCCingOthers: number
   timePlayed: number
@@ -391,138 +408,139 @@ export interface ObjectiveDto {
   kills: number
 }
 export interface CurrentGameInfo {
-  /** The ID of the game */
+  /* The ID of the game */
   gameId: number
-  /** The game type */
+  /* The game type */
   gameType: string
-  /** The game start time represented in epoch milliseconds */
+  /* The game start time represented in epoch milliseconds */
   gameStartTime: number
-  /** The ID of the map */
+  /* The ID of the map */
   mapId: number
-  /** The amount of time in seconds that has passed since the game started */
+  /* The amount of time in seconds that has passed since the game started */
   gameLength: number
-  /** The ID of the platform on which the game is being played */
+  /* The ID of the platform on which the game is being played */
   platformId: string
-  /** The game mode */
+  /* The game mode */
   gameMode: string
-  /** Banned champion information */
+  /* Banned champion information */
   bannedChampions: BannedChampion[]
-  /** The queue type (queue types are documented on the Game Constants page) */
+  /* The queue type (queue types are documented on the Game Constants page) */
   gameQueueConfigId: number
-  /** The observer information */
+  /* The observer information */
   observers: Observer
-  /** The participant information */
+  /* The participant information */
   participants: CurrentGameParticipant[]
 }
 export interface BannedChampion {
-  /** The turn during which the champion was banned */
+  /* The turn during which the champion was banned */
   pickTurn: number
-  /** The ID of the banned champion */
+  /* The ID of the banned champion */
   championId: number
-  /** The ID of the team that banned the champion */
+  /* The ID of the team that banned the champion */
   teamId: number
 }
 export interface Observer {
-  /** Key used to decrypt the spectator grid game data for playback */
+  /* Key used to decrypt the spectator grid game data for playback */
   encryptionKey: string
 }
 export interface CurrentGameParticipant {
-  /** The ID of the champion played by this participant */
+  /* The ID of the champion played by this participant */
   championId: number
-  /** Perks/Runes Reforged Information */
+  /* Perks/Runes Reforged Information */
   perks: Perks
-  /** The ID of the profile icon used by this participant */
+  /* The ID of the profile icon used by this participant */
   profileIconId: number
-  /** Flag indicating whether or not this participant is a bot */
+  /* Flag indicating whether or not this participant is a bot */
   bot: boolean
-  /** The team ID of this participant, indicating the participant's team */
+  /* The team ID of this participant, indicating the participant's team */
   teamId: number
-  /** The summoner name of this participant */
+  /* The summoner name of this participant */
   summonerName: string
-  /** The encrypted summoner ID of this participant */
+  /* The encrypted summoner ID of this participant */
   summonerId: string
-  /** The ID of the first summoner spell used by this participant */
+  /* The ID of the first summoner spell used by this participant */
   spell1Id: number
-  /** The ID of the second summoner spell used by this participant */
+  /* The ID of the second summoner spell used by this participant */
   spell2Id: number
-  /** List of Game Customizations */
+  /* List of Game Customizations */
   gameCustomizationObjects: GameCustomizationObject[]
 }
 export interface Perks {
-  /** IDs of the perks/runes assigned. */
+  /* IDs of the perks/runes assigned. */
   perkIds: number[]
-  /** Primary runes path */
+  /* Primary runes path */
   perkStyle: number
-  /** Secondary runes path */
+  /* Secondary runes path */
   perkSubStyle: number
 }
 export interface GameCustomizationObject {
-  /** Category identifier for Game Customization */
+  /* Category identifier for Game Customization */
   category: string
-  /** Game Customization content */
+  /* Game Customization content */
   content: string
 }
 export interface FeaturedGames {
-  /** The list of featured games */
+  /* The list of featured games */
   gameList: FeaturedGameInfo[]
-  /** The suggested interval to wait before requesting FeaturedGames again */
+  /* The suggested interval to wait before requesting FeaturedGames again */
   clientRefreshInterval: number
 }
 export interface FeaturedGameInfo {
-  /** The game mode
+  /* The game mode
  (Legal values: CLASSIC, ODIN, ARAM, TUTORIAL, ONEFORALL, ASCENSION, FIRSTBLOOD, KINGPORO) */
   gameMode: string
-  /** The amount of time in seconds that has passed since the game started */
+  /* The amount of time in seconds that has passed since the game started */
   gameLength: number
-  /** The ID of the map */
+  /* The ID of the map */
   mapId: number
-  /** The game type
+  /* The game type
  (Legal values: CUSTOM_GAME, MATCHED_GAME, TUTORIAL_GAME) */
   gameType: string
-  /** Banned champion information */
+  /* Banned champion information */
   bannedChampions: BannedChampion[]
-  /** The ID of the game */
+  /* The ID of the game */
   gameId: number
-  /** The observer information */
+  /* The observer information */
   observers: Observer
-  /** The queue type (queue types are documented on the Game Constants page) */
+  /* The queue type (queue types are documented on the Game Constants page) */
   gameQueueConfigId: number
-  /** The game start time represented in epoch milliseconds */
+  /* The game start time represented in epoch milliseconds */
   gameStartTime: number
-  /** The participant information */
+  /* The participant information */
   participants: Participant[]
-  /** The ID of the platform on which the game is being played */
+  /* The ID of the platform on which the game is being played */
   platformId: string
 }
 export interface Participant {
-  /** Flag indicating whether or not this participant is a bot */
+  /* Flag indicating whether or not this participant is a bot */
   bot: boolean
-  /** The ID of the second summoner spell used by this participant */
+  /* The ID of the second summoner spell used by this participant */
   spell2Id: number
-  /** The ID of the profile icon used by this participant */
+  /* The ID of the profile icon used by this participant */
   profileIconId: number
-  /** The summoner name of this participant */
+  /* The summoner name of this participant */
   summonerName: string
-  /** The ID of the champion played by this participant */
+  /* The ID of the champion played by this participant */
   championId: number
-  /** The team ID of this participant, indicating the participant's team */
+  /* The team ID of this participant, indicating the participant's team */
   teamId: number
-  /** The ID of the first summoner spell used by this participant */
+  /* The ID of the first summoner spell used by this participant */
   spell1Id: number
 }
+/* - represents a summoner */
 export interface SummonerDTO {
-  /** Encrypted account ID. Max length 56 characters. */
+  /* Encrypted account ID. Max length 56 characters. */
   accountId: string
-  /** ID of the summoner icon associated with the summoner. */
+  /* ID of the summoner icon associated with the summoner. */
   profileIconId: number
-  /** Date summoner was last modified specified as epoch milliseconds. The following events will update this timestamp: summoner name change, summoner level change, or profile icon change. */
+  /* Date summoner was last modified specified as epoch milliseconds. The following events will update this timestamp: summoner name change, summoner level change, or profile icon change. */
   revisionDate: number
-  /** Summoner name. */
+  /* Summoner name. */
   name: string
-  /** Encrypted summoner ID. Max length 63 characters. */
+  /* Encrypted summoner ID. Max length 63 characters. */
   id: string
-  /** Encrypted PUUID. Exact length of 78 characters. */
+  /* Encrypted PUUID. Exact length of 78 characters. */
   puuid: string
-  /** Summoner level associated with the summoner. */
+  /* Summoner level associated with the summoner. */
   summonerLevel: number
 }

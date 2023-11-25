@@ -26,25 +26,25 @@ describe('generate-riot-client', () => {
     expect(await genEndpointsInPage('account-v1')).toMatchInlineSnapshot(`
       "// #region ACCOUNT-V1
       '/riot/account/v1/accounts/by-puuid/{puuid}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
-        /** Get account by puuid */
+        /* Get account by puuid */
         get() {
           return limiter.execute<AccountDto>(generalRegion, realPath, path)
         },
       }),
       '/riot/account/v1/accounts/by-riot-id/{gameName}/{tagLine}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
-        /** Get account by riot id */
+        /* Get account by riot id */
         get() {
           return limiter.execute<AccountDto>(generalRegion, realPath, path)
         },
       }),
       '/riot/account/v1/accounts/me': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
-        /** Get account by access token */
+        /* Get account by access token */
         get() {
           return limiter.execute<AccountDto>(generalRegion, realPath, path)
         },
       }),
       '/riot/account/v1/active-shards/by-game/{game}/by-puuid/{puuid}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
-        /** Get active shard for a player */
+        /* Get active shard for a player */
         get() {
           return limiter.execute<ActiveShardDto>(generalRegion, realPath, path)
         },
