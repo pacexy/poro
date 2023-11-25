@@ -18,13 +18,10 @@ export async function fetchApiNames() {
   console.timeEnd('parse html')
 
   console.time('parse api names')
-  const apiList = $$(document, 'ul.app-nav-bar a')
-  const apiNames = apiList
+  const apiNames = $$(document, 'ul.app-nav-bar a')
     .map((a) => a.getAttribute('api-name'))
     .filter(isString)
-    .filter((name) => {
-      return !ignoredApiPrefixes.some((prefix) => name.startsWith(prefix))
-    })
+    .filter((n) => !ignoredApiPrefixes.some((p) => n.startsWith(p)))
   console.timeEnd('parse api names')
 
   return apiNames
@@ -35,12 +32,9 @@ function genEndpoint(el: Element) {
   const method = text($(el, '.http_method'))?.toLowerCase()
   const desc = text($(el, '.options'))
 
-  const [returnTypeNode, ...dtoNodes] = $$(el, '.response_body')
-  const returnType = text(returnTypeNode)?.replace(/Return value: (\w+)/, '$1')
-
-  dtoNodes.forEach((dtoNode) => {
-    Object.assign(dtoMap, dtoToType(dtoNode))
-  })
+  const [returnTypeEl, ...dtoEls] = $$(el, '.response_body')
+  const returnType = text(returnTypeEl)?.replace(/Return value: (\w+)/, '$1')
+  dtoEls.forEach((el) => Object.assign(dtoMap, dtoToType(el)))
 
   const generic = returnType ? `<${transformType(returnType)}>` : ''
   return [
@@ -116,9 +110,8 @@ function dtoToType(el: Element) {
     const typeName = text($(el, 'h5'))
     if (!typeName) return
 
-    const propNodes = $$(el, 'table > tbody > tr')
-    const content = propNodes
-      .map((propNode) => Array.from(propNode.children).map(text))
+    const content = $$(el, 'table > tbody > tr')
+      .map((propEl) => Array.from(propEl.children).map(text))
       .map(([n, t, c]) => withComment(`${n}: ${transformType(t)}`, c))
       .join('\n')
 
