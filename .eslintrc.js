@@ -12,6 +12,9 @@ module.exports = {
   ],
   plugins: ['import'],
   rules: {
+    // warn us when different riot dtos have the same name
+    '@typescript-eslint/no-redeclare': 'off',
+    'no-redeclare': 'warn',
     // note you must disable the base rule as it can report incorrect errors
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': 'error',

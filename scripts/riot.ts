@@ -8,7 +8,6 @@ const riot = new RiotClient({
 const axios = riot.axiosInstance
 const BASE_URL = 'https://developer.riotgames.com'
 const ignoredApiPrefixes = ['tft', 'lor', 'val', 'tournament']
-const dtoMap = {}
 
 // selectors
 const s = {
@@ -36,7 +35,7 @@ export async function fetchPageNames() {
     .filter((n) => !ignoredApiPrefixes.some((p) => n.startsWith(p)))
 }
 
-function genEndpoint(el: Element) {
+function genEndpoint(el: Element, dtoMap: Record<string, string>) {
   const path = text($(el, s.ENDPOINT_PATH))
   const method = text($(el, s.ENDPOINT_METHOD))?.toLowerCase()
   const desc = text($(el, s.ENDPOINT_DESC))
@@ -65,16 +64,25 @@ async function fetchPageDocument(page: string) {
 
 async function genEndpointsInPage(document: Document, page: string) {
   console.time(`gen ${page}`)
+  // different dto in different page may have the same name, so we use page-specific dtoMap
+  const dtoMap = {}
   const endpoints = $$(document, s.ENDPOINTs)
-    .map((el) => genEndpoint(el))
+    .map((el) => genEndpoint(el, dtoMap))
     .join('\n')
   console.timeEnd(`gen ${page}`)
 
-  return [
-    `// #region ${page.toUpperCase()}`, //
-    endpoints,
-    `// #endregion`,
-  ].join('\n')
+  return {
+    content: [
+      `// #region ${page.toUpperCase()}`, //
+      endpoints,
+      `// #endregion`,
+    ].join('\n'),
+    dtos: [
+      `// #region ${page.toUpperCase()}`, //
+      Object.values(dtoMap).join('\n'),
+      `// #endregion`,
+    ].join('\n'),
+  }
 }
 
 export async function genEndpoints() {
@@ -88,8 +96,8 @@ export async function genEndpoints() {
     results.push(await genEndpointsInPage(documents[i], page))
   }
   return {
-    content: results.join('\n\n'),
-    dtos: Object.values(dtoMap).join('\n'),
+    content: results.map((r) => r.content).join('\n\n'),
+    dtos: results.map((r) => r.dtos).join('\n\n'),
   }
 }
 
