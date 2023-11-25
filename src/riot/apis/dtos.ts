@@ -1,17 +1,14 @@
-// #region ACCOUNT-V1
-export interface AccountDto {
+import { Queue, Tier, Division } from './enums'
+
+export type AccountDto = {
   puuid: string
   /** This field may be excluded from the response if the account doesn't have a gameName. */
   gameName: string
   /** This field may be excluded from the response if the account doesn't have a tagLine. */
   tagLine: string
 }
-// #endregion
-
-// #region CHAMPION-MASTERY-V4
-export interface ChampionMasteryDto {
-  /** Player Universal Unique Identifier. Exact length of 78 characters. (Encrypted) */
-  puuid: string
+/** This object contains single Champion Mastery information for player and champion combination. */
+export type ChampionMasteryDto = {
   /** Number of points needed to achieve next level. Zero if player reached maximum champion level for this champion. */
   championPointsUntilNextLevel: number
   /** Is chest granted for this champion or not in current season. */
@@ -31,26 +28,22 @@ export interface ChampionMasteryDto {
   /** The token earned for this champion at the current championLevel. When the championLevel is advanced the tokensEarned resets to 0. */
   tokensEarned: number
 }
-// #endregion
 
-// #region CHAMPION-V3
-export interface ChampionInfo {
+export type ChampionInfo = {
   maxNewPlayerLevel: number
   freeChampionIdsForNewPlayers: number[]
   freeChampionIds: number[]
 }
-// #endregion
 
-// #region CLASH-V1
-export interface PlayerDto {
+export type PlayerDto = {
   summonerId: string
-  /** (Legal values: UNSELECTED, FILL, TOP, JUNGLE, MIDDLE, BOTTOM, UTILITY) */
+  /** (Legal values:  UNSELECTED,  FILL,  TOP,  JUNGLE,  MIDDLE,  BOTTOM,  UTILITY) */
   position: string
-  /** (Legal values: CAPTAIN, MEMBER) */
+  /** (Legal values:  CAPTAIN,  MEMBER) */
   role: string
 }
 
-export interface TeamDto {
+export type TeamDto = {
   id: string
   tournamentId: number
   name: string
@@ -63,7 +56,7 @@ export interface TeamDto {
   players: PlayerDto[]
 }
 
-export interface TournamentDto {
+export type TournamentDto = {
   id: number
   themeId: number
   nameKey: string
@@ -72,24 +65,22 @@ export interface TournamentDto {
   schedule: TournamentPhaseDto[]
 }
 
-export interface TournamentPhaseDto {
+export type TournamentPhaseDto = {
   id: number
   registrationTime: number
   startTime: number
   cancelled: boolean
 }
-// #endregion
 
-// #region LEAGUE-EXP-V4
-export interface LeagueEntryDTO {
+export type LeagueEntryDTO = {
   leagueId: string
   /** Player's summonerId (Encrypted) */
   summonerId: string
   summonerName: string
-  queueType: string
-  tier: string
+  queueType: Queue
+  tier: Tier
   /** The player's division within a tier. */
-  rank: string
+  rank: Division
   leaguePoints: number
   /** Winning team on Summoners Rift. First placement in Teamfight Tactics. */
   wins: number
@@ -99,27 +90,25 @@ export interface LeagueEntryDTO {
   veteran: boolean
   freshBlood: boolean
   inactive: boolean
-  miniSeries: MiniSeriesDTO
+  miniSeries?: MiniSeriesDTO
 }
 
-export interface MiniSeriesDTO {
+export type MiniSeriesDTO = {
   losses: number
   progress: string
   target: number
   wins: number
 }
-// #endregion
 
-// #region LEAGUE-V4
-export interface LeagueListDTO {
+export type LeagueListDTO = {
   leagueId: string
   entries: LeagueItemDTO[]
-  tier: string
+  tier: Tier
   name: string
-  queue: string
+  queue: Queue
 }
 
-export interface LeagueItemDTO {
+export type LeagueItemDTO = {
   freshBlood: boolean
   /** Winning team on Summoners Rift. */
   wins: number
@@ -128,7 +117,7 @@ export interface LeagueItemDTO {
   inactive: boolean
   veteran: boolean
   hotStreak: boolean
-  rank: string
+  rank: Division
   leaguePoints: number
   /** Losing team on Summoners Rift. */
   losses: number
@@ -136,111 +125,7 @@ export interface LeagueItemDTO {
   summonerId: string
 }
 
-export interface MiniSeriesDTO {
-  losses: number
-  progress: string
-  target: number
-  wins: number
-}
-
-export interface LeagueEntryDTO {
-  leagueId: string
-  /** Player's encrypted summonerId. */
-  summonerId: string
-  summonerName: string
-  queueType: string
-  tier: string
-  /** The player's division within a tier. */
-  rank: string
-  leaguePoints: number
-  /** Winning team on Summoners Rift. */
-  wins: number
-  /** Losing team on Summoners Rift. */
-  losses: number
-  hotStreak: boolean
-  veteran: boolean
-  freshBlood: boolean
-  inactive: boolean
-  miniSeries: MiniSeriesDTO
-}
-// #endregion
-
-// #region LOL-CHALLENGES-V1
-export interface ChallengeConfigInfoDto {
-  id: number
-  localizedNames: Record<string, Record<string, string>>
-  state: State
-  tracking: Tracking
-  startTimestamp: number
-  endTimestamp: number
-  leaderboard: boolean
-  thresholds: Record<string, number>
-}
-
-export interface State {}
-
-export interface Tracking {}
-
-export interface ApexPlayerInfoDto {
-  puuid: string
-  value: number
-  position: number
-}
-
-export interface Level {}
-
-export interface PlayerInfoDto {
-  challenges: any[]
-  preferences: any
-  totalPoints: any
-  categoryPoints: Record<string, any>
-}
-// #endregion
-
-// #region LOL-STATUS-V3
-export interface ShardStatus {
-  locales: string[]
-  hostname: string
-  name: string
-  services: Service[]
-  slug: string
-  region_tag: string
-}
-
-export interface Service {
-  name: string
-  slug: string
-  status: string
-  incidents: Incident[]
-}
-
-export interface Incident {
-  id: number
-  active: boolean
-  created_at: string
-  updates: Message[]
-}
-
-export interface Message {
-  id: string
-  author: string
-  heading: string
-  content: string
-  severity: string
-  created_at: string
-  updated_at: string
-  translations: Translation[]
-}
-
-export interface Translation {
-  updated_at: string
-  locale: string
-  content: string
-}
-// #endregion
-
-// #region LOL-STATUS-V4
-export interface PlatformDataDto {
+export type PlatformDataDto = {
   id: string
   name: string
   locales: string[]
@@ -248,11 +133,11 @@ export interface PlatformDataDto {
   incidents: StatusDto[]
 }
 
-export interface StatusDto {
+export type StatusDto = {
   id: number
-  /** (Legal values: scheduled, in_progress, complete) */
+  /** (Legal values:  scheduled,  in_progress,  complete) */
   maintenance_status: string
-  /** (Legal values: info, warning, critical) */
+  /** (Legal values:  info,  warning,  critical) */
   incident_severity: string
   titles: ContentDto[]
   updates: UpdateDto[]
@@ -263,12 +148,12 @@ export interface StatusDto {
   platforms: string[]
 }
 
-export interface ContentDto {
+export type ContentDto = {
   locale: string
   content: string
 }
 
-export interface UpdateDto {
+export type UpdateDto = {
   id: number
   author: string
   publish: boolean
@@ -278,17 +163,15 @@ export interface UpdateDto {
   created_at: string
   updated_at: string
 }
-// #endregion
 
-// #region MATCH-V5
-export interface MatchDto {
+export type MatchDto = {
   /** Match metadata. */
   metadata: MetadataDto
   /** Match info. */
   info: InfoDto
 }
 
-export interface MetadataDto {
+export type MetadataDto = {
   /** Match data version. */
   dataVersion: string
   /** Match id. */
@@ -297,7 +180,7 @@ export interface MetadataDto {
   participants: string[]
 }
 
-export interface InfoDto {
+export type InfoDto = {
   /** Unix timestamp for when the game is created on the game server (i.e., the loading screen). */
   gameCreation: number
   /** Prior to patch 11.20, this field returns the game length in milliseconds calculated from gameEndTimestamp - gameStartTimestamp. Post patch 11.20, this field returns the max timePlayed of any participant in the game in seconds, which makes the behavior of this field consistent with that of match-v4. The best way to handling the change in this field is to treat the value as milliseconds if the gameEndTimestamp field isn't in the response and to treat the value as seconds if gameEndTimestamp is in the response. */
@@ -320,15 +203,16 @@ export interface InfoDto {
   platformId: string
   /** Refer to the Game Constants documentation. */
   queueId: number
-  teams: TeamDto[]
+  teams: MatchTeamDto[]
   /** Tournament code used to generate the match. This field was added to match-v5 in patch 11.13 on June 23rd, 2021. */
   tournamentCode: string
 }
 
-export interface ParticipantDto {
+export type ParticipantDto = {
   assists: number
   baronKills: number
   bountyLevel: number
+  challenges: ChallengesDTO
   champExperience: number
   champLevel: number
   /** Prior to patch 11.4, on Feb 18th, 2021, this field returned invalid championIds. We recommend determining the champion based on the championName field for matches played prior to patch 11.4. */
@@ -437,43 +321,144 @@ export interface ParticipantDto {
   win: boolean
 }
 
-export interface PerksDto {
+export interface ChallengesDTO {
+  '12AssistStreakCount': number
+  abilityUses: number
+  acesBefore15Minutes: number
+  alliedJungleMonsterKills: number
+  baronTakedowns: number
+  blastConeOppositeOpponentCount: number
+  bountyGold: number
+  buffsStolen: number
+  controlWardsPlaced: number
+  damagePerMinute: number
+  damageTakenOnTeamPercentage: number
+  dancedWithRiftHerald: number
+  deathsByEnemyChamps: number
+  doubleAces: number
+  dragonTakedowns: number
+  earlyLaningPhaseGoldExpAdvantage: number
+  effectiveHealAndShielding: number
+  elderDragonKillsWithOpposingSoul: number
+  elderDragonMultikills: number
+  enemyChampionImmobilizations: number
+  enemyJungleMonsterKills: number
+  epicMonsterKillsNearEnemyJungler: number
+  epicMonsterKillsWithin30SecondsOfSpawn: number
+  epicMonsterSteals: number
+  flawlessAces: number
+  fullTeamTakedown: number
+  gameLength: number
+  getTakedownsInAllLanesEarlyJungleAsLaner: number
+  goldPerMinute: number
+  hadAfkTeammate: number
+  hadOpenNexus: number
+  initialBuffCount: number
+  initialCrabCount: number
+  jungleCsBefore10Minutes: number
+  junglerKillsEarlyJungle: number
+  junglerTakedownsNearDamagedEpicMonster: number
+  kda: number
+  killParticipation: number
+  killsNearEnemyTurret: number
+  killsOnLanersEarlyJungleAsJungler: number
+  killsOnOtherLanesEarlyJungleAsLaner: number
+  killsOnRecentlyHealedByAramPack: number
+  killsUnderOwnTurret: number
+  killsWithHelpFromEpicMonster: number
+  laneMinionsFirst10Minutes: number
+  laningPhaseGoldExpAdvantage: number
+  legendaryCount: number
+  lostAnInhibitor: number
+  maxCsAdvantageOnLaneOpponent: number
+  maxKillDeficit: number
+  maxLevelLeadLaneOpponent: number
+  moreEnemyJungleThanOpponent: number
+  mostWardsDestroyedOneSweeper: number
+  multiKillOneSpell: number
+  multikills: number
+  multikillsAfterAggressiveFlash: number
+  mythicItemUsed: number
+  outerTurretExecutesBefore10Minutes: number
+  outnumberedKills: number
+  outnumberedNexusKill: number
+  perfectDragonSoulsTaken: number
+  perfectGame: number
+  poroExplosions: number
+  riftHeraldTakedowns: number
+  scuttleCrabKills: number
+  shortestTimeToAceFromFirstTakedown?: number
+  skillshotsDodged: number
+  skillshotsHit: number
+  snowballsHit: number
+  soloBaronKills: number
+  soloKills: number
+  stealthWardsPlaced: number
+  survivedSingleDigitHpCount: number
+  takedownOnFirstTurret: number
+  takedowns: number
+  takedownsAfterGainingLevelAdvantage: number
+  takedownsBeforeJungleMinionSpawn: number
+  takedownsFirst25Minutes: number
+  takedownsInAlcove: number
+  takedownsInEnemyFountain: number
+  teamBaronKills: number
+  teamDamagePercentage: number
+  teamElderDragonKills: number
+  teamRiftHeraldKills: number
+  teleportTakedowns?: number
+  turretPlatesTaken: number
+  turretTakedowns: number
+  turretsTakenWithRiftHerald: number
+  twentyMinionsIn3SecondsCount: number
+  unseenRecalls: number
+  visionScoreAdvantageLaneOpponent: number
+  visionScorePerMinute: number
+  wardTakedowns: number
+  wardTakedownsBefore20M: number
+  wardsGuarded: number
+  highestCrowdControlScore?: number
+  highestChampionDamage?: number
+  firstTurretKilledTime?: number
+}
+
+export type PerksDto = {
   statPerks: PerkStatsDto
   styles: PerkStyleDto[]
 }
 
-export interface PerkStatsDto {
+export type PerkStatsDto = {
   defense: number
   flex: number
   offense: number
 }
 
-export interface PerkStyleDto {
+export type PerkStyleDto = {
   description: string
   selections: PerkStyleSelectionDto[]
   style: number
 }
 
-export interface PerkStyleSelectionDto {
+export type PerkStyleSelectionDto = {
   perk: number
   var1: number
   var2: number
   var3: number
 }
 
-export interface TeamDto {
+export type MatchTeamDto = {
   bans: BanDto[]
   objectives: ObjectivesDto
   teamId: number
   win: boolean
 }
 
-export interface BanDto {
+export type BanDto = {
   championId: number
   pickTurn: number
 }
 
-export interface ObjectivesDto {
+export type ObjectivesDto = {
   baron: ObjectiveDto
   champion: ObjectiveDto
   dragon: ObjectiveDto
@@ -482,14 +467,12 @@ export interface ObjectivesDto {
   tower: ObjectiveDto
 }
 
-export interface ObjectiveDto {
+export type ObjectiveDto = {
   first: boolean
   kills: number
 }
-// #endregion
 
-// #region SPECTATOR-V4
-export interface CurrentGameInfo {
+export type CurrentGameInfo = {
   /** The ID of the game */
   gameId: number
   /** The game type */
@@ -507,14 +490,14 @@ export interface CurrentGameInfo {
   /** Banned champion information */
   bannedChampions: BannedChampion[]
   /** The queue type (queue types are documented on the Game Constants page) */
-  gameQueueConfigId: number
+  gameQueueConfigId?: number
   /** The observer information */
   observers: Observer
   /** The participant information */
   participants: CurrentGameParticipant[]
 }
 
-export interface BannedChampion {
+export type BannedChampion = {
   /** The turn during which the champion was banned */
   pickTurn: number
   /** The ID of the banned champion */
@@ -523,12 +506,12 @@ export interface BannedChampion {
   teamId: number
 }
 
-export interface Observer {
+export type Observer = {
   /** Key used to decrypt the spectator grid game data for playback */
   encryptionKey: string
 }
 
-export interface CurrentGameParticipant {
+export type CurrentGameParticipant = {
   /** The ID of the champion played by this participant */
   championId: number
   /** Perks/Runes Reforged Information */
@@ -551,7 +534,7 @@ export interface CurrentGameParticipant {
   gameCustomizationObjects: GameCustomizationObject[]
 }
 
-export interface Perks {
+export type Perks = {
   /** IDs of the perks/runes assigned. */
   perkIds: number[]
   /** Primary runes path */
@@ -560,21 +543,21 @@ export interface Perks {
   perkSubStyle: number
 }
 
-export interface GameCustomizationObject {
+export type GameCustomizationObject = {
   /** Category identifier for Game Customization */
   category: string
   /** Game Customization content */
   content: string
 }
 
-export interface FeaturedGames {
+export type FeaturedGames = {
   /** The list of featured games */
   gameList: FeaturedGameInfo[]
   /** The suggested interval to wait before requesting FeaturedGames again */
   clientRefreshInterval: number
 }
 
-export interface FeaturedGameInfo {
+export type FeaturedGameInfo = {
   /** The game mode
  (Legal values: CLASSIC, ODIN, ARAM, TUTORIAL, ONEFORALL, ASCENSION, FIRSTBLOOD, KINGPORO) */
   gameMode: string
@@ -601,7 +584,7 @@ export interface FeaturedGameInfo {
   platformId: string
 }
 
-export interface Participant {
+export type Participant = {
   /** Flag indicating whether or not this participant is a bot */
   bot: boolean
   /** The ID of the second summoner spell used by this participant */
@@ -617,15 +600,14 @@ export interface Participant {
   /** The ID of the first summoner spell used by this participant */
   spell1Id: number
 }
-// #endregion
 
-// #region SUMMONER-V4
-export interface SummonerDTO {
+/** represents a summoner */
+export type SummonerDTO = {
   /** Encrypted account ID. Max length 56 characters. */
   accountId: string
   /** ID of the summoner icon associated with the summoner. */
   profileIconId: number
-  /** Date summoner was last modified specified as epoch milliseconds. The following events will update this timestamp: summoner name change, summoner level change, or profile icon change. */
+  /** Date summoner was last modified specified as epoch milliseconds. The following events will update this timestamp: profile icon change, playing the tutorial or advanced tutorial, finishing a game, summoner name change */
   revisionDate: number
   /** Summoner name. */
   name: string
@@ -636,4 +618,3 @@ export interface SummonerDTO {
   /** Summoner level associated with the summoner. */
   summonerLevel: number
 }
-// #endregion
