@@ -1,10 +1,12 @@
+/* eslint-disable no-console */
 import { writeFileSync } from 'fs'
 import path from 'path'
 
-import * as cheerio from 'cheerio'
 import { isString } from 'lodash'
 
 import { CargoClient } from '../src/leaguepedia/index'
+
+import { text, $, createDocument, $$ } from './utils'
 
 const cargo = new CargoClient()
 const axios = cargo.axiosInstance
@@ -29,30 +31,26 @@ function writeToFile() {
   )
 }
 
-function parse(name: string) {
-  return axios.get(BASE_URL + '/' + name).then(({ data }) => {
-    const $ = cheerio.load(data)
-    const fieldElements = $('#mw-content-text > ul').children().toArray()
+async function parse(name: string) {
+  const { data } = await axios.get(BASE_URL + '/' + name)
+  const document = createDocument(data)
+  const fieldElements = $$(document, '#mw-content-text > ul > li')
 
-    return {
-      name,
-      children: fieldElements.map((fieldElem) => {
-        const nameNode = $('strong', fieldElem)
-        const name = nameNode.text()
-        const type = nameNode.next().text()
-        const isArray = nameNode
-          .parent()
-          .text()
-          .startsWith(`${name} - List of ${type}`)
-        return {
-          name,
-          type,
-          isArray,
-          desc: $('span', fieldElem).text(),
-        }
-      }),
-    }
-  })
+  return {
+    name,
+    children: fieldElements.map((fieldElem) => {
+      const nameNode = $(fieldElem, 'strong')
+      const name = text(nameNode)
+      const type = text(nameNode?.nextElementSibling)
+      const isArray = text(fieldElem).startsWith(`${name} - List of ${type}`)
+      return {
+        name,
+        type,
+        isArray,
+        desc: text($(fieldElem, 'span')),
+      }
+    }),
+  }
 }
 
 function transform(data: Data) {
@@ -102,36 +100,25 @@ function updateString(data: Data) {
   `
 }
 
-export function fetchTables() {
-  return axios.get(BASE_URL).then(({ data }) => {
-    const $ = cheerio.load(data)
+export async function fetchTables() {
+  const { data } = await axios.get(BASE_URL)
+  const document = createDocument(data)
+  const cargoTableList = $$(document, '#mw-content-text > ul > li')
+  const cargoTableNames = cargoTableList
+    .map((tableElem) => tableElem.textContent)
+    .filter(isString)
 
-    const cargoTableList = $('#mw-content-text > ul').children().toArray()
-    const cargoTableNames = cargoTableList
-      .map((tableElem) => {
-        if (tableElem.type === 'tag') {
-          const firstChild = tableElem.firstChild
-          if (firstChild?.type === 'text') {
-            return firstChild.data?.split(' ')[0]
-          }
-        }
-      })
-      .filter(isString)
-
-    return cargoTableNames
-  })
+  return cargoTableNames
 }
 
 async function generate() {
   const tables = await fetchTables()
-  // eslint-disable-next-line no-console
   console.log('fetch tables success')
 
   pre()
   for (const table of tables) {
     const data = await parse(table)
     updateString(transform(data))
-    // eslint-disable-next-line no-console
     console.log('√', table)
   }
   post()
