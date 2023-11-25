@@ -15,7 +15,7 @@
     "generate-cargo-schema": "ts-node scripts/cargoSchemaGenerator.ts",
     "clean": "rimraf ./dist",
     "build": "pnpm clean && tsc -p tsconfig.esm.json && tsc",
-    "test": "jest",
+    "test:scripts": "vitest --update scripts",
     "lint": "eslint src/**/*.{ts,tsx}  --fix",
     "release": "pnpm build && release-it"
   },
