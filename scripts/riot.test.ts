@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 
-import { fetchApiNames, genEndpoints, genApis } from './generate-riot-client'
+import { fetchApiNames, genEndpoints, genApis } from './riot'
 
 describe('generate-riot-client', () => {
   it('should generate API names', async () => {

@@ -1,8 +1,7 @@
 /* eslint-disable no-console */
 import { JSDOM } from 'jsdom'
 import { isString } from 'lodash'
-import { RiotClient } from 'src'
-
+import { RiotClient } from 'src/index'
 const riot = new RiotClient({
   auth: '',
 })
@@ -104,11 +103,6 @@ export async function genApis() {
   }
 
   return { content, dtos }
-}
-
-export async function main() {
-  const result = await genApis()
-  return result
 }
 
 // utils
