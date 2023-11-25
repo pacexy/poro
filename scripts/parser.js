@@ -83,12 +83,12 @@ function parse() {
             }
           })
 
-          return `'${path}': (path: string) => ({
+          return `'${path}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
 /** ${desc} */
 ${method}() {
-  return axiosInstance.${method}${
-            returnType ? `<${transformType(returnType)}>` : ''
-          }(PLATFORM_BASE_URL + path)
+  return limiter.execute${
+    returnType ? `<${transformType(returnType)}>` : ''
+  }(generalRegion, realPath, path)
   },
 }),`
         })
