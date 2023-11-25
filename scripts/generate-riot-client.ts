@@ -30,10 +30,10 @@ export function genEndpoints(apiName: string) {
   return axios.get(`${BASE_URL}/api-details/${apiName}`).then(({ data }) => {
     const $ = cheerio.load(data.html)
 
-    const dtos = {}
+    const dtoMap = {}
 
     const operationNodes = $('.operation').toArray()
-    const endpoints = [operationNodes[0]]
+    const endpoints = operationNodes
       .map((node) => {
         const path = $(node).find('.path').text().trim()
         const method = $(node).find('.http_method').text().trim().toLowerCase()
@@ -48,7 +48,7 @@ export function genEndpoints(apiName: string) {
           .replace(/Return value: (\w+)/, '$1')
 
         dtoNodes.forEach((dtoNode) => {
-          Object.assign(dtos, dtoToType($, dtoNode))
+          Object.assign(dtoMap, dtoToType($, dtoNode))
         })
 
         return `'${path}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({\n/** ${desc} */\n${method}() {\n  return limiter.execute${
@@ -57,9 +57,19 @@ export function genEndpoints(apiName: string) {
       })
       .join('')
 
-    const content = `// ${apiName.toUpperCase()}\n  ${endpoints}\n`
+    const content = `
+    // #region ${apiName.toUpperCase()}
+      ${endpoints}
+    // #endregion
+      `
 
-    return { content, dtos: Object.values(dtos).join('\n\n') }
+    const dtos = `
+    // #region ${apiName.toUpperCase()}
+      ${Object.values(dtoMap).join('\n\n')}
+    // #endregion
+    `
+
+    return { content, dtos }
   })
 }
 
@@ -69,11 +79,24 @@ export async function main() {
     return !ignoredApiPrefixes.some((prefix) => name.startsWith(prefix))
   })
 
-  return apiNames
+  // eslint-disable-next-line no-console
+  console.log('apiNames', apiNames)
+
+  let content = ''
+  let dtos = ''
+
+  for (const apiName of apiNames) {
+    // eslint-disable-next-line no-console
+    console.log('genEndpoints', apiName)
+    const result = await genEndpoints(apiName)
+    content += result.content
+    dtos += result.dtos
+  }
+
+  return { content: `{${content}}`, dtos }
 }
 
 // utils
-
 function removeRedundantSpace(str: string) {
   return str.trim().split(' ').filter(Boolean).join(' ')
 }
@@ -113,7 +136,7 @@ function dtoToType(
       })
       .join('\n')
 
-    const def = `export type ${typeName} = {\n  ${content}\n}`
+    const def = `export interface ${typeName} {\n  ${content}\n}`
     return {
       [typeName]: typeDesc ? `/** ${typeDesc} */\n${def}` : def,
     }
