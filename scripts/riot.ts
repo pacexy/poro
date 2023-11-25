@@ -140,10 +140,6 @@ function dtoToType(element: Element) {
     const typeName = element.querySelector('h5')?.textContent
     if (!typeName) return
 
-    const typeDesc = removeRedundantSpace(
-      element.querySelector('h5')?.nextElementSibling?.textContent,
-    )
-
     const propertyNodes = Array.from(
       element.querySelectorAll('table > tbody > tr'),
     )
@@ -152,32 +148,34 @@ function dtoToType(element: Element) {
         const children = Array.from(propertyNode.children)
         return children.map((child) => removeRedundantSpace(child.textContent))
       })
-      .map(([name, type, desc]) => {
+      .map(([name, type, comment]) => {
         const property = `${name}: ${transformType(type)}`
-        return desc
-          ? [
-              `/** ${desc} */`, //
-              property,
-            ].join('\n')
-          : property
+        return withComment(property, comment)
       })
       .join('\n')
 
-    const def = [
+    const type = [
       `export interface ${typeName} {`, //
       content,
       `}`,
     ].join('\n')
 
+    const comment = removeRedundantSpace(
+      element.querySelector('h5')?.nextElementSibling?.textContent,
+    )
+
     return {
-      [typeName]: typeDesc
-        ? [
-            `/** ${typeDesc} */`, //
-            def,
-          ].join('\n')
-        : def,
+      [typeName]: withComment(type, comment),
     }
   } catch (err) {
     console.error(err)
   }
+}
+
+function withComment(content: string, comment?: string) {
+  if (!comment) return content
+  return [
+    `/** ${comment} */`, //
+    content,
+  ].join('\n')
 }
