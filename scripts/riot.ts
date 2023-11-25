@@ -40,8 +40,7 @@ export function genEndpoints(apiName: string) {
     console.time('parse endpoints')
     const dtoMap = {}
 
-    const operationNodes = Array.from(document.querySelectorAll('.operation'))
-    const endpoints = operationNodes
+    const endpoints = Array.from(document.querySelectorAll('.operation'))
       .map((node) => {
         const path = node.querySelector('.path')?.textContent?.trim()
         const method = node
@@ -50,35 +49,41 @@ export function genEndpoints(apiName: string) {
           .toLowerCase()
         const desc = node.querySelector('.options')?.textContent?.trim()
 
-        const responseBodies = Array.from(
+        const [returnTypeNode, ...dtoNodes] = Array.from(
           node.querySelectorAll('.response_body'),
         )
-        const returnTypeNode = responseBodies.shift()
         const returnType = returnTypeNode?.textContent
           ?.trim()
           .replace(/Return value: (\w+)/, '$1')
 
-        responseBodies.forEach((dtoNode) => {
+        dtoNodes.forEach((dtoNode) => {
           Object.assign(dtoMap, dtoToType(dtoNode))
         })
 
-        return `'${path}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({\n/** ${desc} */\n${method}() {\n  return limiter.execute${
-          returnType ? `<${transformType(returnType)}>` : ''
-        }(generalRegion, realPath, path)\n  },\n}),`
+        const generic = returnType ? `<${transformType(returnType)}>` : ''
+        return [
+          `'${path}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({`,
+          `  /** ${desc} */`,
+          `  ${method}() {`,
+          `    return limiter.execute${generic}(generalRegion, realPath, path)`,
+          `  },`,
+          `}),`,
+        ].join('\n')
       })
-      .join('')
+      .join('\n')
 
-    const content = `
-    // #region ${apiName.toUpperCase()}
-      ${endpoints}
-    // #endregion
-    `
+    const content = [
+      `// #region ${apiName.toUpperCase()}`,
+      endpoints,
+      `// #endregion`,
+    ].join('\n')
 
-    const dtos = `
-    // #region ${apiName.toUpperCase()}
-      ${Object.values(dtoMap).join('\n\n')}
-    // #endregion
-    `
+    const dtos = [
+      `// #region ${apiName.toUpperCase()}`,
+      Object.values(dtoMap).join('\n\n'),
+      `// #endregion`,
+    ].join('\n')
+
     console.timeEnd('parse endpoints')
 
     return { content, dtos }
@@ -149,13 +154,28 @@ function dtoToType(element: Element) {
       })
       .map(([name, type, desc]) => {
         const property = `${name}: ${transformType(type)}`
-        return desc ? `/** ${desc} */\n${property}` : property
+        return desc
+          ? [
+              `/** ${desc} */`, //
+              property,
+            ].join('\n')
+          : property
       })
       .join('\n')
 
-    const def = `export interface ${typeName} {\n  ${content}\n}`
+    const def = [
+      `export interface ${typeName} {`, //
+      content,
+      `}`,
+    ].join('\n')
+
     return {
-      [typeName]: typeDesc ? `/** ${typeDesc} */\n${def}` : def,
+      [typeName]: typeDesc
+        ? [
+            `/** ${typeDesc} */`, //
+            def,
+          ].join('\n')
+        : def,
     }
   } catch (err) {
     console.error(err)
