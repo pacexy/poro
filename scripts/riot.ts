@@ -21,6 +21,9 @@ export function fetchApiNames() {
     const apiNames = apiList
       .map((a) => a.getAttribute('api-name'))
       .filter(isString)
+      .filter((name) => {
+        return !ignoredApiPrefixes.some((prefix) => name.startsWith(prefix))
+      })
     console.timeEnd('parse api names')
 
     return apiNames
@@ -83,19 +86,13 @@ export function genEndpoints(apiName: string) {
 }
 
 export async function genApis() {
-  const allApiNames = await fetchApiNames()
-  const apiNames = allApiNames.filter((name) => {
-    return !ignoredApiPrefixes.some((prefix) => name.startsWith(prefix))
-  })
-
-  // eslint-disable-next-line no-console
+  const apiNames = await fetchApiNames()
   console.log('apiNames', apiNames)
 
   let content = ''
   let dtos = ''
 
   for (const apiName of apiNames) {
-    // eslint-disable-next-line no-console
     console.log('genEndpoints', apiName)
     const result = await genEndpoints(apiName)
     content += result.content
@@ -161,7 +158,6 @@ function dtoToType(element: Element) {
       [typeName]: typeDesc ? `/** ${typeDesc} */\n${def}` : def,
     }
   } catch (err) {
-    // eslint-disable-next-line no-console
     console.error(err)
   }
 }
