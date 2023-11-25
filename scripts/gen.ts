@@ -12,7 +12,24 @@ export async function main() {
   const result = await genEndpoints()
 
   writeFileSync(
-    join(__dirname, '../src/riot/apis/dtos.ts'),
+    join(__dirname, `../schemas/riot/endpoints_${Date.now()}.ts`),
+    prettier.format(
+      [
+        `export function createEndpoints(limiter: RiotRateLimiter) {`,
+        `  return {`,
+        result.content,
+        `  }`,
+        `}`,
+      ].join('\n'),
+      {
+        ...prettierConfig,
+        parser: 'typescript',
+      },
+    ),
+  )
+
+  writeFileSync(
+    join(__dirname, `../schemas/riot/dtos_${Date.now()}.ts`),
     prettier.format(result.dtos, {
       ...prettierConfig,
       parser: 'typescript',
