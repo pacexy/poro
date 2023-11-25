@@ -128,7 +128,7 @@ export class RiotClient {
 
 function createEndpoints(limiter: RiotRateLimiter) {
   return {
-    // ACCOUNT-V1
+    // #region ACCOUNT-V1
     '/riot/account/v1/accounts/by-puuid/{puuid}': (
       generalRegion: GeneralRegion,
       realPath: string,
@@ -169,8 +169,9 @@ function createEndpoints(limiter: RiotRateLimiter) {
         return limiter.execute<AccountDto>(generalRegion, realPath, path)
       },
     }),
+    // #endregion
 
-    // CHAMPION-MASTERY-V4
+    // #region CHAMPION-MASTERY-V4
     '/lol/champion-mastery/v4/champion-masteries/by-summoner/{encryptedSummonerId}':
       (generalRegion: GeneralRegion, realPath: string, path: string) => ({
         /** Get all champion mastery entries sorted by number of champion points descending, */
@@ -203,8 +204,9 @@ function createEndpoints(limiter: RiotRateLimiter) {
         return limiter.execute<number>(generalRegion, realPath, path)
       },
     }),
+    // #endregion
 
-    // CHAMPION-V3
+    // #region CHAMPION-V3
     '/lol/platform/v3/champion-rotations': (
       generalRegion: GeneralRegion,
       realPath: string,
@@ -215,8 +217,9 @@ function createEndpoints(limiter: RiotRateLimiter) {
         return limiter.execute<ChampionInfo>(generalRegion, realPath, path)
       },
     }),
+    // #endregion
 
-    // CLASH-V1
+    // #region CLASH-V1
     '/lol/clash/v1/players/by-summoner/{summonerId}': (
       generalRegion: GeneralRegion,
       realPath: string,
@@ -267,8 +270,9 @@ function createEndpoints(limiter: RiotRateLimiter) {
         return limiter.execute<TournamentDto>(generalRegion, realPath, path)
       },
     }),
+    // #endregion
 
-    // LEAGUE-EXP-V4
+    // #region LEAGUE-EXP-V4
     '/lol/league-exp/v4/entries/{queue}/{tier}/{division}': (
       generalRegion: GeneralRegion,
       realPath: string,
@@ -284,8 +288,9 @@ function createEndpoints(limiter: RiotRateLimiter) {
         )
       },
     }),
+    // #endregion
 
-    // LEAGUE-V4
+    // #region LEAGUE-V4
     '/lol/league/v4/challengerleagues/by-queue/{queue}': (
       generalRegion: GeneralRegion,
       realPath: string,
@@ -351,8 +356,9 @@ function createEndpoints(limiter: RiotRateLimiter) {
         return limiter.execute<LeagueListDTO>(generalRegion, realPath, path)
       },
     }),
+    // #endregion
 
-    // LOL-STATUS-V4
+    // #region LOL-STATUS-V4
     '/lol/status/v4/platform-data': (
       generalRegion: GeneralRegion,
       realPath: string,
@@ -363,8 +369,9 @@ function createEndpoints(limiter: RiotRateLimiter) {
         return limiter.execute<PlatformDataDto>(generalRegion, realPath, path)
       },
     }),
+    // #endregion
 
-    // MATCH-V5
+    // #region MATCH-V5
     '/lol/match/v5/matches/by-puuid/{puuid}/ids': (
       generalRegion: GeneralRegion,
       realPath: string,
@@ -396,8 +403,9 @@ function createEndpoints(limiter: RiotRateLimiter) {
         return limiter.execute(generalRegion, realPath, path)
       },
     }),
+    // #endregion
 
-    // SPECTATOR-V4
+    // #region SPECTATOR-V4
     '/lol/spectator/v4/active-games/by-summoner/{encryptedSummonerId}': (
       generalRegion: GeneralRegion,
       realPath: string,
@@ -418,8 +426,9 @@ function createEndpoints(limiter: RiotRateLimiter) {
         return limiter.execute<FeaturedGames>(generalRegion, realPath, path)
       },
     }),
+    // #endregion
 
-    // SUMMONER-V4
+    // #region SUMMONER-V4
     '/lol/summoner/v4/summoners/by-account/{encryptedAccountId}': (
       generalRegion: GeneralRegion,
       realPath: string,
@@ -460,8 +469,9 @@ function createEndpoints(limiter: RiotRateLimiter) {
         return limiter.execute<SummonerDTO>(generalRegion, realPath, path)
       },
     }),
+    // #endregion
 
-    // THIRD-PARTY-CODE-V4
+    // #region THIRD-PARTY-CODE-V4
     '/lol/platform/v4/third-party-code/by-summoner/{encryptedSummonerId}': (
       generalRegion: GeneralRegion,
       realPath: string,
@@ -472,5 +482,6 @@ function createEndpoints(limiter: RiotRateLimiter) {
         return limiter.execute<string>(generalRegion, realPath, path)
       },
     }),
+    // #endregion
   }
 }
