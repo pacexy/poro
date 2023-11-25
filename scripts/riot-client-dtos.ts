@@ -169,7 +169,7 @@ miniSeries: MiniSeriesDTO
     // #region LOL-CHALLENGES-V1
       export interface ChallengeConfigInfoDto  {
   id: number
-localizedNames: Record<string, Map[String, string]>
+localizedNames: Record<string, Record<string, string>>
 state: State
 tracking: Tracking
 startTimestamp: number
@@ -642,118 +642,6 @@ id: string
 puuid: string
 /** Summoner level associated with the summoner. */
 summonerLevel: number
-}
-    // #endregion
-    
-    // #region TOURNAMENT-STUB-V5
-      export interface TournamentCodeV5DTO  {
-  /** The tournament code. */
-code: string
-/** The spectator mode for the tournament code game. */
-spectators: string
-/** The lobby name for the tournament code game. */
-lobbyName: string
-/** The metadata for tournament code. */
-metaData: string
-/** The password for the tournament code game. */
-password: string
-/** The team size for the tournament code game. */
-teamSize: number
-/** The provider's ID. */
-providerId: number
-/** The pick mode for tournament code game. */
-pickType: string
-/** The tournament's ID. */
-tournamentId: number
-/** The tournament code's ID. */
-id: number
-/** The tournament code's region.
- (Legal values: BR, EUNE, EUW, JP, LAN, LAS, NA, OCE, PBE, RU, TR, KR) */
-region: string
-/** The game map for the tournament code game */
-map: string
-/** The puuids of the participants (Encrypted) */
-participants: string[]
-}
-
-export interface LobbyEventV5DTOWrapper  {
-  eventList: LobbyEventV5DTO[]
-}
-
-export interface LobbyEventV5DTO  {
-  /** Timestamp from the event */
-timestamp: string
-/** The type of event that was triggered */
-eventType: string
-/** The puuid that triggered the event (Encrypted) */
-puuid: string
-}
-    // #endregion
-    
-    // #region TOURNAMENT-V5
-      export interface TournamentCodeV5DTO  {
-  /** The tournament code. */
-code: string
-/** The spectator mode for the tournament code game. */
-spectators: string
-/** The lobby name for the tournament code game. */
-lobbyName: string
-/** The metadata for tournament code. */
-metaData: string
-/** The password for the tournament code game. */
-password: string
-/** The team size for the tournament code game. */
-teamSize: number
-/** The provider's ID. */
-providerId: number
-/** The pick mode for tournament code game. */
-pickType: string
-/** The tournament's ID. */
-tournamentId: number
-/** The tournament code's ID. */
-id: number
-/** The tournament code's region.
- (Legal values: BR, EUNE, EUW, JP, LAN, LAS, NA, OCE, PBE, RU, TR, KR) */
-region: string
-/** The game map for the tournament code game */
-map: string
-/** The puuids of the participants (Encrypted) */
-participants: string[]
-}
-
-export interface TournamentGamesV5  {
-  winningTeam: TournamentTeamV5[]
-losingTeam: TournamentTeamV5[]
-/** Tournament Code */
-shortCode: string
-/** Metadata for the TournamentCode */
-metaData: string
-gameId: number
-gameName: string
-gameType: string
-/** Game Map ID */
-gameMap: number
-gameMode: string
-/** Region of the game */
-region: string
-}
-
-export interface TournamentTeamV5  {
-  /** Player Unique UUID (Encrypted) */
-puuid: string
-}
-
-export interface LobbyEventV5DTOWrapper  {
-  eventList: LobbyEventV5DTO[]
-}
-
-export interface LobbyEventV5DTO  {
-  /** Timestamp from the event */
-timestamp: string
-/** The type of event that was triggered */
-eventType: string
-/** The puuid that triggered the event (Encrypted) */
-puuid: string
 }
     // #endregion
     

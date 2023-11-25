@@ -8,7 +8,7 @@ const riot = new RiotClient({
 })
 const axios = riot.axiosInstance
 const BASE_URL = 'https://developer.riotgames.com'
-const ignoredApiPrefixes = ['tft', 'lor', 'val']
+const ignoredApiPrefixes = ['tft', 'lor', 'val', 'tournament']
 
 export function fetchApiNames() {
   return axios.get(BASE_URL + '/apis').then(({ data }) => {
@@ -83,7 +83,7 @@ export function genEndpoints(apiName: string) {
   })
 }
 
-export async function main() {
+export async function genApis() {
   const allApiNames = await fetchApiNames()
   const apiNames = allApiNames.filter((name) => {
     return !ignoredApiPrefixes.some((prefix) => name.startsWith(prefix))
@@ -103,7 +103,12 @@ export async function main() {
     dtos += result.dtos
   }
 
-  return { content: `{${content}}`, dtos }
+  return { content, dtos }
+}
+
+export async function main() {
+  const result = await genApis()
+  return result
 }
 
 // utils
@@ -113,16 +118,25 @@ function removeRedundantSpace(str?: string | null) {
 }
 
 function transformType(type: string) {
-  return removeRedundantSpace(
-    type
-      .replace('int', 'number')
-      .replace('long', 'number')
-      .replace('double', 'number')
-      .replace('String', 'string')
-      .replace(/Set\[(\w+)\]/, '$1[]')
-      .replace(/List\[(\w+)\]/, '$1[]')
-      .replace(/Map\[(.+)\]/, 'Record<$1>'),
-  )
+  let transformed = type
+  let previous: string
+
+  do {
+    // eslint-disable-next-line prefer-const
+    previous = transformed
+    transformed = removeRedundantSpace(
+      previous
+        .replace(/int/g, 'number')
+        .replace(/long/g, 'number')
+        .replace(/double/g, 'number')
+        .replace(/String/g, 'string')
+        .replace(/Set\[(\w+)\]/g, '$1[]')
+        .replace(/List\[(\w+)\]/g, '$1[]')
+        .replace(/Map\[(.+?)\]/g, 'Record<$1>'),
+    )
+  } while (transformed !== previous)
+
+  return transformed
 }
 
 function dtoToType(element: Element) {

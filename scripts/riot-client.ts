@@ -1,4 +1,4 @@
-{
+
     // #region ACCOUNT-V1
       '/riot/account/v1/accounts/by-puuid/{puuid}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
 /** Get account by puuid */
@@ -22,7 +22,7 @@ get() {
   },
 }),
     // #endregion
-      
+    
     // #region CHAMPION-MASTERY-V4
       '/lol/champion-mastery/v4/champion-masteries/by-puuid/{encryptedPUUID}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
 /** Get all champion mastery entries sorted by number of champion points descending. */
@@ -66,7 +66,7 @@ get() {
   },
 }),
     // #endregion
-      
+    
     // #region CHAMPION-V3
       '/lol/platform/v3/champion-rotations': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
 /** Returns champion rotations, including free-to-play and low-level free-to-play rotations (REST) */
@@ -75,7 +75,7 @@ get() {
   },
 }),
     // #endregion
-      
+    
     // #region CLASH-V1
       '/lol/clash/v1/players/by-summoner/{summonerId}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
 /** Get players by summoner ID. */
@@ -104,7 +104,7 @@ get() {
   },
 }),
     // #endregion
-      
+    
     // #region LEAGUE-EXP-V4
       '/lol/league-exp/v4/entries/{queue}/{tier}/{division}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
 /** Get all the league entries. */
@@ -113,7 +113,7 @@ get() {
   },
 }),
     // #endregion
-      
+    
     // #region LEAGUE-V4
       '/lol/league/v4/challengerleagues/by-queue/{queue}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
 /** Get the challenger league for given queue. */
@@ -147,7 +147,7 @@ get() {
   },
 }),
     // #endregion
-      
+    
     // #region LOL-CHALLENGES-V1
       '/lol/challenges/v1/challenges/config': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
 /** List of all basic challenge configuration information (includes all translations for names and descriptions) */
@@ -157,7 +157,7 @@ get() {
 }),'/lol/challenges/v1/challenges/percentiles': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
 /** Map of level to percentile of players who have achieved it - keys: ChallengeId -> Season -> Level -> percentile of players who achieved it */
 get() {
-  return limiter.execute<Record<Long, Map[Integer, Map[Level, Double]]>>(generalRegion, realPath, path)
+  return limiter.execute<Record<Long, Record<Integer, Record<Level, Double>>>>(generalRegion, realPath, path)
   },
 }),'/lol/challenges/v1/challenges/{challengeId}/config': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
 /** Get challenge configuration (REST) */
@@ -181,7 +181,7 @@ get() {
   },
 }),
     // #endregion
-      
+    
     // #region LOL-STATUS-V3
       '/lol/status/v3/shard-data': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
 /** Get League of Legends status for the given shard. */
@@ -190,7 +190,7 @@ get() {
   },
 }),
     // #endregion
-      
+    
     // #region LOL-STATUS-V4
       '/lol/status/v4/platform-data': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
 /** Get League of Legends status for the given platform. */
@@ -199,7 +199,7 @@ get() {
   },
 }),
     // #endregion
-      
+    
     // #region MATCH-V5
       '/lol/match/v5/matches/by-puuid/{puuid}/ids': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
 /** Get a list of match ids by puuid */
@@ -218,7 +218,7 @@ get() {
   },
 }),
     // #endregion
-      
+    
     // #region SPECTATOR-V4
       '/lol/spectator/v4/active-games/by-summoner/{encryptedSummonerId}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
 /** Get current game information for the given summoner ID. */
@@ -232,7 +232,7 @@ get() {
   },
 }),
     // #endregion
-      
+    
     // #region SUMMONER-V4
       '/fulfillment/v1/summoners/by-puuid/{rsoPUUID}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
 /** Get a summoner by its RSO encrypted PUUID. */
@@ -266,72 +266,4 @@ get() {
   },
 }),
     // #endregion
-      
-    // #region TOURNAMENT-STUB-V5
-      '/lol/tournament-stub/v5/codes': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
-/** Create a tournament code for the given tournament - Stub method */
-post() {
-  return limiter.execute<string[]>(generalRegion, realPath, path)
-  },
-}),'/lol/tournament-stub/v5/codes/{tournamentCode}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
-/** Returns the tournament code DTO associated with a tournament code string - Stub Method */
-get() {
-  return limiter.execute<TournamentCodeV5DTO>(generalRegion, realPath, path)
-  },
-}),'/lol/tournament-stub/v5/lobby-events/by-code/{tournamentCode}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
-/** Gets a list of lobby events by tournament code - Stub method */
-get() {
-  return limiter.execute<LobbyEventV5DTOWrapper>(generalRegion, realPath, path)
-  },
-}),'/lol/tournament-stub/v5/providers': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
-/** Creates a tournament provider and returns its ID - Stub method */
-post() {
-  return limiter.execute<number>(generalRegion, realPath, path)
-  },
-}),'/lol/tournament-stub/v5/tournaments': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
-/** Creates a tournament and returns its ID - Stub method */
-post() {
-  return limiter.execute<number>(generalRegion, realPath, path)
-  },
-}),
-    // #endregion
-      
-    // #region TOURNAMENT-V5
-      '/lol/tournament/v5/codes': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
-/** Create a tournament code for the given tournament. */
-post() {
-  return limiter.execute<string[]>(generalRegion, realPath, path)
-  },
-}),'/lol/tournament/v5/codes/{tournamentCode}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
-/** Returns the tournament code DTO associated with a tournament code string. */
-get() {
-  return limiter.execute<TournamentCodeV5DTO>(generalRegion, realPath, path)
-  },
-}),'/lol/tournament/v5/codes/{tournamentCode}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
-/** Update the pick type, map, spectator type, or allowed puuids for a code. */
-put() {
-  return limiter.execute(generalRegion, realPath, path)
-  },
-}),'/lol/tournament/v5/games/by-code/{tournamentCode}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
-/** Get games details */
-get() {
-  return limiter.execute<TournamentGamesV5[]>(generalRegion, realPath, path)
-  },
-}),'/lol/tournament/v5/lobby-events/by-code/{tournamentCode}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
-/** Gets a list of lobby events by tournament code. */
-get() {
-  return limiter.execute<LobbyEventV5DTOWrapper>(generalRegion, realPath, path)
-  },
-}),'/lol/tournament/v5/providers': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
-/** Creates a tournament provider and returns its ID. */
-post() {
-  return limiter.execute<number>(generalRegion, realPath, path)
-  },
-}),'/lol/tournament/v5/tournaments': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
-/** Creates a tournament and returns its ID. */
-post() {
-  return limiter.execute<number>(generalRegion, realPath, path)
-  },
-}),
-    // #endregion
-      }
+    
