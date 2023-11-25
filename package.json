@@ -14,10 +14,10 @@
     "format": "prettier --write src/**/*.ts",
     "generate-cargo-schema": "ts-node scripts/cargoSchemaGenerator.ts",
     "clean": "rimraf ./dist",
-    "build": "yarn clean && tsc -p tsconfig.esm.json && tsc",
+    "build": "pnpm clean && tsc -p tsconfig.esm.json && tsc",
     "test": "jest",
     "lint": "eslint src/**/*.{ts,tsx}  --fix",
-    "release": "yarn build && release-it"
+    "release": "pnpm build && release-it"
   },
   "files": [
     "dist/cjs/src",
