@@ -1,10 +1,10 @@
 import { describe, it, expect } from 'vitest'
 
-import { fetchApiNames, genEndpoints, genApis } from './riot'
+import { fetchPageNames, genEndpointsInPage, genEndpoints } from './riot'
 
 describe('generate-riot-client', () => {
   it('should generate API names', async () => {
-    expect(fetchApiNames()).resolves.toMatchInlineSnapshot(`
+    expect(fetchPageNames()).resolves.toMatchInlineSnapshot(`
       [
         "account-v1",
         "champion-mastery-v4",
@@ -23,7 +23,7 @@ describe('generate-riot-client', () => {
   })
 
   it('should generate endpoints', async () => {
-    expect(await genEndpoints('account-v1')).toMatchInlineSnapshot(`
+    expect(await genEndpointsInPage('account-v1')).toMatchInlineSnapshot(`
       "// #region ACCOUNT-V1
       '/riot/account/v1/accounts/by-puuid/{puuid}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
         /** Get account by puuid */
@@ -56,7 +56,7 @@ describe('generate-riot-client', () => {
   it(
     'should run',
     async () => {
-      const result = await genApis()
+      const result = await genEndpoints()
       expect(result.content).toMatchFileSnapshot('riot-client.ts')
       expect(result.dtos).toMatchFileSnapshot('riot-client-dtos.ts')
     },

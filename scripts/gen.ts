@@ -3,12 +3,13 @@ import { join } from 'path'
 
 import prettier from 'prettier'
 
-import { genApis } from './riot'
+import { genEndpoints } from './riot'
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const prettierConfig = require('../.prettierrc.js')
 
 export async function main() {
-  const result = await genApis()
+  const result = await genEndpoints()
 
   writeFileSync(
     join(__dirname, '../src/riot/apis/dtos.ts'),

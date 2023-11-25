@@ -12,7 +12,7 @@ const dtoMap = {}
 
 // selectors
 const s = {
-  API_NAMEs: 'ul.app-nav-bar a', // ACCOUNT-V1
+  PAGE_NAMEs: 'ul.app-nav-bar a', // ACCOUNT-V1
   ENDPOINTs: '.operation', // GET /lol/account/v1/accounts/{puuid}
   ENDPOINT_PATH: '.path', // /lol/account/v1/accounts/{puuid}
   ENDPOINT_METHOD: '.http_method', // GET
@@ -24,7 +24,7 @@ const s = {
   DTO_COMMENT: '', // - represents a summoner (text node, so not selectable)
 }
 
-export async function fetchApiNames() {
+export async function fetchPageNames() {
   const { data } = await axios.get(BASE_URL + '/apis')
   console.time('parse html')
   const jsdom = new JSDOM(data)
@@ -32,13 +32,13 @@ export async function fetchApiNames() {
   console.timeEnd('parse html')
 
   console.time('parse api names')
-  const apiNames = $$(document, s.API_NAMEs)
+  const pageNames = $$(document, s.PAGE_NAMEs)
     .map((a) => a.getAttribute('api-name'))
     .filter(isString)
     .filter((n) => !ignoredApiPrefixes.some((p) => n.startsWith(p)))
   console.timeEnd('parse api names')
 
-  return apiNames
+  return pageNames
 }
 
 function genEndpoint(el: Element) {
@@ -62,8 +62,8 @@ function genEndpoint(el: Element) {
   ].join('\n')
 }
 
-export async function genEndpoints(apiName: string) {
-  const { data } = await axios.get(`${BASE_URL}/api-details/${apiName}`)
+export async function genEndpointsInPage(page: string) {
+  const { data } = await axios.get(BASE_URL + `/api-details/${page}`)
   console.time('parse html')
   const jsdom = new JSDOM(data.html)
   const document = jsdom.window.document
@@ -75,7 +75,7 @@ export async function genEndpoints(apiName: string) {
     .join('\n')
 
   const content = [
-    `// #region ${apiName.toUpperCase()}`,
+    `// #region ${page.toUpperCase()}`,
     endpoints,
     `// #endregion`,
   ].join('\n')
@@ -84,14 +84,14 @@ export async function genEndpoints(apiName: string) {
   return content
 }
 
-export async function genApis() {
-  const apiNames = await fetchApiNames()
-  console.log('apiNames', apiNames)
+export async function genEndpoints() {
+  const pageNames = await fetchPageNames()
+  console.log('pageNames', pageNames)
 
   let content = ''
-  for (const apiName of apiNames) {
-    console.log('genEndpoints', apiName)
-    const result = await genEndpoints(apiName)
+  for (const pageName of pageNames) {
+    console.log('genEndpoints', pageName)
+    const result = await genEndpointsInPage(pageName)
     content += result
   }
 
