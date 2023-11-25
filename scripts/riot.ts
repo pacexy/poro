@@ -10,25 +10,24 @@ const BASE_URL = 'https://developer.riotgames.com'
 const ignoredApiPrefixes = ['tft', 'lor', 'val', 'tournament']
 const dtoMap = {}
 
-export function fetchApiNames() {
-  return axios.get(BASE_URL + '/apis').then(({ data }) => {
-    console.time('parse html')
-    const jsdom = new JSDOM(data)
-    const document = jsdom.window.document
-    console.timeEnd('parse html')
+export async function fetchApiNames() {
+  const { data } = await axios.get(BASE_URL + '/apis')
+  console.time('parse html')
+  const jsdom = new JSDOM(data)
+  const document = jsdom.window.document
+  console.timeEnd('parse html')
 
-    console.time('parse api names')
-    const apiList = $$(document, 'ul.app-nav-bar a')
-    const apiNames = apiList
-      .map((a) => a.getAttribute('api-name'))
-      .filter(isString)
-      .filter((name) => {
-        return !ignoredApiPrefixes.some((prefix) => name.startsWith(prefix))
-      })
-    console.timeEnd('parse api names')
+  console.time('parse api names')
+  const apiList = $$(document, 'ul.app-nav-bar a')
+  const apiNames = apiList
+    .map((a) => a.getAttribute('api-name'))
+    .filter(isString)
+    .filter((name) => {
+      return !ignoredApiPrefixes.some((prefix) => name.startsWith(prefix))
+    })
+  console.timeEnd('parse api names')
 
-    return apiNames
-  })
+  return apiNames
 }
 
 function genEndpoint(el: Element) {
@@ -54,27 +53,26 @@ function genEndpoint(el: Element) {
   ].join('\n')
 }
 
-export function genEndpoints(apiName: string) {
-  return axios.get(`${BASE_URL}/api-details/${apiName}`).then(({ data }) => {
-    console.time('parse html')
-    const jsdom = new JSDOM(data.html)
-    const document = jsdom.window.document
-    console.timeEnd('parse html')
+export async function genEndpoints(apiName: string) {
+  const { data } = await axios.get(`${BASE_URL}/api-details/${apiName}`)
+  console.time('parse html')
+  const jsdom = new JSDOM(data.html)
+  const document = jsdom.window.document
+  console.timeEnd('parse html')
 
-    console.time('parse endpoints')
-    const endpoints = $$(document, '.operation')
-      .map((el) => genEndpoint(el))
-      .join('\n')
+  console.time('parse endpoints')
+  const endpoints = $$(document, '.operation')
+    .map((el) => genEndpoint(el))
+    .join('\n')
 
-    const content = [
-      `// #region ${apiName.toUpperCase()}`,
-      endpoints,
-      `// #endregion`,
-    ].join('\n')
-    console.timeEnd('parse endpoints')
+  const content = [
+    `// #region ${apiName.toUpperCase()}`,
+    endpoints,
+    `// #endregion`,
+  ].join('\n')
+  console.timeEnd('parse endpoints')
 
-    return content
-  })
+  return content
 }
 
 export async function genApis() {
