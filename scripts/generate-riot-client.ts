@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import * as cheerio from 'cheerio'
 import { isString } from 'lodash'
 import { RiotClient } from 'src'
@@ -11,8 +12,11 @@ const ignoredApiPrefixes = ['tft', 'lor', 'val']
 
 export function fetchApiNames() {
   return axios.get(BASE_URL + '/apis').then(({ data }) => {
+    console.time('parse html')
     const $ = cheerio.load(data)
+    console.timeEnd('parse html')
 
+    console.time('parse api names')
     const apiList = $('ul.app-nav-bar a').toArray()
     const apiNames = apiList
       .map((a) => {
@@ -21,6 +25,7 @@ export function fetchApiNames() {
         }
       })
       .filter(isString)
+    console.timeEnd('parse api names')
 
     return apiNames
   })
@@ -28,10 +33,12 @@ export function fetchApiNames() {
 
 export function genEndpoints(apiName: string) {
   return axios.get(`${BASE_URL}/api-details/${apiName}`).then(({ data }) => {
+    console.time('parse html')
     const $ = cheerio.load(data.html)
+    console.timeEnd('parse html')
 
+    console.time('parse endpoints')
     const dtoMap = {}
-
     const operationNodes = $('.operation').toArray()
     const endpoints = operationNodes
       .map((node) => {
@@ -68,6 +75,7 @@ export function genEndpoints(apiName: string) {
       ${Object.values(dtoMap).join('\n\n')}
     // #endregion
     `
+    console.timeEnd('parse endpoints')
 
     return { content, dtos }
   })
