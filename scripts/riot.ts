@@ -17,7 +17,7 @@ export function fetchApiNames() {
     console.timeEnd('parse html')
 
     console.time('parse api names')
-    const apiList = Array.from(document.querySelectorAll('ul.app-nav-bar a'))
+    const apiList = $$(document, 'ul.app-nav-bar a')
     const apiNames = apiList
       .map((a) => a.getAttribute('api-name'))
       .filter(isString)
@@ -40,21 +40,17 @@ export function genEndpoints(apiName: string) {
     console.time('parse endpoints')
     const dtoMap = {}
 
-    const endpoints = Array.from(document.querySelectorAll('.operation'))
+    const endpoints = $$(document, '.operation')
       .map((node) => {
-        const path = node.querySelector('.path')?.textContent?.trim()
-        const method = node
-          .querySelector('.http_method')
-          ?.textContent?.trim()
-          .toLowerCase()
-        const desc = node.querySelector('.options')?.textContent?.trim()
+        const path = text($(node, '.path'))
+        const method = text($(node, '.http_method'))?.toLowerCase()
+        const desc = text($(node, '.options'))
 
-        const [returnTypeNode, ...dtoNodes] = Array.from(
-          node.querySelectorAll('.response_body'),
+        const [returnTypeNode, ...dtoNodes] = $$(node, '.response_body')
+        const returnType = text(returnTypeNode)?.replace(
+          /Return value: (\w+)/,
+          '$1',
         )
-        const returnType = returnTypeNode?.textContent
-          ?.trim()
-          .replace(/Return value: (\w+)/, '$1')
 
         dtoNodes.forEach((dtoNode) => {
           Object.assign(dtoMap, dtoToType(dtoNode))
@@ -113,6 +109,18 @@ function removeRedundantSpace(str?: string | null) {
   return str.trim().split(' ').filter(Boolean).join(' ')
 }
 
+function text(el?: Element | null) {
+  return removeRedundantSpace(el?.textContent)
+}
+
+function $(el: Element | Document, selector: string) {
+  return el.querySelector(selector)
+}
+
+function $$(el: Element | Document, selector: string) {
+  return Array.from(el.querySelectorAll(selector))
+}
+
 function transformType(type: string) {
   let transformed = type
   let previous: string
@@ -135,23 +143,15 @@ function transformType(type: string) {
   return transformed
 }
 
-function dtoToType(element: Element) {
+function dtoToType(el: Element) {
   try {
-    const typeName = element.querySelector('h5')?.textContent
+    const typeName = text($(el, 'h5'))
     if (!typeName) return
 
-    const propertyNodes = Array.from(
-      element.querySelectorAll('table > tbody > tr'),
-    )
-    const content = propertyNodes
-      .map((propertyNode) => {
-        const children = Array.from(propertyNode.children)
-        return children.map((child) => removeRedundantSpace(child.textContent))
-      })
-      .map(([name, type, comment]) => {
-        const property = `${name}: ${transformType(type)}`
-        return withComment(property, comment)
-      })
+    const propNodes = $$(el, 'table > tbody > tr')
+    const content = propNodes
+      .map((propNode) => Array.from(propNode.children).map(text))
+      .map(([n, t, c]) => withComment(`${n}: ${transformType(t)}`, c))
       .join('\n')
 
     const type = [
@@ -160,9 +160,7 @@ function dtoToType(element: Element) {
       `}`,
     ].join('\n')
 
-    const comment = removeRedundantSpace(
-      element.querySelector('h5')?.nextElementSibling?.textContent,
-    )
+    const comment = text($(el, 'h5')?.nextElementSibling)
 
     return {
       [typeName]: withComment(type, comment),
