@@ -10,6 +10,20 @@ const BASE_URL = 'https://developer.riotgames.com'
 const ignoredApiPrefixes = ['tft', 'lor', 'val', 'tournament']
 const dtoMap = {}
 
+// selectors
+const s = {
+  API_NAMEs: 'ul.app-nav-bar a', // ACCOUNT-V1
+  ENDPOINTs: '.operation', // GET /lol/account/v1/accounts/{puuid}
+  ENDPOINT_PATH: '.path', // /lol/account/v1/accounts/{puuid}
+  ENDPOINT_METHOD: '.http_method', // GET
+  ENDPOINT_DESC: '.options', // Get account by puuid
+  ENDPOINT_RETURN: '.response_body:first-of-type', // Return value: AccountDTO
+  ENDPOINT_DTOs: '.response_body:not(first-of-type)', // AccountDTO <table>, ...other DTOs
+  DTO_NAME: 'h5', // AccountDTO
+  DTO_PROPs: 'table > tbody > tr', // puuid string PUUID
+  DTO_COMMENT: '', // - represents a summoner (text node, so not selectable)
+}
+
 export async function fetchApiNames() {
   const { data } = await axios.get(BASE_URL + '/apis')
   console.time('parse html')
@@ -18,7 +32,7 @@ export async function fetchApiNames() {
   console.timeEnd('parse html')
 
   console.time('parse api names')
-  const apiNames = $$(document, 'ul.app-nav-bar a')
+  const apiNames = $$(document, s.API_NAMEs)
     .map((a) => a.getAttribute('api-name'))
     .filter(isString)
     .filter((n) => !ignoredApiPrefixes.some((p) => n.startsWith(p)))
@@ -28,13 +42,14 @@ export async function fetchApiNames() {
 }
 
 function genEndpoint(el: Element) {
-  const path = text($(el, '.path'))
-  const method = text($(el, '.http_method'))?.toLowerCase()
-  const desc = text($(el, '.options'))
-
-  const [returnTypeEl, ...dtoEls] = $$(el, '.response_body')
-  const returnType = text(returnTypeEl)?.replace(/Return value: (\w+)/, '$1')
-  dtoEls.forEach((el) => Object.assign(dtoMap, dtoToType(el)))
+  const path = text($(el, s.ENDPOINT_PATH))
+  const method = text($(el, s.ENDPOINT_METHOD))?.toLowerCase()
+  const desc = text($(el, s.ENDPOINT_DESC))
+  const returnType = text($(el, s.ENDPOINT_RETURN))?.replace(
+    /Return value: (\w+)/,
+    '$1',
+  )
+  $$(el, s.ENDPOINT_DTOs).forEach((el) => Object.assign(dtoMap, dtoToType(el)))
 
   const generic = returnType ? `<${transformType(returnType)}>` : ''
   return [
@@ -55,7 +70,7 @@ export async function genEndpoints(apiName: string) {
   console.timeEnd('parse html')
 
   console.time('parse endpoints')
-  const endpoints = $$(document, '.operation')
+  const endpoints = $$(document, s.ENDPOINTs)
     .map((el) => genEndpoint(el))
     .join('\n')
 
@@ -106,28 +121,22 @@ function transformType(type: string) {
 }
 
 function dtoToType(el: Element) {
-  try {
-    const typeName = text($(el, 'h5'))
-    if (!typeName) return
+  const name = text($(el, s.DTO_NAME))
+  if (!name) return
 
-    const content = $$(el, 'table > tbody > tr')
-      .map((propEl) => Array.from(propEl.children).map(text))
-      .map(([n, t, c]) => withComment(`${n}: ${transformType(t)}`, c))
-      .join('\n')
+  const comment = text($(el, s.DTO_NAME)?.nextSibling)
+  const props = $$(el, s.DTO_PROPs)
+    .map((propEl) => Array.from(propEl.children).map(text))
+    .map(([n, t, c]) => withComment(`${n}: ${transformType(t)}`, c))
+    .join('\n')
+  const type = [
+    `export interface ${name} {`, //
+    props,
+    `}`,
+  ].join('\n')
 
-    const type = [
-      `export interface ${typeName} {`, //
-      content,
-      `}`,
-    ].join('\n')
-
-    const comment = text($(el, 'h5')?.nextElementSibling)
-
-    return {
-      [typeName]: withComment(type, comment),
-    }
-  } catch (err) {
-    console.error(err)
+  return {
+    [name]: withComment(type, comment),
   }
 }
 
@@ -137,8 +146,8 @@ function removeRedundantSpace(str?: string | null) {
   return str.trim().split(' ').filter(Boolean).join(' ')
 }
 
-function text(el?: Element | null) {
-  return removeRedundantSpace(el?.textContent)
+function text(node?: Node | null) {
+  return removeRedundantSpace(node?.textContent)
 }
 
 function $(el: Element | Document, selector: string) {
