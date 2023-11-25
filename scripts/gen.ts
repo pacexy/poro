@@ -30,10 +30,15 @@ export async function main() {
 
   writeFileSync(
     join(__dirname, `../schemas/riot/dtos_${Date.now()}.ts`),
-    prettier.format(result.dtos, {
-      ...prettierConfig,
-      parser: 'typescript',
-    }),
+    prettier.format(
+      [`import { Queue, Tier, Division } from './enums'`, result.dtos].join(
+        '\n\n',
+      ),
+      {
+        ...prettierConfig,
+        parser: 'typescript',
+      },
+    ),
   )
 }
 

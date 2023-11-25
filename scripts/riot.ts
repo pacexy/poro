@@ -79,7 +79,7 @@ async function genEndpointsInPage(document: Document, page: string) {
     ].join('\n'),
     dtos: [
       `// #region ${page.toUpperCase()}`, //
-      Object.values(dtoMap).join('\n'),
+      Object.values(dtoMap).join('\n\n'),
       `// #endregion`,
     ].join('\n'),
   }
@@ -101,7 +101,15 @@ export async function genEndpoints() {
   }
 }
 
-function transformType(type: string) {
+function transformType(type: string, name = '') {
+  const specialTypeMap: Record<string, string> = {
+    queue: 'Queue',
+    queueType: 'Queue',
+    tier: 'Tier',
+    rank: 'Division',
+  }
+  if (name in specialTypeMap) return specialTypeMap[name]
+
   let transformed = type
   let previous: string
 
@@ -127,10 +135,10 @@ function dtoToType(el: Element) {
   const name = text($(el, s.DTO_NAME))
   if (!name) return
 
-  const comment = text($(el, s.DTO_NAME)?.nextSibling)
+  const comment = text($(el, s.DTO_NAME)?.nextSibling).replace(/^- /, '')
   const props = $$(el, s.DTO_PROPs)
     .map((propEl) => Array.from(propEl.children).map(text))
-    .map(([n, t, c]) => withComment(`${n}: ${transformType(t)}`, c))
+    .map(([n, t, c]) => withComment(`${n}: ${transformType(t, n)}`, c))
     .join('\n')
   const type = [
     `export interface ${name} {`, //
