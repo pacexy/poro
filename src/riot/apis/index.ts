@@ -7,6 +7,8 @@ import { GeneralRegion, LimiterConfig, RiotRateLimiter } from './rate-limiter'
 
 type Endpoints = ReturnType<typeof createEndpoints>
 
+// Input: '/lol/league/v4/entries/{queue}/{tier}/{division}'
+// Output: 'queue' | 'tier' | 'division'
 type PathParametersUnion<P> =
   P extends `${string}{${infer Parameter}}${infer Tail}`
     ? Parameter | PathParametersUnion<Tail>
@@ -18,6 +20,8 @@ type OriginPrefix<P> = P extends `${RegionScopedPathPrefix}${string}`
   ? [prefix?: Region]
   : [platform?: Platform]
 
+// Input: '/lol/league/v4/entries/{queue}/{tier}/{division}'
+// Output: [queue: string, tier: string, division: string, platform?: Platform]
 type UrlParameters<P> = PathParametersUnion<P> extends never
   ? [...OriginPrefix<P>]
   : [
@@ -26,6 +30,11 @@ type UrlParameters<P> = PathParametersUnion<P> extends never
       },
       ...OriginPrefix<P>
     ]
+
+// type-safe Object.keys
+function keys<T extends Record<string, any>>(obj: T) {
+  return Object.keys(obj) as (keyof T)[]
+}
 
 interface RiotClientConfig extends LimiterConfig {
   auth: string
@@ -84,7 +93,7 @@ export class RiotClient {
     let originPrefix = urlParameters[1]
 
     if (typeof pathParam === 'object') {
-      Object.keys(pathParam).forEach((paramName: PathParametersUnion<Path>) => {
+      keys(pathParam).forEach((paramName: PathParametersUnion<Path>) => {
         realPath = realPath.replace(
           `{${paramName}}`,
           String(pathParam[paramName]),
