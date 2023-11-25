@@ -57,14 +57,18 @@ function genEndpoint(el: Element) {
   ].join('\n')
 }
 
-export async function genEndpointsInPage(page: string) {
-  console.time(page)
+async function fetchPageDocument(page: string) {
+  console.time(`fetch ${page}`)
   const { data } = await axios.get(BASE_URL + `/api-details/${page}`)
-  const document = createDocument(data.html)
+  return console.timeEnd(`fetch ${page}`), createDocument(data.html)
+}
+
+async function genEndpointsInPage(document: Document, page: string) {
+  console.time(`gen ${page}`)
   const endpoints = $$(document, s.ENDPOINTs)
     .map((el) => genEndpoint(el))
     .join('\n')
-  console.timeEnd(page)
+  console.timeEnd(`gen ${page}`)
 
   return [
     `// #region ${page.toUpperCase()}`, //
@@ -76,10 +80,12 @@ export async function genEndpointsInPage(page: string) {
 export async function genEndpoints() {
   const pages = await fetchPageNames()
   console.log('pages', pages)
+  // fetch and parse document in parallel
+  const documents = await Promise.all(pages.map(fetchPageDocument))
   const results = []
   // execute in sequence to ensure DTOs are generated in order
-  for (const page of pages) {
-    results.push(await genEndpointsInPage(page))
+  for (const [i, page] of pages.entries()) {
+    results.push(await genEndpointsInPage(documents[i], page))
   }
   return {
     content: results.join('\n\n'),

@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest'
 
-import { fetchPageNames, genEndpointsInPage, genEndpoints } from './riot'
+import { fetchPageNames, genEndpoints } from './riot'
 
 describe('generate-riot-client', () => {
-  it('should generate API names', async () => {
+  it('should generate page names', async () => {
     expect(fetchPageNames()).resolves.toMatchInlineSnapshot(`
       [
         "account-v1",
@@ -22,39 +22,8 @@ describe('generate-riot-client', () => {
     `)
   })
 
-  it('should generate endpoints', async () => {
-    expect(await genEndpointsInPage('account-v1')).toMatchInlineSnapshot(`
-      "// #region ACCOUNT-V1
-      '/riot/account/v1/accounts/by-puuid/{puuid}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
-        /* Get account by puuid */
-        get() {
-          return limiter.execute<AccountDto>(generalRegion, realPath, path)
-        },
-      }),
-      '/riot/account/v1/accounts/by-riot-id/{gameName}/{tagLine}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
-        /* Get account by riot id */
-        get() {
-          return limiter.execute<AccountDto>(generalRegion, realPath, path)
-        },
-      }),
-      '/riot/account/v1/accounts/me': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
-        /* Get account by access token */
-        get() {
-          return limiter.execute<AccountDto>(generalRegion, realPath, path)
-        },
-      }),
-      '/riot/account/v1/active-shards/by-game/{game}/by-puuid/{puuid}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
-        /* Get active shard for a player */
-        get() {
-          return limiter.execute<ActiveShardDto>(generalRegion, realPath, path)
-        },
-      }),
-      // #endregion"
-    `)
-  })
-
   it(
-    'should run',
+    'should generate endpoints',
     async () => {
       const result = await genEndpoints()
       expect(result.content).toMatchFileSnapshot('riot-client.ts')
