@@ -18,6 +18,7 @@ const s = {
   ENDPOINT_DESC: '.options', // Get account by puuid
   ENDPOINT_RETURN: '.response_body:first-of-type', // Return value: AccountDTO
   ENDPOINT_DTOs: '.response_body:not(first-of-type)', // AccountDTO <table>, ...other DTOs
+  ENDPOINT_INPUT: 'form .api_block:nth-of-type(2) tbody > tr', // LeagueEntryInput
   DTO_NAME: 'h5', // AccountDTO
   DTO_PROPs: 'table > tbody > tr', // puuid string PUUID
   DTO_COMMENT: '', // - represents a summoner (text node, so not selectable)
@@ -43,14 +44,17 @@ function genEndpoint(el: Element, dtoMap: Record<string, string>) {
     /Return value: (\w+)/,
     '$1',
   )
-  $$(el, s.ENDPOINT_DTOs).forEach((el) => Object.assign(dtoMap, dtoToType(el)))
+  $$(el, s.ENDPOINT_DTOs).forEach((el) => Object.assign(dtoMap, parseDto(el)))
+  const hasInput = $(el, s.ENDPOINT_INPUT)
 
   const generic = returnType ? `<${transformType(returnType)}>` : ''
+  const params = hasInput ? `{query}: SomeInput` : ''
+  const lastArg = hasInput ? ', query' : ''
   return [
     `'${path}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({`,
     `  /* ${desc} */`,
-    `  ${method}() {`,
-    `    return limiter.execute${generic}(generalRegion, realPath, path)`,
+    `  ${method}(${params}) {`,
+    `    return limiter.execute${generic}(generalRegion, realPath, path${lastArg})`,
     `  },`,
     `}),`,
   ].join('\n')
@@ -131,7 +135,7 @@ function transformType(type: string, name = '') {
   return transformed
 }
 
-function dtoToType(el: Element) {
+function parseDto(el: Element) {
   const name = text($(el, s.DTO_NAME))
   if (!name) return
 
