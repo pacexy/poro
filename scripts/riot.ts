@@ -1,7 +1,16 @@
 /* eslint-disable no-console */
-import { JSDOM } from 'jsdom'
 import { isString } from 'lodash'
 import { RiotClient } from 'src/index'
+
+import {
+  createDocument,
+  $,
+  $$,
+  text,
+  removeRedundantSpace,
+  withComment,
+} from './utils'
+
 const riot = new RiotClient({
   auth: '',
 })
@@ -153,35 +162,4 @@ function parseDto(el: Element) {
   return {
     [name]: withComment(type, comment),
   }
-}
-
-// utils
-function createDocument(html: string) {
-  const jsdom = new JSDOM(html)
-  return jsdom.window.document
-}
-
-function removeRedundantSpace(str?: string | null) {
-  if (!str) return ''
-  return str.trim().split(' ').filter(Boolean).join(' ')
-}
-
-function text(node?: Node | null) {
-  return removeRedundantSpace(node?.textContent)
-}
-
-function $(el: Element | Document, selector: string) {
-  return el.querySelector(selector)
-}
-
-function $$(el: Element | Document, selector: string) {
-  return Array.from(el.querySelectorAll(selector))
-}
-
-function withComment(content: string, comment?: string) {
-  if (!comment) return content
-  return [
-    `/* ${comment} */`, //
-    content,
-  ].join('\n')
 }
