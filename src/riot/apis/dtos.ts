@@ -190,10 +190,10 @@ export interface ApexPlayerInfoDto {
 export interface Level {}
 
 export interface PlayerInfoDto {
-  challenges: ChallengeInfo[]
-  preferences: PlayerClientPreferences
-  totalPoints: ChallengePonumbers
-  categoryPoints: Record<string, ChallengePonumbers>
+  challenges: any[]
+  preferences: any
+  totalPoints: any
+  categoryPoints: Record<string, any>
 }
 // #endregion
 

@@ -17,6 +17,8 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': 'error',
     '@typescript-eslint/no-non-null-assertion': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
+    '@typescript-eslint/no-empty-interface': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
     'node/no-missing-import': 'off',
     'node/no-unsupported-features/es-syntax': 'off',
     'node/no-missing-require': 'off',
