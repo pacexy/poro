@@ -103,24 +103,6 @@ export async function genApis() {
   return { content, dtos }
 }
 
-// utils
-function removeRedundantSpace(str?: string | null) {
-  if (!str) return ''
-  return str.trim().split(' ').filter(Boolean).join(' ')
-}
-
-function text(el?: Element | null) {
-  return removeRedundantSpace(el?.textContent)
-}
-
-function $(el: Element | Document, selector: string) {
-  return el.querySelector(selector)
-}
-
-function $$(el: Element | Document, selector: string) {
-  return Array.from(el.querySelectorAll(selector))
-}
-
 function transformType(type: string) {
   let transformed = type
   let previous: string
@@ -168,6 +150,24 @@ function dtoToType(el: Element) {
   } catch (err) {
     console.error(err)
   }
+}
+
+// utils
+function removeRedundantSpace(str?: string | null) {
+  if (!str) return ''
+  return str.trim().split(' ').filter(Boolean).join(' ')
+}
+
+function text(el?: Element | null) {
+  return removeRedundantSpace(el?.textContent)
+}
+
+function $(el: Element | Document, selector: string) {
+  return el.querySelector(selector)
+}
+
+function $$(el: Element | Document, selector: string) {
+  return Array.from(el.querySelectorAll(selector))
 }
 
 function withComment(content: string, comment?: string) {
