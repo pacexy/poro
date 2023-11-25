@@ -44,26 +44,17 @@ describe('generate-riot-client', () => {
         '/riot/account/v1/accounts/by-puuid/{puuid}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
       /** Get account by puuid */
       get() {
-        return limiter.execute(generalRegion, realPath, path)
-        },
-      }),'/riot/account/v1/accounts/by-riot-id/{gameName}/{tagLine}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
-      /** Get account by riot id */
-      get() {
-        return limiter.execute(generalRegion, realPath, path)
-        },
-      }),'/riot/account/v1/accounts/me': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
-      /** Get account by access token */
-      get() {
-        return limiter.execute(generalRegion, realPath, path)
-        },
-      }),'/riot/account/v1/active-shards/by-game/{game}/by-puuid/{puuid}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
-      /** Get active shard for a player */
-      get() {
-        return limiter.execute(generalRegion, realPath, path)
+        return limiter.execute<AccountDto>(generalRegion, realPath, path)
         },
       }),
       ",
-        "dtos": {},
+        "dtos": "export type AccountDto  = {
+        puuid: string
+      /** This field may be excluded from the response if the account doesn't have a gameName. */
+      gameName: string
+      /** This field may be excluded from the response if the account doesn't have a tagLine. */
+      tagLine: string
+      }",
       }
     `)
   })

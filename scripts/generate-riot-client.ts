@@ -30,43 +30,36 @@ export function genEndpoints(apiName: string) {
   return axios.get(`${BASE_URL}/api-details/${apiName}`).then(({ data }) => {
     const $ = cheerio.load(data.html)
 
-    let dtos = {}
+    const dtos = {}
 
-    const operationNodes = [...$('.operation')]
-    const endpoints = operationNodes
+    const operationNodes = $('.operation').toArray()
+    const endpoints = [operationNodes[0]]
       .map((node) => {
-        const path = $('.path', node).text().trim()
-        const method = $('.http_method', node).text().trim().toLowerCase()
-        const desc = $('.options', node).text().trim()
+        const path = $(node).find('.path').text().trim()
+        const method = $(node).find('.http_method').text().trim().toLowerCase()
+        const desc = $(node).find('.options').text().trim()
 
-        const [returnTypeNode, ...dtoNodes] = [...$('.response_body', node)]
-        const returnType = returnTypeNode.data
-          ?.trim()
+        const [returnTypeNode, ...dtoNodes] = $(node)
+          .find('.response_body')
+          .toArray()
+        const returnType = $(returnTypeNode)
+          .text()
+          .trim()
           .replace(/Return value: (\w+)/, '$1')
 
         dtoNodes.forEach((dtoNode) => {
-          dtos = {
-            ...dtos,
-            ...dtoToType(dtoNode),
-          }
+          Object.assign(dtos, dtoToType($, dtoNode))
         })
 
-        return `'${path}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
-/** ${desc} */
-${method}() {
-  return limiter.execute${
-    returnType ? `<${transformType(returnType)}>` : ''
-  }(generalRegion, realPath, path)
-  },
-}),`
+        return `'${path}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({\n/** ${desc} */\n${method}() {\n  return limiter.execute${
+          returnType ? `<${transformType(returnType)}>` : ''
+        }(generalRegion, realPath, path)\n  },\n}),`
       })
       .join('')
 
-    const content = `// ${apiName.toUpperCase()}
-  ${endpoints}
-`
+    const content = `// ${apiName.toUpperCase()}\n  ${endpoints}\n`
 
-    return { content, dtos }
+    return { content, dtos: Object.values(dtos).join('\n\n') }
   })
 }
 
@@ -98,39 +91,34 @@ function transformType(type: string) {
   )
 }
 
-function dtoToType(element: cheerio.Element) {
+function dtoToType(
+  $: cheerio.Root,
+  element: cheerio.Element,
+): Record<string, string> | void {
   try {
-    const typeName = element.firstElementChild.textContent
-    const typeDesc = removeRedundantSpace(
-      element.firstElementChild.nextSibling.textContent,
-    )
+    const typeName = $(element).find('h5').text()
+    if (!typeName) return
 
-    const propertyNodes = Array.from($('table > tbody', element).children())
+    const typeDesc = removeRedundantSpace($(element).find('h5').next().text())
+
+    const propertyNodes = $(element).find('table > tbody').children().toArray()
     const content = propertyNodes
-      .map((propertyNode) =>
-        Array.from(propertyNode.children).map((child) =>
-          removeRedundantSpace(child.textContent),
-        ),
-      )
+      .map((propertyNode) => {
+        const children = $(propertyNode).children().toArray()
+        return children.map((child) => removeRedundantSpace($(child).text()))
+      })
       .map(([name, type, desc]) => {
         const property = `${name}: ${transformType(type)}`
-        return desc
-          ? `/** ${desc} */
-${property}`
-          : property
+        return desc ? `/** ${desc} */\n${property}` : property
       })
       .join('\n')
 
-    const def = `export type ${typeName} = {
-  ${content}
-}`
+    const def = `export type ${typeName} = {\n  ${content}\n}`
     return {
-      [typeName]: typeDesc
-        ? `/** ${typeDesc} */
-${def}`
-        : def,
+      [typeName]: typeDesc ? `/** ${typeDesc} */\n${def}` : def,
     }
   } catch (err) {
-    //
+    // eslint-disable-next-line no-console
+    console.error(err)
   }
 }
