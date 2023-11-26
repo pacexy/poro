@@ -1,4 +1,11 @@
+import { writeFileSync } from 'fs'
+import { join } from 'path'
+
 import { JSDOM } from 'jsdom'
+import prettier from 'prettier'
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const prettierConfig = require('../.prettierrc.js')
 
 export function createDocument(html: string) {
   const jsdom = new JSDOM(html)
@@ -28,4 +35,14 @@ export function withComment(content: string, comment?: string) {
     `/* ${comment} */`, //
     content,
   ].join('\n')
+}
+
+export function writeSchema(pathPrefix: string, content: string) {
+  return writeFileSync(
+    join(__dirname, '../schemas', pathPrefix + `_${Date.now()}.ts`),
+    prettier.format(content, {
+      ...prettierConfig,
+      parser: 'typescript',
+    }),
+  )
 }

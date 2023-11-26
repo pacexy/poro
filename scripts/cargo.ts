@@ -1,12 +1,10 @@
 /* eslint-disable no-console */
-import { writeFileSync } from 'fs'
-import path from 'path'
 
 import { isString } from 'lodash'
 
 import { CargoClient } from '../src/leaguepedia/index'
 
-import { text, $, createDocument, $$ } from './utils'
+import { text, $, createDocument, $$, writeSchema } from './utils'
 
 const cargo = new CargoClient()
 const axios = cargo.axiosInstance
@@ -30,13 +28,6 @@ interface Data {
 }
 
 let string = ''
-
-function writeToFile() {
-  writeFileSync(
-    path.join(__dirname, `../schemas/cargo_schema_${Date.now()}.ts`),
-    string,
-  )
-}
 
 async function parse(name: string) {
   const { data } = await axios.get(BASE_URL + '/' + name)
@@ -124,7 +115,7 @@ async function generate() {
   }
   post()
 
-  writeToFile()
+  writeSchema('./cargo/schema', string)
 }
 
 generate()
