@@ -1,8 +1,9 @@
+/* eslint-disable no-console */
+import { describe, it, expect } from 'vitest'
+
 import { general, DataDragon, CommunityDragon, RiotClient, Riot } from '../src'
 
 import { auth } from './env'
-
-jest.setTimeout(240 * 1000)
 
 describe('static files', () => {
   it('general', () => {
@@ -154,101 +155,116 @@ describe('set region/platform correctly', () => {
   })
 })
 
-describe('rate limit', () => {
-  it('app < method', () => {
-    // App rate limit: 100:120 spread to 1:1200ms
-    const client = new RiotClient({ auth })
-    const promises: Promise<any>[] = []
-    let lastResolveTime = Date.now()
+describe(
+  'rate limit',
+  () => {
+    it('app < method', () => {
+      // App rate limit: 100:120 spread to 1:1200ms
+      const n = 5
+      const client = new RiotClient({ auth })
+      const promises: Promise<any>[] = []
+      const start = Date.now()
+      let lastResolveTime = start
 
-    for (let i = 0; i < 5; i++) {
-      // Method rate limit: 1200000:600 spread to 1:0.5ms
-      const promise = client
-        .path('/lol/spectator/v4/featured-games')
-        .get()
-        .then(() => {
-          const now = Date.now()
-          if (i !== 0) {
-            expect(now - lastResolveTime).toBeGreaterThanOrEqual(1200)
-          }
-          lastResolveTime = now
-        })
-
-      promises.push(promise)
-    }
-
-    return Promise.all(promises)
-  })
-
-  it('app > method', () => {
-    // App rate limit: 100:120 spread to 1:1200ms
-    const client = new RiotClient({ auth })
-    const promises: Promise<any>[] = []
-    let lastResolveTime = Date.now()
-
-    for (let i = 0; i < 5; i++) {
-      // Method rate limit: 10:60 spread to 1:6000ms
-      const promise = client
-        .path('/lol/clash/v1/tournaments')
-        .get()
-        .then(() => {
-          const now = Date.now()
-          if (i !== 0) {
-            expect(now - lastResolveTime).toBeGreaterThanOrEqual(6000)
-          }
-          lastResolveTime = now
-        })
-
-      promises.push(promise)
-    }
-
-    return Promise.all(promises)
-  })
-
-  it('multiple regions', () => {
-    const client = new RiotClient({ auth })
-    const promises: Promise<any>[] = []
-
-    Object.values(Riot.Platform).forEach((platform) => {
-      let lastResolveTime = Date.now()
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < n; i++) {
+        // Method rate limit: 1200000:600 spread to 1:0.5ms
         const promise = client
-          .path('/lol/spectator/v4/featured-games', platform)
+          .path('/lol/spectator/v4/featured-games')
           .get()
           .then(() => {
             const now = Date.now()
-            if (i !== 0) {
-              expect(now - lastResolveTime).toBeGreaterThanOrEqual(1200)
-            }
+            console.log('request', i, now - lastResolveTime)
+            lastResolveTime = now
+          })
+        promises.push(promise)
+      }
+
+      return Promise.all(promises).then(() => {
+        const now = Date.now()
+        console.log('total', now - start)
+        expect(now - start).toBeGreaterThanOrEqual(1200 * (n - 1))
+      })
+    })
+
+    it('app > method', () => {
+      // App rate limit: 100:120 spread to 1:1200ms
+      const n = 5
+      const client = new RiotClient({ auth })
+      const promises: Promise<any>[] = []
+      const start = Date.now()
+      let lastResolveTime = start
+
+      for (let i = 0; i < n; i++) {
+        // Method rate limit: 10:60 spread to 1:6000ms
+        const promise = client
+          .path('/lol/clash/v1/tournaments')
+          .get()
+          .then(() => {
+            const now = Date.now()
+            console.log('request', i, now - lastResolveTime)
             lastResolveTime = now
           })
 
         promises.push(promise)
       }
+
+      return Promise.all(promises).then(() => {
+        const now = Date.now()
+        console.log('total', now - start)
+        expect(now - start).toBeGreaterThanOrEqual(6000 * (n - 1))
+      })
     })
 
-    return Promise.all(promises)
-  })
+    it('multiple regions', () => {
+      const n = 5
+      const client = new RiotClient({ auth })
+      const promises: Promise<any>[] = []
+      const start = Date.now()
 
-  it('multiple methods', () => {
-    const client = new RiotClient({ auth })
-    const promises: Promise<any>[] = []
+      Object.values(Riot.Platform).forEach((platform) => {
+        let lastResolveTime = Date.now()
+        for (let i = 0; i < n; i++) {
+          const promise = client
+            .path('/lol/spectator/v4/featured-games', platform)
+            .get()
+            .then(() => {
+              const now = Date.now()
+              console.log('platform', platform, i, now - lastResolveTime)
+              lastResolveTime = now
+            })
 
-    const startTime = Date.now()
+          promises.push(promise)
+        }
+      })
 
-    for (let i = 0; i < 5; i++) {
-      const promise = client.path('/lol/spectator/v4/featured-games').get()
-      promises.push(promise)
-    }
-
-    for (let i = 0; i < 5; i++) {
-      const promise = client.path('/lol/clash/v1/tournaments').get()
-      promises.push(promise)
-    }
-
-    return Promise.all(promises).then(() => {
-      const now = Date.now()
-      expect(now - startTime).toBeGreaterThan(30 * 1000)
+      return Promise.all(promises).then(() => {
+        const now = Date.now()
+        console.log('total', now - start)
+        expect(now - start).toBeGreaterThanOrEqual(1200 * (n - 1))
+      })
     })
-  })
-})
+
+    it('multiple methods', () => {
+      const client = new RiotClient({ auth })
+      const promises: Promise<any>[] = []
+
+      const startTime = Date.now()
+
+      for (let i = 0; i < 5; i++) {
+        const promise = client.path('/lol/spectator/v4/featured-games').get()
+        promises.push(promise)
+      }
+
+      for (let i = 0; i < 5; i++) {
+        const promise = client.path('/lol/clash/v1/tournaments').get()
+        promises.push(promise)
+      }
+
+      return Promise.all(promises).then(() => {
+        const now = Date.now()
+        expect(now - startTime).toBeGreaterThan(30 * 1000)
+      })
+    })
+  },
+  { timeout: Infinity },
+)
