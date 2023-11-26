@@ -12,8 +12,8 @@
   "sideEffects": false,
   "scripts": {
     "format": "prettier --write src/**/*.ts",
-    "gen:cargo": "tsx ./scripts/cargo.ts",
-    "gen": "tsx ./scripts/gen.ts",
+    "gen:cargo": "tsx ./scripts/gen.ts --mode=1",
+    "gen:riot": "tsx ./scripts/gen.ts --mode=2",
     "clean": "rimraf ./dist",
     "build": "pnpm clean && tsc -p tsconfig.esm.json && tsc",
     "test:scripts": "vitest --update scripts",

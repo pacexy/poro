@@ -4,7 +4,7 @@ import { isString } from 'lodash'
 
 import { CargoClient } from '../src/leaguepedia/index'
 
-import { text, $, createDocument, $$, writeSchema } from './utils'
+import { text, $, createDocument, $$ } from './utils'
 
 const cargo = new CargoClient()
 const axios = cargo.axiosInstance
@@ -103,7 +103,7 @@ export async function fetchTables() {
   return $$(document, s.TABLE_NAMEs).map(text).filter(isString)
 }
 
-async function generate() {
+export async function genSchema() {
   const tables = await fetchTables()
   console.log('tables', tables)
 
@@ -115,7 +115,5 @@ async function generate() {
   }
   post()
 
-  writeSchema('./cargo/schema', string)
+  return string
 }
-
-generate()
