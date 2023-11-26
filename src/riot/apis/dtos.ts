@@ -1,5 +1,13 @@
 import { Queue, Tier, Division } from './enums'
 
+// not mentioned in the docs
+export type NotMentioned = any
+export type ChallengeInfo = NotMentioned
+export type ChallengePonumbers = NotMentioned
+export type PlayerClientPreferences = NotMentioned
+export type ActiveShardDto = NotMentioned
+export type MatchTimelineDto = NotMentioned
+
 // #region ACCOUNT-V1
 export interface AccountDto {
   puuid: string
@@ -13,6 +21,8 @@ export interface AccountDto {
 // #region CHAMPION-MASTERY-V4
 /* This object contains single Champion Mastery information for player and champion combination. */
 export interface ChampionMasteryDto {
+  /* Player Universal Unique Identifier. Exact length of 78 characters. (Encrypted) */
+  puuid: string
   /* Number of points needed to achieve next level. Zero if player reached maximum champion level for this champion. */
   championPointsUntilNextLevel: number
   /* Is chest granted for this champion or not in current season. */
@@ -138,6 +148,96 @@ export interface LeagueItemDTO {
 }
 // #endregion
 
+// #region LOL-CHALLENGES-V1
+export interface ChallengeConfigInfoDto {
+  id: number
+  localizedNames: Record<string, Record<string, string>>
+  state: State
+  tracking: Tracking
+  startTimestamp: number
+  endTimestamp: number
+  leaderboard: boolean
+  thresholds: Record<string, number>
+}
+
+/* DISABLED - not visible and not calculated,
+HIDDEN - not visible, but calculated,
+ENABLED - visible and calculated,
+ARCHIVED - visible, but not calculated */
+export type State = NotMentioned
+
+/* LIFETIME - stats are incremented without reset,
+SEASON - stats are accumulated by season and reset at the beginning of new season */
+export type Tracking = NotMentioned
+
+export interface ApexPlayerInfoDto {
+  puuid: string
+  value: number
+  position: number
+}
+
+/* 0 NONE,
+1 IRON,
+2 BRONZE,
+3 SILVER,
+4 GOLD,
+5 PLATINUM,
+6 DIAMOND,
+7 MASTER,
+8 GRANDMASTER,
+9 CHALLENGER */
+export type Level = NotMentioned
+
+export interface PlayerInfoDto {
+  challenges: ChallengeInfo[]
+  preferences: PlayerClientPreferences
+  totalPoints: ChallengePonumbers
+  categoryPoints: Record<string, ChallengePonumbers>
+}
+// #endregion
+
+// #region LOL-STATUS-V3
+export interface ShardStatus {
+  locales: string[]
+  hostname: string
+  name: string
+  services: Service[]
+  slug: string
+  region_tag: string
+}
+
+export interface Service {
+  name: string
+  slug: string
+  status: string
+  incidents: Incident[]
+}
+
+export interface Incident {
+  id: number
+  active: boolean
+  created_at: string
+  updates: Message[]
+}
+
+export interface Message {
+  id: string
+  author: string
+  heading: string
+  content: string
+  severity: string
+  created_at: string
+  updated_at: string
+  translations: Translation[]
+}
+
+export interface Translation {
+  updated_at: string
+  locale: string
+  content: string
+}
+// #endregion
+
 // #region LOL-STATUS-V4
 export interface PlatformDataDto {
   id: string
@@ -228,7 +328,6 @@ export interface ParticipantDto {
   assists: number
   baronKills: number
   bountyLevel: number
-  challenges: ChallengesDTO
   champExperience: number
   champLevel: number
   /* Prior to patch 11.4, on Feb 18th, 2021, this field returned invalid championIds. We recommend determining the champion based on the championName field for matches played prior to patch 11.4. */
@@ -335,107 +434,6 @@ export interface ParticipantDto {
   wardsKilled: number
   wardsPlaced: number
   win: boolean
-}
-
-export interface ChallengesDTO {
-  '12AssistStreakCount': number
-  abilityUses: number
-  acesBefore15Minutes: number
-  alliedJungleMonsterKills: number
-  baronTakedowns: number
-  blastConeOppositeOpponentCount: number
-  bountyGold: number
-  buffsStolen: number
-  controlWardsPlaced: number
-  damagePerMinute: number
-  damageTakenOnTeamPercentage: number
-  dancedWithRiftHerald: number
-  deathsByEnemyChamps: number
-  doubleAces: number
-  dragonTakedowns: number
-  earlyLaningPhaseGoldExpAdvantage: number
-  effectiveHealAndShielding: number
-  elderDragonKillsWithOpposingSoul: number
-  elderDragonMultikills: number
-  enemyChampionImmobilizations: number
-  enemyJungleMonsterKills: number
-  epicMonsterKillsNearEnemyJungler: number
-  epicMonsterKillsWithin30SecondsOfSpawn: number
-  epicMonsterSteals: number
-  flawlessAces: number
-  fullTeamTakedown: number
-  gameLength: number
-  getTakedownsInAllLanesEarlyJungleAsLaner: number
-  goldPerMinute: number
-  hadAfkTeammate: number
-  hadOpenNexus: number
-  initialBuffCount: number
-  initialCrabCount: number
-  jungleCsBefore10Minutes: number
-  junglerKillsEarlyJungle: number
-  junglerTakedownsNearDamagedEpicMonster: number
-  kda: number
-  killParticipation: number
-  killsNearEnemyTurret: number
-  killsOnLanersEarlyJungleAsJungler: number
-  killsOnOtherLanesEarlyJungleAsLaner: number
-  killsOnRecentlyHealedByAramPack: number
-  killsUnderOwnTurret: number
-  killsWithHelpFromEpicMonster: number
-  laneMinionsFirst10Minutes: number
-  laningPhaseGoldExpAdvantage: number
-  legendaryCount: number
-  lostAnInhibitor: number
-  maxCsAdvantageOnLaneOpponent: number
-  maxKillDeficit: number
-  maxLevelLeadLaneOpponent: number
-  moreEnemyJungleThanOpponent: number
-  mostWardsDestroyedOneSweeper: number
-  multiKillOneSpell: number
-  multikills: number
-  multikillsAfterAggressiveFlash: number
-  mythicItemUsed: number
-  outerTurretExecutesBefore10Minutes: number
-  outnumberedKills: number
-  outnumberedNexusKill: number
-  perfectDragonSoulsTaken: number
-  perfectGame: number
-  poroExplosions: number
-  riftHeraldTakedowns: number
-  scuttleCrabKills: number
-  shortestTimeToAceFromFirstTakedown?: number
-  skillshotsDodged: number
-  skillshotsHit: number
-  snowballsHit: number
-  soloBaronKills: number
-  soloKills: number
-  stealthWardsPlaced: number
-  survivedSingleDigitHpCount: number
-  takedownOnFirstTurret: number
-  takedowns: number
-  takedownsAfterGainingLevelAdvantage: number
-  takedownsBeforeJungleMinionSpawn: number
-  takedownsFirst25Minutes: number
-  takedownsInAlcove: number
-  takedownsInEnemyFountain: number
-  teamBaronKills: number
-  teamDamagePercentage: number
-  teamElderDragonKills: number
-  teamRiftHeraldKills: number
-  teleportTakedowns?: number
-  turretPlatesTaken: number
-  turretTakedowns: number
-  turretsTakenWithRiftHerald: number
-  twentyMinionsIn3SecondsCount: number
-  unseenRecalls: number
-  visionScoreAdvantageLaneOpponent: number
-  visionScorePerMinute: number
-  wardTakedowns: number
-  wardTakedownsBefore20M: number
-  wardsGuarded: number
-  highestCrowdControlScore?: number
-  highestChampionDamage?: number
-  firstTurretKilledTime?: number
 }
 
 export interface PerksDto {
@@ -627,7 +625,7 @@ export interface SummonerDTO {
   accountId: string
   /* ID of the summoner icon associated with the summoner. */
   profileIconId: number
-  /* Date summoner was last modified specified as epoch milliseconds. The following events will update this timestamp: profile icon change, playing the tutorial or advanced tutorial, finishing a game, summoner name change */
+  /* Date summoner was last modified specified as epoch milliseconds. The following events will update this timestamp: summoner name change, summoner level change, or profile icon change. */
   revisionDate: number
   /* Summoner name. */
   name: string

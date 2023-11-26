@@ -1,19 +1,31 @@
 import {
   AccountDto,
+  ActiveShardDto,
+  ApexPlayerInfoDto,
+  ChallengeConfigInfoDto,
   ChampionInfo,
   ChampionMasteryDto,
   CurrentGameInfo,
   FeaturedGames,
   LeagueEntryDTO,
   LeagueListDTO,
+  Level,
   MatchDto,
+  MatchTimelineDto,
   PlatformDataDto,
   PlayerDto,
+  PlayerInfoDto,
+  ShardStatus,
   SummonerDTO,
   TeamDto,
   TournamentDto,
 } from './dtos'
-import { LeagueEntryInput, MatchIdsInput } from './inputs'
+import {
+  GetChallengeLeaderboardsInput,
+  GetTopChampionMasteriesInput,
+  LeagueEntryInput,
+  MatchIdsInput,
+} from './inputs'
 import { GeneralRegion, RiotRateLimiter } from './rate-limiter'
 
 export function createEndpoints(limiter: RiotRateLimiter) {
@@ -56,12 +68,49 @@ export function createEndpoints(limiter: RiotRateLimiter) {
     ) => ({
       /* Get active shard for a player */
       get() {
-        return limiter.execute<any>(generalRegion, realPath, path)
+        return limiter.execute<ActiveShardDto>(generalRegion, realPath, path)
       },
     }),
     // #endregion
 
     // #region CHAMPION-MASTERY-V4
+    '/lol/champion-mastery/v4/champion-masteries/by-puuid/{encryptedPUUID}': (
+      generalRegion: GeneralRegion,
+      realPath: string,
+      path: string,
+    ) => ({
+      /* Get all champion mastery entries sorted by number of champion points descending. */
+      get() {
+        return limiter.execute<ChampionMasteryDto[]>(
+          generalRegion,
+          realPath,
+          path,
+        )
+      },
+    }),
+    '/lol/champion-mastery/v4/champion-masteries/by-puuid/{encryptedPUUID}/by-champion/{championId}':
+      (generalRegion: GeneralRegion, realPath: string, path: string) => ({
+        /* Get a champion mastery by puuid and champion ID. */
+        get() {
+          return limiter.execute<ChampionMasteryDto>(
+            generalRegion,
+            realPath,
+            path,
+          )
+        },
+      }),
+    '/lol/champion-mastery/v4/champion-masteries/by-puuid/{encryptedPUUID}/top':
+      (generalRegion: GeneralRegion, realPath: string, path: string) => ({
+        /* Get specified number of top champion mastery entries sorted by number of champion points descending. */
+        get({ query }: GetTopChampionMasteriesInput) {
+          return limiter.execute<ChampionMasteryDto[]>(
+            generalRegion,
+            realPath,
+            path,
+            query,
+          )
+        },
+      }),
     '/lol/champion-mastery/v4/champion-masteries/by-summoner/{encryptedSummonerId}':
       (generalRegion: GeneralRegion, realPath: string, path: string) => ({
         /* Get all champion mastery entries sorted by number of champion points descending, */
@@ -84,6 +133,28 @@ export function createEndpoints(limiter: RiotRateLimiter) {
           )
         },
       }),
+    '/lol/champion-mastery/v4/champion-masteries/by-summoner/{encryptedSummonerId}/top':
+      (generalRegion: GeneralRegion, realPath: string, path: string) => ({
+        /* Get specified number of top champion mastery entries sorted by number of champion points descending. */
+        get({ query }: GetTopChampionMasteriesInput) {
+          return limiter.execute<ChampionMasteryDto[]>(
+            generalRegion,
+            realPath,
+            path,
+            query,
+          )
+        },
+      }),
+    '/lol/champion-mastery/v4/scores/by-puuid/{encryptedPUUID}': (
+      generalRegion: GeneralRegion,
+      realPath: string,
+      path: string,
+    ) => ({
+      /* Get a player's total champion mastery score, which is the sum of individual champion mastery levels. */
+      get() {
+        return limiter.execute<number>(generalRegion, realPath, path)
+      },
+    }),
     '/lol/champion-mastery/v4/scores/by-summoner/{encryptedSummonerId}': (
       generalRegion: GeneralRegion,
       realPath: string,
@@ -248,6 +319,98 @@ export function createEndpoints(limiter: RiotRateLimiter) {
     }),
     // #endregion
 
+    // #region LOL-CHALLENGES-V1
+    '/lol/challenges/v1/challenges/config': (
+      generalRegion: GeneralRegion,
+      realPath: string,
+      path: string,
+    ) => ({
+      /* List of all basic challenge configuration information (includes all translations for names and descriptions) */
+      get() {
+        return limiter.execute<ChallengeConfigInfoDto[]>(
+          generalRegion,
+          realPath,
+          path,
+        )
+      },
+    }),
+    '/lol/challenges/v1/challenges/percentiles': (
+      generalRegion: GeneralRegion,
+      realPath: string,
+      path: string,
+    ) => ({
+      /* Map of level to percentile of players who have achieved it - keys: ChallengeId -> Season -> Level -> percentile of players who achieved it */
+      get() {
+        return limiter.execute<
+          Record<number, Record<number, Record<Level, number>>>
+        >(generalRegion, realPath, path)
+      },
+    }),
+    '/lol/challenges/v1/challenges/{challengeId}/config': (
+      generalRegion: GeneralRegion,
+      realPath: string,
+      path: string,
+    ) => ({
+      /* Get challenge configuration (REST) */
+      get() {
+        return limiter.execute<ChallengeConfigInfoDto>(
+          generalRegion,
+          realPath,
+          path,
+        )
+      },
+    }),
+    '/lol/challenges/v1/challenges/{challengeId}/leaderboards/by-level/{level}':
+      (generalRegion: GeneralRegion, realPath: string, path: string) => ({
+        /* Return top players for each level. Level must be MASTER, GRANDMASTER or CHALLENGER. */
+        get({ query }: GetChallengeLeaderboardsInput) {
+          return limiter.execute<ApexPlayerInfoDto[]>(
+            generalRegion,
+            realPath,
+            path,
+            query,
+          )
+        },
+      }),
+    '/lol/challenges/v1/challenges/{challengeId}/percentiles': (
+      generalRegion: GeneralRegion,
+      realPath: string,
+      path: string,
+    ) => ({
+      /* Map of level to percentile of players who have achieved it */
+      get() {
+        return limiter.execute<Record<Level, number>>(
+          generalRegion,
+          realPath,
+          path,
+        )
+      },
+    }),
+    '/lol/challenges/v1/player-data/{puuid}': (
+      generalRegion: GeneralRegion,
+      realPath: string,
+      path: string,
+    ) => ({
+      /* Returns player information with list of all progressed challenges (REST) */
+      get() {
+        return limiter.execute<PlayerInfoDto>(generalRegion, realPath, path)
+      },
+    }),
+    // #endregion
+
+    // #region LOL-STATUS-V3
+    '/lol/status/v3/shard-data': (
+      generalRegion: GeneralRegion,
+      realPath: string,
+      path: string,
+    ) => ({
+      /* Get League of Legends status for the given shard. */
+      get() {
+        return limiter.execute<ShardStatus>(generalRegion, realPath, path)
+      },
+    }),
+    // #endregion
+
     // #region LOL-STATUS-V4
     '/lol/status/v4/platform-data': (
       generalRegion: GeneralRegion,
@@ -289,8 +452,7 @@ export function createEndpoints(limiter: RiotRateLimiter) {
     ) => ({
       /* Get a match timeline by match id */
       get() {
-        // TODO: add `MatchTimelineDto` when it is finalized
-        return limiter.execute(generalRegion, realPath, path)
+        return limiter.execute<MatchTimelineDto>(generalRegion, realPath, path)
       },
     }),
     // #endregion
@@ -319,6 +481,16 @@ export function createEndpoints(limiter: RiotRateLimiter) {
     // #endregion
 
     // #region SUMMONER-V4
+    '/fulfillment/v1/summoners/by-puuid/{rsoPUUID}': (
+      generalRegion: GeneralRegion,
+      realPath: string,
+      path: string,
+    ) => ({
+      /* Get a summoner by its RSO encrypted PUUID. */
+      get() {
+        return limiter.execute<SummonerDTO>(generalRegion, realPath, path)
+      },
+    }),
     '/lol/summoner/v4/summoners/by-account/{encryptedAccountId}': (
       generalRegion: GeneralRegion,
       realPath: string,
@@ -349,6 +521,16 @@ export function createEndpoints(limiter: RiotRateLimiter) {
         return limiter.execute<SummonerDTO>(generalRegion, realPath, path)
       },
     }),
+    '/lol/summoner/v4/summoners/me': (
+      generalRegion: GeneralRegion,
+      realPath: string,
+      path: string,
+    ) => ({
+      /* Get a summoner by access token. */
+      get() {
+        return limiter.execute<SummonerDTO>(generalRegion, realPath, path)
+      },
+    }),
     '/lol/summoner/v4/summoners/{encryptedSummonerId}': (
       generalRegion: GeneralRegion,
       realPath: string,
@@ -357,19 +539,6 @@ export function createEndpoints(limiter: RiotRateLimiter) {
       /* Get a summoner by summoner ID. */
       get() {
         return limiter.execute<SummonerDTO>(generalRegion, realPath, path)
-      },
-    }),
-    // #endregion
-
-    // #region THIRD-PARTY-CODE-V4
-    '/lol/platform/v4/third-party-code/by-summoner/{encryptedSummonerId}': (
-      generalRegion: GeneralRegion,
-      realPath: string,
-      path: string,
-    ) => ({
-      /* Get third party code for a given summoner ID. */
-      get() {
-        return limiter.execute<string>(generalRegion, realPath, path)
       },
     }),
     // #endregion

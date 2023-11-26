@@ -131,10 +131,10 @@ function transformType(type: string, name = '') {
     previous = transformed
     transformed = removeRedundantSpace(
       previous
-        .replace(/int/g, 'number')
-        .replace(/long/g, 'number')
-        .replace(/double/g, 'number')
-        .replace(/String/g, 'string')
+        .replace(/int/gi, 'number')
+        .replace(/long/gi, 'number')
+        .replace(/double/gi, 'number')
+        .replace(/String/gi, 'string')
         .replace(/Set\[(\w+)\]/g, '$1[]')
         .replace(/List\[(\w+)\]/g, '$1[]')
         .replace(/Map\[(.+?)\]/g, 'Record<$1>'),

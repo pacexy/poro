@@ -183,7 +183,7 @@ export const schemaMap = {
 
   CurrentLeagues: {
     Event: '', // String
-    Page: '', // Page
+    OverviewPage: '', // String
     Priority: 0, // Integer
     _pageName: '',
     _pageTitle: '',
@@ -314,6 +314,8 @@ export const schemaMap = {
 
   Items: {
     Name: '', // String
+    Tier: '', // String
+    RiotId: 0, // Integer
     Recipe: [''], // List of String
     Cost: 0, // Integer
     TotalCost: 0, // Integer
@@ -462,6 +464,7 @@ export const schemaMap = {
     IsFlexibleStart: false, // Boolean
     IsReschedulable: false, // Boolean
     OverrideAllowPredictions: false, // Boolean
+    OverrideDisallowPredictions: false, // Boolean
     IsTiebreaker: false, // Boolean
     OverviewPage: '', // String
     ShownName: '', // String
@@ -505,6 +508,7 @@ export const schemaMap = {
     Footnote: '', // Text
     UniqueMatch: '', // String
     MatchId: '', // String
+    Tags: [''], // List of String
     _pageName: '',
     _pageTitle: '',
     _pageNamespace: 0,
@@ -659,6 +663,7 @@ export const schemaMap = {
     NewsId: '', // String
     ExcludeFrontpage: false, // Boolean
     ExcludePortal: false, // Boolean
+    ExcludeArchive: false, // Boolean
     _pageName: '',
     _pageTitle: '',
     _pageNamespace: 0,
@@ -739,6 +744,18 @@ export const schemaMap = {
     _ID: 0,
   },
 
+  PicksAndBansCounters: {
+    OverviewPage: '', // String
+    Tab: '', // String
+    N_Page: 0, // Integer
+    N_MatchInPage: 0, // Integer
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
   PicksAndBansS7: {
     Team1Role1: '', // String
     Team1Role2: '', // String
@@ -781,6 +798,7 @@ export const schemaMap = {
     Phase: '', // String
     UniqueLine: '', // String
     IsComplete: false, // Boolean
+    IsFilled: false, // Boolean
     Tab: '', // String
     N_Page: 0, // Integer
     N_TabInPage: 0, // Integer
@@ -912,6 +930,7 @@ export const schemaMap = {
     Team2System: '', // String
     Residency: '', // String
     Role: '', // String
+    Contract: new Date(), // Date
     FavChamps: [''], // List of String
     SoloqueueIds: '', // Text
     Askfm: '', // String
@@ -928,7 +947,7 @@ export const schemaMap = {
     Weibo: '', // Text
     Youtube: '', // Text
     TeamLast: '', // String
-    RoleLast: '', // String
+    RoleLast: [''], // List of String
     IsRetired: false, // Boolean
     ToWildrift: false, // Boolean
     IsPersonality: false, // Boolean
@@ -1329,6 +1348,7 @@ export const schemaMap = {
 
   StandingsArgs: {
     OverviewPage: '', // String
+    BasePage: '', // String
     TournamentGroup: '', // String
     N: 0, // Integer
     Args: '', // Text
@@ -1402,10 +1422,9 @@ export const schemaMap = {
     Short: '', // String
     Medium: '', // String
     Exception: false, // Boolean
-    Dark: false, // Boolean
-    Black: false, // Boolean
+    Class: '', // String
     Sprite: 0, // Integer
-    Inputs: '', // String
+    Inputs: [''], // List of String
     TeamnameId: '', // String
     _pageName: '',
     _pageTitle: '',
@@ -1687,6 +1706,7 @@ export const schemaMap = {
     BasePage: '', // String
     Split: '', // String
     SplitNumber: 0, // Integer
+    SplitMainPage: '', // String
     TournamentLevel: '', // String
     IsQualifier: false, // Boolean
     IsPlayoffs: false, // Boolean
@@ -1697,6 +1717,27 @@ export const schemaMap = {
     ScrapeLink: '', // Text
     Tags: [''], // List of String
     SuppressTopSchedule: false, // Boolean
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  TwitterArchive: {
+    TweetId: '', // String
+    TweetDate: new Date(), // Date
+    TweetAuthorUsername: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  TwitterArchivePages: {
+    PageDate: new Date(), // Date
+    IsRedirect: false, // Boolean
     _pageName: '',
     _pageTitle: '',
     _pageNamespace: 0,
@@ -1740,6 +1781,14 @@ export const schemaMap = {
     _numRevisions: 0, // Integer
     _isRedirect: false, // Boolean
     _pageNameOrRedirect: '', // String
+    _pageName: '',
+    _pageTitle: '',
+    _pageNamespace: 0,
+    _pageID: 0,
+    _ID: 0,
+  },
+
+  _fileData: {
     _pageName: '',
     _pageTitle: '',
     _pageNamespace: 0,
