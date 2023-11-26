@@ -1,5 +1,11 @@
 import { Queue, Tier, Division } from './enums'
 
+// not mentioned in the docs
+export type NotMentioned = any
+export type ChallengeInfo = NotMentioned
+export type ChallengePonumbers = NotMentioned
+export type PlayerClientPreferences = NotMentioned
+
 // #region ACCOUNT-V1
 export interface AccountDto {
   puuid: string
@@ -181,10 +187,10 @@ export interface ApexPlayerInfoDto {
 export interface Level {}
 
 export interface PlayerInfoDto {
-  challenges: any[]
-  preferences: any
-  totalPoints: any
-  categoryPoints: Record<string, any>
+  challenges: ChallengeInfo[]
+  preferences: PlayerClientPreferences
+  totalPoints: ChallengePonumbers
+  categoryPoints: Record<string, ChallengePonumbers>
 }
 // #endregion
 
