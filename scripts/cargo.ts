@@ -12,6 +12,13 @@ const cargo = new CargoClient()
 const axios = cargo.axiosInstance
 const BASE_URL = '/wiki/Special:CargoTables'
 
+const s = {
+  TABLE_NAMEs: '.cargo-tablelist-tablename',
+  TABLE_ROWs: '#mw-content-text > ol > li',
+  ROW_NAME: 'strong',
+  ROW_TYPE: 'tt',
+} as const
+
 interface Data {
   name: string
   children: {
@@ -34,20 +41,19 @@ function writeToFile() {
 async function parse(name: string) {
   const { data } = await axios.get(BASE_URL + '/' + name)
   const document = createDocument(data)
-  const fieldElements = $$(document, '#mw-content-text > ul > li')
+  const fieldEls = $$(document, s.TABLE_ROWs)
 
   return {
     name,
-    children: fieldElements.map((fieldElem) => {
-      const nameNode = $(fieldElem, 'strong')
-      const name = text(nameNode)
-      const type = text(nameNode?.nextElementSibling)
-      const isArray = text(fieldElem).startsWith(`${name} - List of ${type}`)
+    children: fieldEls.map((el) => {
+      const name = text($(el, s.ROW_NAME))
+      const type = text($(el, s.ROW_TYPE))
+      const isArray = text(el).startsWith(`${name} - List of ${type}`)
       return {
         name,
         type,
         isArray,
-        desc: text($(fieldElem, 'span')),
+        desc: text($(el, 'span')),
       }
     }),
   }
@@ -103,17 +109,12 @@ function updateString(data: Data) {
 export async function fetchTables() {
   const { data } = await axios.get(BASE_URL)
   const document = createDocument(data)
-  const cargoTableList = $$(document, '#mw-content-text > ul > li')
-  const cargoTableNames = cargoTableList
-    .map((tableElem) => tableElem.textContent)
-    .filter(isString)
-
-  return cargoTableNames
+  return $$(document, s.TABLE_NAMEs).map(text).filter(isString)
 }
 
 async function generate() {
   const tables = await fetchTables()
-  console.log('fetch tables success')
+  console.log('tables', tables)
 
   pre()
   for (const table of tables) {
