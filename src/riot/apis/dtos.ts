@@ -638,3 +638,4 @@ export interface SummonerDTO {
   /* Summoner level associated with the summoner. */
   summonerLevel: number
 }
+// #endregion
