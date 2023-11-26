@@ -5,6 +5,8 @@ export type NotMentioned = any
 export type ChallengeInfo = NotMentioned
 export type ChallengePonumbers = NotMentioned
 export type PlayerClientPreferences = NotMentioned
+export type ActiveShardDto = NotMentioned
+export type MatchTimelineDto = NotMentioned
 
 // #region ACCOUNT-V1
 export interface AccountDto {
@@ -162,11 +164,11 @@ export interface ChallengeConfigInfoDto {
 HIDDEN - not visible, but calculated,
 ENABLED - visible and calculated,
 ARCHIVED - visible, but not calculated */
-export interface State {}
+export type State = NotMentioned
 
 /* LIFETIME - stats are incremented without reset,
 SEASON - stats are accumulated by season and reset at the beginning of new season */
-export interface Tracking {}
+export type Tracking = NotMentioned
 
 export interface ApexPlayerInfoDto {
   puuid: string
@@ -184,7 +186,7 @@ export interface ApexPlayerInfoDto {
 7 MASTER,
 8 GRANDMASTER,
 9 CHALLENGER */
-export interface Level {}
+export type Level = NotMentioned
 
 export interface PlayerInfoDto {
   challenges: ChallengeInfo[]
