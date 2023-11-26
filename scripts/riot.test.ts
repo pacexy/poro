@@ -2,8 +2,8 @@ import { describe, it, expect } from 'vitest'
 
 import { fetchPageNames, genEndpoints } from './riot'
 
-describe('generate-riot-client', () => {
-  it('should generate page names', async () => {
+describe('riot', () => {
+  it('should fetch page names', async () => {
     expect(fetchPageNames()).resolves.toMatchInlineSnapshot(`
       [
         "account-v1",
