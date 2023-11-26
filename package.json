@@ -12,12 +12,14 @@
   "sideEffects": false,
   "scripts": {
     "format": "prettier --write src/**/*.ts",
-    "generate-cargo-schema": "ts-node scripts/cargoSchemaGenerator.ts",
+    "gen:cargo": "tsx ./scripts/gen.ts --mode=1",
+    "gen:riot": "tsx ./scripts/gen.ts --mode=2",
+    "test:cargo": "vitest --update cargo",
+    "test:riot": "vitest --update riot",
     "clean": "rimraf ./dist",
-    "build": "yarn clean && tsc -p tsconfig.esm.json && tsc",
-    "test": "jest",
+    "build": "pnpm clean && tsc -p tsconfig.esm.json && tsc",
     "lint": "eslint src/**/*.{ts,tsx}  --fix",
-    "release": "yarn build && release-it"
+    "release": "pnpm build && release-it"
   },
   "files": [
     "dist/cjs/src",
@@ -54,34 +56,41 @@
     "tslib": "^2.3.1"
   },
   "devDependencies": {
-    "@types/cheerio": "^0.22.30",
     "@types/jest": "^26.0.24",
-    "@types/jquery": "^3.5.6",
+    "@types/jsdom": "^21.1.6",
     "@types/lodash": "^4.14.172",
     "@types/node": "^16.4.2",
     "@types/prettier": "^2.3.2",
-    "@typescript-eslint/eslint-plugin": "^4.28.4",
-    "@typescript-eslint/parser": "^4.28.4",
-    "cheerio": "^1.0.0-rc.10",
+    "@typescript-eslint/eslint-plugin": "^6.12.0",
+    "@typescript-eslint/parser": "^6.12.0",
     "eslint": "^7.31.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.23.4",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^3.4.0",
-    "husky": "^4.2.5",
     "jest": "^27.0.6",
+    "jsdom": "^22.1.0",
     "lint-staged": "^10.2.11",
     "prettier": "^2.3.2",
     "release-it": "^14.11.5",
     "rimraf": "^3.0.2",
+    "simple-git-hooks": "^2.9.0",
     "ts-jest": "^27.0.4",
-    "ts-node": "^10.1.0",
-    "typescript": "^4.4.2"
+    "tsx": "^4.5.0",
+    "typescript": "^5.3.2",
+    "vitest": "^0.34.6"
   },
   "release-it": {
     "github": {
       "release": true,
       "web": true
     }
+  },
+  "lint-staged": {
+    "*.{js,json,yml,yaml,css,scss,ts,tsx,md}": "prettier --write",
+    "*.{js,ts,tsx}": "eslint --fix"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged"
   }
 }
