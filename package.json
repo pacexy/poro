@@ -17,7 +17,7 @@
     "test:cargo": "vitest --update cargo",
     "test:riot": "vitest --update riot",
     "clean": "rimraf ./dist",
-    "build": "pnpm clean && tsc -p tsconfig.esm.json && tsc",
+    "build": "pnpm clean && tsc -p tsconfig.esm.json && tsc -p tsconfig.cjs.json",
     "lint": "eslint src/**/*.{ts,tsx}  --fix",
     "release": "pnpm build && release-it"
   },
