@@ -40,8 +40,8 @@
 }),
 '/lol/champion-mastery/v4/champion-masteries/by-puuid/{encryptedPUUID}/top': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
   /* Get specified number of top champion mastery entries sorted by number of champion points descending. */
-  get() {
-    return limiter.execute<ChampionMasteryDto[]>(generalRegion, realPath, path)
+  get({query}: SomeInput) {
+    return limiter.execute<ChampionMasteryDto[]>(generalRegion, realPath, path, query)
   },
 }),
 '/lol/champion-mastery/v4/champion-masteries/by-summoner/{encryptedSummonerId}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
@@ -58,8 +58,8 @@
 }),
 '/lol/champion-mastery/v4/champion-masteries/by-summoner/{encryptedSummonerId}/top': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
   /* Get specified number of top champion mastery entries sorted by number of champion points descending. */
-  get() {
-    return limiter.execute<ChampionMasteryDto[]>(generalRegion, realPath, path)
+  get({query}: SomeInput) {
+    return limiter.execute<ChampionMasteryDto[]>(generalRegion, realPath, path, query)
   },
 }),
 '/lol/champion-mastery/v4/scores/by-puuid/{encryptedPUUID}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
@@ -121,8 +121,8 @@
 // #region LEAGUE-EXP-V4
 '/lol/league-exp/v4/entries/{queue}/{tier}/{division}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
   /* Get all the league entries. */
-  get() {
-    return limiter.execute<LeagueEntryDTO[]>(generalRegion, realPath, path)
+  get({query}: SomeInput) {
+    return limiter.execute<LeagueEntryDTO[]>(generalRegion, realPath, path, query)
   },
 }),
 // #endregion
@@ -142,8 +142,8 @@
 }),
 '/lol/league/v4/entries/{queue}/{tier}/{division}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
   /* Get all the league entries. */
-  get() {
-    return limiter.execute<LeagueEntryDTO[]>(generalRegion, realPath, path)
+  get({query}: SomeInput) {
+    return limiter.execute<LeagueEntryDTO[]>(generalRegion, realPath, path, query)
   },
 }),
 '/lol/league/v4/grandmasterleagues/by-queue/{queue}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
@@ -187,8 +187,8 @@
 }),
 '/lol/challenges/v1/challenges/{challengeId}/leaderboards/by-level/{level}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
   /* Return top players for each level. Level must be MASTER, GRANDMASTER or CHALLENGER. */
-  get() {
-    return limiter.execute<ApexPlayerInfoDto[]>(generalRegion, realPath, path)
+  get({query}: SomeInput) {
+    return limiter.execute<ApexPlayerInfoDto[]>(generalRegion, realPath, path, query)
   },
 }),
 '/lol/challenges/v1/challenges/{challengeId}/percentiles': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
@@ -226,8 +226,8 @@
 // #region MATCH-V5
 '/lol/match/v5/matches/by-puuid/{puuid}/ids': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
   /* Get a list of match ids by puuid */
-  get() {
-    return limiter.execute<string[]>(generalRegion, realPath, path)
+  get({query}: SomeInput) {
+    return limiter.execute<string[]>(generalRegion, realPath, path, query)
   },
 }),
 '/lol/match/v5/matches/{matchId}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({

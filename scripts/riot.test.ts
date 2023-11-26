@@ -26,8 +26,8 @@ describe('generate-riot-client', () => {
     'should generate endpoints',
     async () => {
       const result = await genEndpoints()
-      expect(result.content).toMatchFileSnapshot('riot-client.ts')
-      expect(result.dtos).toMatchFileSnapshot('riot-client-dtos.ts')
+      expect(result.content).toMatchFileSnapshot('__snapshots__/endpoints.ts')
+      expect(result.dtos).toMatchFileSnapshot('__snapshots__/dtos.ts')
     },
     { timeout: Infinity },
   )
