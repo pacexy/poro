@@ -154,7 +154,7 @@ function parseDto(el: Element) {
     .map(([n, t, c]) => withComment(`${n}: ${transformType(t, n)}`, c))
     .join('\n')
   const type = [
-    `export interface ${name} {`, //
+    `export type ${name} = {`, //
     props,
     `}`,
   ].join('\n')
