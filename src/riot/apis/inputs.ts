@@ -1,11 +1,11 @@
-export interface LeagueEntryInput {
+export type LeagueEntryInput = {
   query: {
     /** Defaults to 1. Starts with page 1. */
     page?: number
   }
 }
 
-export interface MatchIdsInput {
+export type MatchIdsInput = {
   query: {
     /** Filter the list of match ids by a specific queue id. This filter is mutually inclusive of the type filter meaning any match ids returned must match both the queue and type filters. */
     queue?: number
@@ -18,14 +18,14 @@ export interface MatchIdsInput {
   }
 }
 
-export interface GetTopChampionMasteriesInput {
+export type GetTopChampionMasteriesInput = {
   query: {
     /** Number of entries to retrieve, defaults to 3. */
     count?: number
   }
 }
 
-export interface GetChallengeLeaderboardsInput {
+export type GetChallengeLeaderboardsInput = {
   query: {
     limit?: number
   }
