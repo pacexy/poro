@@ -22,6 +22,10 @@ function wait(ms: number) {
 
 class SpreadRateLimiter extends RateLimiter {
   constructor(rateLimitHeader: string) {
+    // sometimes rate limit header is empty, maybe a bug from Riot
+    if (!rateLimitHeader) {
+      throw new Error('Rate limit header is empty')
+    }
     // Get last rate limit
     const [tokensPerInterval, intervalInSecond] =
       parseRateLimitHeaders(rateLimitHeader).slice(-1)[0]
