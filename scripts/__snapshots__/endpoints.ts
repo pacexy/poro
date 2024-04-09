@@ -40,7 +40,7 @@
 }),
 '/lol/champion-mastery/v4/champion-masteries/by-puuid/{encryptedPUUID}/top': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
   /* Get specified number of top champion mastery entries sorted by number of champion points descending. */
-  get({query}: SomeInput) {
+  get({query}: GetTopChampionMasteriesInput) {
     return limiter.execute<ChampionMasteryDto[]>(generalRegion, realPath, path, query)
   },
 }),
@@ -97,7 +97,7 @@
 // #region LEAGUE-EXP-V4
 '/lol/league-exp/v4/entries/{queue}/{tier}/{division}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
   /* Get all the league entries. */
-  get({query}: SomeInput) {
+  get({query}: LeagueEntryInput) {
     return limiter.execute<LeagueEntryDTO[]>(generalRegion, realPath, path, query)
   },
 }),
@@ -118,7 +118,7 @@
 }),
 '/lol/league/v4/entries/{queue}/{tier}/{division}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
   /* Get all the league entries. */
-  get({query}: SomeInput) {
+  get({query}: LeagueEntryInput) {
     return limiter.execute<LeagueEntryDTO[]>(generalRegion, realPath, path, query)
   },
 }),
@@ -163,7 +163,7 @@
 }),
 '/lol/challenges/v1/challenges/{challengeId}/leaderboards/by-level/{level}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
   /* Return top players for each level. Level must be MASTER, GRANDMASTER or CHALLENGER. */
-  get({query}: SomeInput) {
+  get({query}: GetChallengeLeaderboardsInput) {
     return limiter.execute<ApexPlayerInfoDto[]>(generalRegion, realPath, path, query)
   },
 }),
@@ -193,7 +193,7 @@
 // #region MATCH-V5
 '/lol/match/v5/matches/by-puuid/{puuid}/ids': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
   /* Get a list of match ids by puuid */
-  get({query}: SomeInput) {
+  get({query}: MatchIdsInput) {
     return limiter.execute<string[]>(generalRegion, realPath, path, query)
   },
 }),

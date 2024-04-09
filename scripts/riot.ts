@@ -45,6 +45,16 @@ export async function fetchPageNames() {
     .filter((n) => !ignoredApiPrefixes.some((p) => n.startsWith(p)))
 }
 
+const InputMap: Record<string, string> = {
+  '/lol/champion-mastery/v4/champion-masteries/by-puuid/{encryptedPUUID}/top':
+    'GetTopChampionMasteriesInput',
+  '/lol/league-exp/v4/entries/{queue}/{tier}/{division}': 'LeagueEntryInput',
+  '/lol/league/v4/entries/{queue}/{tier}/{division}': 'LeagueEntryInput',
+  '/lol/challenges/v1/challenges/{challengeId}/leaderboards/by-level/{level}':
+    'GetChallengeLeaderboardsInput',
+  '/lol/match/v5/matches/by-puuid/{puuid}/ids': 'MatchIdsInput',
+}
+
 function genEndpoint(el: Element, dtoMap: Record<string, string>) {
   const path = text($(el, s.ENDPOINT_PATH))
   const method = text($(el, s.ENDPOINT_METHOD))?.toLowerCase()
@@ -57,7 +67,7 @@ function genEndpoint(el: Element, dtoMap: Record<string, string>) {
   const hasInput = $(el, s.ENDPOINT_INPUT)
 
   const generic = returnType ? `<${transformType(returnType)}>` : ''
-  const params = hasInput ? `{query}: SomeInput` : ''
+  const params = hasInput ? `{query}: ${InputMap[path]}` : ''
   const lastArg = hasInput ? ', query' : ''
   return [
     `'${path}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({`,
