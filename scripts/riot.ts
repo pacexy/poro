@@ -164,11 +164,8 @@ function parseDto(el: Element) {
     .map((propEl) => Array.from(propEl.children).map(text))
     .map(([n, t, c]) => withComment(`${n}: ${transformType(t, n)}`, c))
     .join('\n')
-  const type = [
-    `export type ${name} = {`, //
-    props,
-    `}`,
-  ].join('\n')
+  const value = props ? `{\n${props}\n}` : 'NotMentioned'
+  const type = `export type ${name} = ${value}`
 
   return {
     [name]: withComment(type, comment),

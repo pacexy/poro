@@ -182,15 +182,11 @@ thresholds: Record<string, number>
 HIDDEN - not visible, but calculated,
 ENABLED - visible and calculated,
 ARCHIVED - visible, but not calculated */
-export type State = {
-
-}
+export type State = NotMentioned
 
 /* LIFETIME - stats are incremented without reset,
 SEASON - stats are accumulated by season and reset at the beginning of new season */
-export type Tracking = {
-
-}
+export type Tracking = NotMentioned
 
 export type ApexPlayerInfoDto = {
 puuid: string
@@ -208,9 +204,7 @@ position: number
 7 MASTER,
 8 GRANDMASTER,
 9 CHALLENGER */
-export type Level = {
-
-}
+export type Level = NotMentioned
 
 export type PlayerInfoDto = {
 challenges: ChallengeInfo[]
