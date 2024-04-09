@@ -16,7 +16,7 @@ const riot = new RiotClient({
 })
 const axios = riot.axiosInstance
 const BASE_URL = 'https://developer.riotgames.com'
-const ignoredApiPrefixes = ['tft', 'lor', 'val', 'tournament']
+const ignoredApiPrefixes = ['tft', 'lor', 'val', 'tournament', 'spectator-tft']
 
 // selectors
 const s = {
