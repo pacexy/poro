@@ -131,6 +131,7 @@ function transformType(type: string, name = '') {
     previous = transformed
     transformed = removeRedundantSpace(
       previous
+        .replace(/Integer/gi, 'number')
         .replace(/int/gi, 'number')
         .replace(/long/gi, 'number')
         .replace(/double/gi, 'number')
