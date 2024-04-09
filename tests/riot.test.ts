@@ -72,13 +72,13 @@ describe('set region/platform correctly', () => {
 
     return client
       .path(
-        '/lol/champion-mastery/v4/champion-masteries/by-summoner/{encryptedSummonerId}',
-        { encryptedSummonerId: '123' },
+        '/lol/champion-mastery/v4/champion-masteries/by-puuid/{encryptedPUUID}',
+        { encryptedPUUID: '123' },
       )
       .get()
       .catch((err) => {
         expect(err.config.url).toBe(
-          `https://${Riot.Platform.NA.toLowerCase()}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/123`,
+          `https://${Riot.Platform.NA.toLowerCase()}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-puuid/123`,
         )
       })
   })
@@ -107,13 +107,13 @@ describe('set region/platform correctly', () => {
 
     return client
       .path(
-        '/lol/champion-mastery/v4/champion-masteries/by-summoner/{encryptedSummonerId}',
-        { encryptedSummonerId: '123' },
+        '/lol/champion-mastery/v4/champion-masteries/by-puuid/{encryptedPUUID}',
+        { encryptedPUUID: '123' },
       )
       .get()
       .catch((err) => {
         expect(err.config.url).toBe(
-          `https://${Riot.Platform.KR.toLowerCase()}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/123`,
+          `https://${Riot.Platform.KR.toLowerCase()}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-puuid/123`,
         )
       })
   })
@@ -142,14 +142,14 @@ describe('set region/platform correctly', () => {
 
     return client
       .path(
-        '/lol/champion-mastery/v4/champion-masteries/by-summoner/{encryptedSummonerId}',
-        { encryptedSummonerId: '123' },
+        '/lol/champion-mastery/v4/champion-masteries/by-puuid/{encryptedPUUID}',
+        { encryptedPUUID: '123' },
         Riot.Platform.KR,
       )
       .get()
       .catch((err) => {
         expect(err.config.url).toBe(
-          `https://${Riot.Platform.KR.toLowerCase()}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/123`,
+          `https://${Riot.Platform.KR.toLowerCase()}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-puuid/123`,
         )
       })
   })
@@ -169,7 +169,7 @@ describe(
       for (let i = 0; i < n; i++) {
         // Method rate limit: 1200000:600 spread to 1:0.5ms
         const promise = client
-          .path('/lol/spectator/v4/featured-games')
+          .path('/lol/spectator/v5/featured-games')
           .get()
           .then(() => {
             const now = Date.now()
@@ -225,7 +225,7 @@ describe(
         let lastResolveTime = Date.now()
         for (let i = 0; i < n; i++) {
           const promise = client
-            .path('/lol/spectator/v4/featured-games', platform)
+            .path('/lol/spectator/v5/featured-games', platform)
             .get()
             .then(() => {
               const now = Date.now()
@@ -251,7 +251,7 @@ describe(
       const startTime = Date.now()
 
       for (let i = 0; i < 5; i++) {
-        const promise = client.path('/lol/spectator/v4/featured-games').get()
+        const promise = client.path('/lol/spectator/v5/featured-games').get()
         promises.push(promise)
       }
 

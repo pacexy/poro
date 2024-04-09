@@ -16,7 +16,7 @@ const riot = new RiotClient({
 })
 const axios = riot.axiosInstance
 const BASE_URL = 'https://developer.riotgames.com'
-const ignoredApiPrefixes = ['tft', 'lor', 'val', 'tournament']
+const ignoredApiPrefixes = ['tft', 'lor', 'val', 'tournament', 'spectator-tft']
 
 // selectors
 const s = {
@@ -45,6 +45,16 @@ export async function fetchPageNames() {
     .filter((n) => !ignoredApiPrefixes.some((p) => n.startsWith(p)))
 }
 
+const InputMap: Record<string, string> = {
+  '/lol/champion-mastery/v4/champion-masteries/by-puuid/{encryptedPUUID}/top':
+    'GetTopChampionMasteriesInput',
+  '/lol/league-exp/v4/entries/{queue}/{tier}/{division}': 'LeagueEntryInput',
+  '/lol/league/v4/entries/{queue}/{tier}/{division}': 'LeagueEntryInput',
+  '/lol/challenges/v1/challenges/{challengeId}/leaderboards/by-level/{level}':
+    'GetChallengeLeaderboardsInput',
+  '/lol/match/v5/matches/by-puuid/{puuid}/ids': 'MatchIdsInput',
+}
+
 function genEndpoint(el: Element, dtoMap: Record<string, string>) {
   const path = text($(el, s.ENDPOINT_PATH))
   const method = text($(el, s.ENDPOINT_METHOD))?.toLowerCase()
@@ -57,7 +67,7 @@ function genEndpoint(el: Element, dtoMap: Record<string, string>) {
   const hasInput = $(el, s.ENDPOINT_INPUT)
 
   const generic = returnType ? `<${transformType(returnType)}>` : ''
-  const params = hasInput ? `{query}: SomeInput` : ''
+  const params = hasInput ? `{query}: ${InputMap[path]}` : ''
   const lastArg = hasInput ? ', query' : ''
   return [
     `'${path}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({`,
@@ -131,6 +141,7 @@ function transformType(type: string, name = '') {
     previous = transformed
     transformed = removeRedundantSpace(
       previous
+        .replace(/Integer/gi, 'number')
         .replace(/int/gi, 'number')
         .replace(/long/gi, 'number')
         .replace(/double/gi, 'number')
@@ -153,11 +164,8 @@ function parseDto(el: Element) {
     .map((propEl) => Array.from(propEl.children).map(text))
     .map(([n, t, c]) => withComment(`${n}: ${transformType(t, n)}`, c))
     .join('\n')
-  const type = [
-    `export type ${name} = {`, //
-    props,
-    `}`,
-  ].join('\n')
+  const value = props ? `{\n${props}\n}` : 'NotMentioned'
+  const type = `export type ${name} = ${value}`
 
   return {
     [name]: withComment(type, comment),

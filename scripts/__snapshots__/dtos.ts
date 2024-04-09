@@ -182,15 +182,11 @@ thresholds: Record<string, number>
 HIDDEN - not visible, but calculated,
 ENABLED - visible and calculated,
 ARCHIVED - visible, but not calculated */
-export type State = {
-
-}
+export type State = NotMentioned
 
 /* LIFETIME - stats are incremented without reset,
 SEASON - stats are accumulated by season and reset at the beginning of new season */
-export type Tracking = {
-
-}
+export type Tracking = NotMentioned
 
 export type ApexPlayerInfoDto = {
 puuid: string
@@ -208,57 +204,13 @@ position: number
 7 MASTER,
 8 GRANDMASTER,
 9 CHALLENGER */
-export type Level = {
-
-}
+export type Level = NotMentioned
 
 export type PlayerInfoDto = {
 challenges: ChallengeInfo[]
 preferences: PlayerClientPreferences
 totalPoints: ChallengePonumbers
 categoryPoints: Record<string, ChallengePonumbers>
-}
-// #endregion
-
-// #region LOL-STATUS-V3
-export type ShardStatus = {
-locales: string[]
-hostname: string
-name: string
-services: Service[]
-slug: string
-region_tag: string
-}
-
-export type Service = {
-name: string
-slug: string
-status: string
-incidents: Incident[]
-}
-
-export type Incident = {
-id: number
-active: boolean
-created_at: string
-updates: Message[]
-}
-
-export type Message = {
-id: string
-author: string
-heading: string
-content: string
-severity: string
-created_at: string
-updated_at: string
-translations: Translation[]
-}
-
-export type Translation = {
-updated_at: string
-locale: string
-content: string
 }
 // #endregion
 
@@ -321,6 +273,8 @@ participants: string[]
 }
 
 export type InfoDto = {
+/* Refer to indicate if the game ended in termination. */
+endOfGameResult: string
 /* Unix timestamp for when the game is created on the game server (i.e., the loading screen). */
 gameCreation: number
 /* Prior to patch 11.20, this field returns the game length in milliseconds calculated from gameEndTimestamp - gameStartTimestamp. Post patch 11.20, this field returns the max timePlayed of any participant in the game in seconds, which makes the behavior of this field consistent with that of match-v4. The best way to handling the change in this field is to treat the value as milliseconds if the gameEndTimestamp field isn't in the response and to treat the value as seconds if gameEndTimestamp is in the response. */
@@ -411,6 +365,11 @@ perks: PerksDto
 physicalDamageDealt: number
 physicalDamageDealtToChampions: number
 physicalDamageTaken: number
+playerAugment1: number
+playerAugment2: number
+playerAugment3: number
+playerAugment4: number
+playerSubteamId: number
 profileIcon: number
 puuid: string
 quadraKills: number
@@ -511,7 +470,7 @@ kills: number
 }
 // #endregion
 
-// #region SPECTATOR-V4
+// #region SPECTATOR-V5
 export type CurrentGameInfo = {
 /* The ID of the game */
 gameId: number
@@ -566,6 +525,8 @@ teamId: number
 summonerName: string
 /* The encrypted summoner ID of this participant */
 summonerId: string
+/* The encrypted puuid of this participant */
+puuid: string
 /* The ID of the first summoner spell used by this participant */
 spell1Id: number
 /* The ID of the second summoner spell used by this participant */
@@ -616,8 +577,6 @@ gameId: number
 observers: Observer
 /* The queue type (queue types are documented on the Game Constants page) */
 gameQueueConfigId: number
-/* The game start time represented in epoch milliseconds */
-gameStartTime: number
 /* The participant information */
 participants: Participant[]
 /* The ID of the platform on which the game is being played */
@@ -633,6 +592,10 @@ spell2Id: number
 profileIconId: number
 /* The summoner name of this participant */
 summonerName: string
+/* Encrypted summoner ID of this participant */
+summonerId: string
+/* Encrypted puuid of this participant */
+puuid: string
 /* The ID of the champion played by this participant */
 championId: number
 /* The team ID of this participant, indicating the participant's team */

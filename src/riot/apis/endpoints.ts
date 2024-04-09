@@ -15,7 +15,6 @@ import {
   PlatformDataDto,
   PlayerDto,
   PlayerInfoDto,
-  ShardStatus,
   SummonerDTO,
   TeamDto,
   TournamentDto,
@@ -111,51 +110,7 @@ export function createEndpoints(limiter: RiotRateLimiter) {
           )
         },
       }),
-    '/lol/champion-mastery/v4/champion-masteries/by-summoner/{encryptedSummonerId}':
-      (generalRegion: GeneralRegion, realPath: string, path: string) => ({
-        /* Get all champion mastery entries sorted by number of champion points descending, */
-        get() {
-          return limiter.execute<ChampionMasteryDto[]>(
-            generalRegion,
-            realPath,
-            path,
-          )
-        },
-      }),
-    '/lol/champion-mastery/v4/champion-masteries/by-summoner/{encryptedSummonerId}/by-champion/{championId}':
-      (generalRegion: GeneralRegion, realPath: string, path: string) => ({
-        /* Get a champion mastery by player ID and champion ID. */
-        get() {
-          return limiter.execute<ChampionMasteryDto>(
-            generalRegion,
-            realPath,
-            path,
-          )
-        },
-      }),
-    '/lol/champion-mastery/v4/champion-masteries/by-summoner/{encryptedSummonerId}/top':
-      (generalRegion: GeneralRegion, realPath: string, path: string) => ({
-        /* Get specified number of top champion mastery entries sorted by number of champion points descending. */
-        get({ query }: GetTopChampionMasteriesInput) {
-          return limiter.execute<ChampionMasteryDto[]>(
-            generalRegion,
-            realPath,
-            path,
-            query,
-          )
-        },
-      }),
     '/lol/champion-mastery/v4/scores/by-puuid/{encryptedPUUID}': (
-      generalRegion: GeneralRegion,
-      realPath: string,
-      path: string,
-    ) => ({
-      /* Get a player's total champion mastery score, which is the sum of individual champion mastery levels. */
-      get() {
-        return limiter.execute<number>(generalRegion, realPath, path)
-      },
-    }),
-    '/lol/champion-mastery/v4/scores/by-summoner/{encryptedSummonerId}': (
       generalRegion: GeneralRegion,
       realPath: string,
       path: string,
@@ -398,19 +353,6 @@ export function createEndpoints(limiter: RiotRateLimiter) {
     }),
     // #endregion
 
-    // #region LOL-STATUS-V3
-    '/lol/status/v3/shard-data': (
-      generalRegion: GeneralRegion,
-      realPath: string,
-      path: string,
-    ) => ({
-      /* Get League of Legends status for the given shard. */
-      get() {
-        return limiter.execute<ShardStatus>(generalRegion, realPath, path)
-      },
-    }),
-    // #endregion
-
     // #region LOL-STATUS-V4
     '/lol/status/v4/platform-data': (
       generalRegion: GeneralRegion,
@@ -457,18 +399,18 @@ export function createEndpoints(limiter: RiotRateLimiter) {
     }),
     // #endregion
 
-    // #region SPECTATOR-V4
-    '/lol/spectator/v4/active-games/by-summoner/{encryptedSummonerId}': (
+    // #region SPECTATOR-V5
+    '/lol/spectator/v5/active-games/by-summoner/{encryptedPUUID}': (
       generalRegion: GeneralRegion,
       realPath: string,
       path: string,
     ) => ({
-      /* Get current game information for the given summoner ID. */
+      /* Get current game information for the given puuid. */
       get() {
         return limiter.execute<CurrentGameInfo>(generalRegion, realPath, path)
       },
     }),
-    '/lol/spectator/v4/featured-games': (
+    '/lol/spectator/v5/featured-games': (
       generalRegion: GeneralRegion,
       realPath: string,
       path: string,
