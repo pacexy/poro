@@ -162,7 +162,7 @@ function parseDto(el: Element) {
   const comment = text($(el, s.DTO_NAME)?.nextSibling).replace(/^- /, '')
   const props = $$(el, s.DTO_PROPs)
     .map((propEl) => Array.from(propEl.children).map(text))
-    .map(([n, t, c]) => withComment(`${n}: ${transformType(t, n)}`, c))
+    .map(([n, t, c]) => withComment(`"${n}": ${transformType(t, n)}`, c))
     .join('\n')
   const value = props ? `{\n${props}\n}` : 'NotMentioned'
   const type = `export type ${name} = ${value}`
