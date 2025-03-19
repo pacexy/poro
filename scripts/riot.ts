@@ -143,6 +143,7 @@ function transformType(type: string, name = '') {
       previous
         .replace(/Integer/gi, 'number')
         .replace(/int/gi, 'number')
+        .replace(/float/gi, 'number')
         .replace(/long/gi, 'number')
         .replace(/double/gi, 'number')
         .replace(/String/gi, 'string')
