@@ -13,6 +13,7 @@ describe('riot', () => {
         "league-exp-v4",
         "league-v4",
         "lol-challenges-v1",
+        "lol-rso-match-v1",
         "lol-status-v4",
         "match-v5",
         "spectator-v5",
