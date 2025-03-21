@@ -53,6 +53,7 @@ const InputMap: Record<string, string> = {
   '/lol/challenges/v1/challenges/{challengeId}/leaderboards/by-level/{level}':
     'GetChallengeLeaderboardsInput',
   '/lol/match/v5/matches/by-puuid/{puuid}/ids': 'MatchIdsInput',
+  '/lol/rso-match/v1/matches/ids': 'RsoMatchIdsInput',
 }
 
 function genEndpoint(el: Element, dtoMap: Record<string, string>) {

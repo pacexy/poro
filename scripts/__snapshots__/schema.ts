@@ -329,6 +329,7 @@ AttackDamage: 0, // Integer
 Crit: 0, // Integer
 AttackSpeed: 0, // Integer
 ArmorPen: 0, // Integer
+Lethality: 0, // Integer
 AttackRange: 0, // Integer
 Mana: 0, // Integer
 ManaRegen: 0, // Integer
@@ -478,6 +479,7 @@ N_MatchInTab: 0, // Integer
 N_TabInPage: 0, // Integer
 N_Page: 0, // Integer
 Patch: '', // String
+LegacyPatch: '', // String
 PatchPage: '', // String
 Hotfix: '', // String
 DisabledChampions: [''], // List of String
@@ -922,6 +924,7 @@ Nationality: [''], // List of String
 NationalityPrimary: '', // String
 Age: 0, // Integer
 Birthdate: new Date(), // Date
+Deathdate: new Date(), // Date
 ResidencyFormer: '', // String
 Team: '', // String
 Team2: '', // String
@@ -934,6 +937,7 @@ Contract: new Date(), // Date
 FavChamps: [''], // List of String
 SoloqueueIds: '', // Text
 Askfm: '', // String
+Bluesky: '', // String
 Discord: '', // Text
 Facebook: '', // Text
 Instagram: '', // String
@@ -942,6 +946,8 @@ Reddit: '', // String
 Snapchat: '', // String
 Stream: '', // Text
 Twitter: '', // String
+Threads: '', // String
+LinkedIn: '', // Text
 Vk: '', // Text
 Website: '', // Text
 Weibo: '', // Text
@@ -950,6 +956,7 @@ TeamLast: '', // String
 RoleLast: [''], // List of String
 IsRetired: false, // Boolean
 ToWildrift: false, // Boolean
+ToValorant: false, // Boolean
 IsPersonality: false, // Boolean
 IsSubstitute: false, // Boolean
 IsTrainee: false, // Boolean
@@ -1171,9 +1178,14 @@ Team1Kills: 0, // Integer
 Team2Kills: 0, // Integer
 Team1RiftHeralds: 0, // Integer
 Team2RiftHeralds: 0, // Integer
+Team1VoidGrubs: 0, // Integer
+Team2VoidGrubs: 0, // Integer
+Team1Atakhans: 0, // Integer
+Team2Atakhans: 0, // Integer
 Team1Inhibitors: 0, // Integer
 Team2Inhibitors: 0, // Integer
 Patch: '', // String
+LegacyPatch: '', // String
 PatchSort: '', // String
 MatchHistory: '', // String
 VOD: '', // Wikitext
@@ -1262,6 +1274,8 @@ Towers: 0, // Integer
 Gold: 0, // Integer
 Kills: 0, // Integer
 RiftHeralds: 0, // Integer
+VoidGrubs: 0, // Integer
+Atakhans: 0, // Integer
 Inhibitors: 0, // Integer
 OverviewPage: '', // String
 StatsPage: '', // String
@@ -1409,6 +1423,7 @@ Tournament: '', // String
 Caption: '', // Text
 SortDate: new Date(), // Date
 Hide: false, // Boolean
+InfoboxEligible: false, // Boolean
     _pageName: '',
     _pageTitle: '',
     _pageNamespace: 0,
@@ -1447,6 +1462,7 @@ TeamnameId: '', // String
   TeamnamesPages: {
     SortPriority: 0, // Integer
 Subpage: '', // String
+Special: false, // Boolean
     _pageName: '',
     _pageTitle: '',
     _pageNamespace: 0,
@@ -1467,6 +1483,7 @@ Twitter: '', // String
 Youtube: '', // String
 Facebook: '', // String
 Instagram: '', // String
+Bluesky: '', // String
 Discord: '', // String
 Snapchat: '', // String
 Vk: '', // String
@@ -1506,6 +1523,7 @@ NameLeave: '', // String
 NextTeam: '', // String
 NextIsRetired: false, // Boolean
 NextIsWildrift: false, // Boolean
+NextIsDeceased: false, // Boolean
 IsCurrent: false, // Boolean
     _pageName: '',
     _pageTitle: '',
@@ -1529,6 +1547,7 @@ NameLeave: '', // String
 NextTeam: '', // String
 NextIsRetired: false, // Boolean
 NextIsWildrift: false, // Boolean
+NextIsDeceased: false, // Boolean
 IsCurrent: false, // Boolean
     _pageName: '',
     _pageTitle: '',
@@ -1583,6 +1602,7 @@ IsDistribution: false, // Boolean
     Event: '', // String
 Tier: '', // String
 Date: new Date(), // Date
+Showmatch: false, // Boolean
 RosterPage: '', // Page
 Place: '', // String
 ForceNewPlace: false, // Boolean
@@ -1594,6 +1614,7 @@ Prize_Euro: 1, // Float
 PrizeUnit: '', // String
 Prize_Markup: '', // String
 PrizeOther: '', // String
+TotalPrize: 0, // Integer
 Phase: '', // String
 Team: '', // String
 IsAchievement: false, // Boolean
@@ -1623,6 +1644,7 @@ Prize_Euro: 1, // Float
 PrizeUnit: '', // String
 Prize_Markup: '', // String
 PrizeOther: '', // String
+TotalPrize: 0, // Integer
 Phase: '', // String
 Player: '', // String
 PlayerLink: '', // String

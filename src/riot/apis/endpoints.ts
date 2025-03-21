@@ -1,4 +1,4 @@
-import {
+import type {
   AccountDto,
   ActiveShardDto,
   ApexPlayerInfoDto,
@@ -11,19 +11,21 @@ import {
   LeagueListDTO,
   Level,
   MatchDto,
-  MatchTimelineDto,
   PlatformDataDto,
   PlayerDto,
   PlayerInfoDto,
   SummonerDTO,
   TeamDto,
   TournamentDto,
+  TimelineDto,
 } from './dtos'
-import {
+import type {
   GetChallengeLeaderboardsInput,
   GetTopChampionMasteriesInput,
   LeagueEntryInput,
   MatchIdsInput,
+  RsoMatchIdsInput,
+  RsoMatchInput,
 } from './inputs'
 import { GeneralRegion, RiotRateLimiter } from './rate-limiter'
 
@@ -136,12 +138,12 @@ export function createEndpoints(limiter: RiotRateLimiter) {
     // #endregion
 
     // #region CLASH-V1
-    '/lol/clash/v1/players/by-summoner/{summonerId}': (
+    '/lol/clash/v1/players/by-puuid/{puuid}': (
       generalRegion: GeneralRegion,
       realPath: string,
       path: string,
     ) => ({
-      /* Get players by summoner ID. */
+      /* Get players by puuid */
       get() {
         return limiter.execute<PlayerDto[]>(generalRegion, realPath, path)
       },
@@ -215,6 +217,16 @@ export function createEndpoints(limiter: RiotRateLimiter) {
       /* Get the challenger league for given queue. */
       get() {
         return limiter.execute<LeagueListDTO>(generalRegion, realPath, path)
+      },
+    }),
+    '/lol/league/v4/entries/by-puuid/{encryptedPUUID}': (
+      generalRegion: GeneralRegion,
+      realPath: string,
+      path: string,
+    ) => ({
+      /* Get league entries in all queues for a given puuid */
+      get() {
+        return limiter.execute<LeagueEntryDTO[]>(generalRegion, realPath, path)
       },
     }),
     '/lol/league/v4/entries/by-summoner/{encryptedSummonerId}': (
@@ -353,6 +365,44 @@ export function createEndpoints(limiter: RiotRateLimiter) {
     }),
     // #endregion
 
+    // #region LOL-RSO-MATCH-V1
+    '/lol/rso-match/v1/matches/ids': (
+      generalRegion: GeneralRegion,
+      realPath: string,
+      path: string,
+    ) => ({
+      /* Get a list of match ids by player access token - Includes custom matches */
+      get({ query }: RsoMatchIdsInput) {
+        return limiter.execute<string[]>(generalRegion, realPath, path, query)
+      },
+    }),
+    '/lol/rso-match/v1/matches/{matchId}': (
+      generalRegion: GeneralRegion,
+      realPath: string,
+      path: string,
+    ) => ({
+      /* Get a match by match id */
+      get({ query }: RsoMatchInput) {
+        return limiter.execute<MatchDto>(generalRegion, realPath, path, query)
+      },
+    }),
+    '/lol/rso-match/v1/matches/{matchId}/timeline': (
+      generalRegion: GeneralRegion,
+      realPath: string,
+      path: string,
+    ) => ({
+      /* Get a match timeline by match id */
+      get({ query }: RsoMatchInput) {
+        return limiter.execute<TimelineDto>(
+          generalRegion,
+          realPath,
+          path,
+          query,
+        )
+      },
+    }),
+    // #endregion
+
     // #region LOL-STATUS-V4
     '/lol/status/v4/platform-data': (
       generalRegion: GeneralRegion,
@@ -394,7 +444,7 @@ export function createEndpoints(limiter: RiotRateLimiter) {
     ) => ({
       /* Get a match timeline by match id */
       get() {
-        return limiter.execute<MatchTimelineDto>(generalRegion, realPath, path)
+        return limiter.execute<TimelineDto>(generalRegion, realPath, path)
       },
     }),
     // #endregion
@@ -439,16 +489,6 @@ export function createEndpoints(limiter: RiotRateLimiter) {
       path: string,
     ) => ({
       /* Get a summoner by account ID. */
-      get() {
-        return limiter.execute<SummonerDTO>(generalRegion, realPath, path)
-      },
-    }),
-    '/lol/summoner/v4/summoners/by-name/{summonerName}': (
-      generalRegion: GeneralRegion,
-      realPath: string,
-      path: string,
-    ) => ({
-      /* Get a summoner by summoner name. */
       get() {
         return limiter.execute<SummonerDTO>(generalRegion, realPath, path)
       },

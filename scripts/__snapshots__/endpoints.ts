@@ -62,8 +62,8 @@
 // #endregion
 
 // #region CLASH-V1
-'/lol/clash/v1/players/by-summoner/{summonerId}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
-  /* Get players by summoner ID. */
+'/lol/clash/v1/players/by-puuid/{puuid}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
+  /* Get players by puuid */
   get() {
     return limiter.execute<PlayerDto[]>(generalRegion, realPath, path)
   },
@@ -108,6 +108,12 @@
   /* Get the challenger league for given queue. */
   get() {
     return limiter.execute<LeagueListDTO>(generalRegion, realPath, path)
+  },
+}),
+'/lol/league/v4/entries/by-puuid/{encryptedPUUID}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
+  /* Get league entries in all queues for a given puuid */
+  get() {
+    return limiter.execute<LeagueEntryDTO[]>(generalRegion, realPath, path)
   },
 }),
 '/lol/league/v4/entries/by-summoner/{encryptedSummonerId}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
@@ -181,6 +187,27 @@
 }),
 // #endregion
 
+// #region LOL-RSO-MATCH-V1
+'/lol/rso-match/v1/matches/ids': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
+  /* Get a list of match ids by player access token - Includes custom matches */
+  get({query}: undefined) {
+    return limiter.execute<string[]>(generalRegion, realPath, path, query)
+  },
+}),
+'/lol/rso-match/v1/matches/{matchId}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
+  /* Get a match by match id */
+  get({query}: undefined) {
+    return limiter.execute<MatchDto>(generalRegion, realPath, path, query)
+  },
+}),
+'/lol/rso-match/v1/matches/{matchId}/timeline': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
+  /* Get a match timeline by match id */
+  get({query}: undefined) {
+    return limiter.execute<TimelineDto>(generalRegion, realPath, path, query)
+  },
+}),
+// #endregion
+
 // #region LOL-STATUS-V4
 '/lol/status/v4/platform-data': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
   /* Get League of Legends status for the given platform. */
@@ -206,7 +233,7 @@
 '/lol/match/v5/matches/{matchId}/timeline': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
   /* Get a match timeline by match id */
   get() {
-    return limiter.execute<MatchTimelineDto>(generalRegion, realPath, path)
+    return limiter.execute<TimelineDto>(generalRegion, realPath, path)
   },
 }),
 // #endregion
@@ -235,12 +262,6 @@
 }),
 '/lol/summoner/v4/summoners/by-account/{encryptedAccountId}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
   /* Get a summoner by account ID. */
-  get() {
-    return limiter.execute<SummonerDTO>(generalRegion, realPath, path)
-  },
-}),
-'/lol/summoner/v4/summoners/by-name/{summonerName}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
-  /* Get a summoner by summoner name. */
   get() {
     return limiter.execute<SummonerDTO>(generalRegion, realPath, path)
   },
