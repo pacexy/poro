@@ -19,7 +19,8 @@
     "clean": "rimraf ./dist",
     "build": "pnpm clean && tsc -p tsconfig.esm.json && tsc -p tsconfig.cjs.json",
     "lint": "eslint src/**/*.{ts,tsx}  --fix",
-    "release": "pnpm build && release-it"
+    "version": "pnpm build",
+    "postversion": "git push --follow-tags && npm publish"
   },
   "files": [
     "dist/cjs/src",
