@@ -27,7 +27,7 @@ const s = {
   ENDPOINT_DESC: '.options', // Get account by puuid
   ENDPOINT_RETURN: '.response_body:first-of-type', // Return value: AccountDTO
   ENDPOINT_DTOs: '.response_body:not(first-of-type)', // AccountDTO <table>, ...other DTOs
-  ENDPOINT_INPUT: 'form .api_block:nth-of-type(2) tbody > tr', // LeagueEntryInput
+  ENDPOINT_QUERY: 'form .api_block:nth-of-type(2) tbody > tr', // LeagueEntryQuery
   DTO_NAME: 'h5', // AccountDTO
   DTO_PROPs: 'table > tbody > tr', // puuid string PUUID
   DTO_COMMENT: '', // - represents a summoner (text node, so not selectable)
@@ -45,15 +45,15 @@ export async function fetchPageNames() {
     .filter((n) => !ignoredApiPrefixes.some((p) => n.startsWith(p)))
 }
 
-const InputMap: Record<string, string> = {
+const QueryMap: Record<string, string> = {
   '/lol/champion-mastery/v4/champion-masteries/by-puuid/{encryptedPUUID}/top':
-    'GetTopChampionMasteriesInput',
-  '/lol/league-exp/v4/entries/{queue}/{tier}/{division}': 'LeagueEntryInput',
-  '/lol/league/v4/entries/{queue}/{tier}/{division}': 'LeagueEntryInput',
+    'GetTopChampionMasteriesQuery',
+  '/lol/league-exp/v4/entries/{queue}/{tier}/{division}': 'LeagueEntryQuery',
+  '/lol/league/v4/entries/{queue}/{tier}/{division}': 'LeagueEntryQuery',
   '/lol/challenges/v1/challenges/{challengeId}/leaderboards/by-level/{level}':
-    'GetChallengeLeaderboardsInput',
-  '/lol/match/v5/matches/by-puuid/{puuid}/ids': 'MatchIdsInput',
-  '/lol/rso-match/v1/matches/ids': 'RsoMatchIdsInput',
+    'GetChallengeLeaderboardsQuery',
+  '/lol/match/v5/matches/by-puuid/{puuid}/ids': 'MatchIdsQuery',
+  '/lol/rso-match/v1/matches/ids': 'RsoMatchIdsQuery',
 }
 
 function genEndpoint(el: Element, dtoMap: Record<string, string>) {
@@ -65,11 +65,11 @@ function genEndpoint(el: Element, dtoMap: Record<string, string>) {
     '$1',
   )
   $$(el, s.ENDPOINT_DTOs).forEach((el) => Object.assign(dtoMap, parseDto(el)))
-  const hasInput = $(el, s.ENDPOINT_INPUT)
+  const hasQuery = $(el, s.ENDPOINT_QUERY)
 
   const generic = returnType ? `<${transformType(returnType)}>` : ''
-  const params = hasInput ? `{query}: ${InputMap[path]}` : ''
-  const lastArg = hasInput ? ', query' : ''
+  const params = hasQuery ? `{query}: ${QueryMap[path]}` : ''
+  const lastArg = hasQuery ? ', query' : ''
   return [
     `'${path}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({`,
     `  /* ${desc} */`,
