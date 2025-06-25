@@ -25,7 +25,6 @@ import type {
   LeagueEntryQuery,
   MatchIdsQuery,
   RsoMatchIdsQuery,
-  RsoMatchQuery,
 } from './query'
 import { GeneralRegion, RiotRateLimiter } from './rate-limiter'
 
@@ -103,7 +102,7 @@ export function createEndpoints(limiter: RiotRateLimiter) {
     '/lol/champion-mastery/v4/champion-masteries/by-puuid/{encryptedPUUID}/top':
       (generalRegion: GeneralRegion, realPath: string, path: string) => ({
         /* Get specified number of top champion mastery entries sorted by number of champion points descending. */
-        get({ query }: GetTopChampionMasteriesQuery) {
+        get(query: GetTopChampionMasteriesQuery) {
           return limiter.execute<ChampionMasteryDto[]>(
             generalRegion,
             realPath,
@@ -197,7 +196,7 @@ export function createEndpoints(limiter: RiotRateLimiter) {
       path: string,
     ) => ({
       /* Get all the league entries. */
-      get({ query }: LeagueEntryQuery) {
+      get(query: LeagueEntryQuery) {
         return limiter.execute<LeagueEntryDTO[]>(
           generalRegion,
           realPath,
@@ -245,7 +244,7 @@ export function createEndpoints(limiter: RiotRateLimiter) {
       path: string,
     ) => ({
       /* Get all the league entries. */
-      get({ query }: LeagueEntryQuery) {
+      get(query: LeagueEntryQuery) {
         return limiter.execute<LeagueEntryDTO[]>(
           generalRegion,
           realPath,
@@ -330,7 +329,7 @@ export function createEndpoints(limiter: RiotRateLimiter) {
     '/lol/challenges/v1/challenges/{challengeId}/leaderboards/by-level/{level}':
       (generalRegion: GeneralRegion, realPath: string, path: string) => ({
         /* Return top players for each level. Level must be MASTER, GRANDMASTER or CHALLENGER. */
-        get({ query }: GetChallengeLeaderboardsQuery) {
+        get(query: GetChallengeLeaderboardsQuery) {
           return limiter.execute<ApexPlayerInfoDto[]>(
             generalRegion,
             realPath,
@@ -372,7 +371,7 @@ export function createEndpoints(limiter: RiotRateLimiter) {
       path: string,
     ) => ({
       /* Get a list of match ids by player access token - Includes custom matches */
-      get({ query }: RsoMatchIdsQuery) {
+      get(query: RsoMatchIdsQuery) {
         return limiter.execute<string[]>(generalRegion, realPath, path, query)
       },
     }),
@@ -382,8 +381,8 @@ export function createEndpoints(limiter: RiotRateLimiter) {
       path: string,
     ) => ({
       /* Get a match by match id */
-      get({ query }: RsoMatchQuery) {
-        return limiter.execute<MatchDto>(generalRegion, realPath, path, query)
+      get() {
+        return limiter.execute<MatchDto>(generalRegion, realPath, path)
       },
     }),
     '/lol/rso-match/v1/matches/{matchId}/timeline': (
@@ -392,13 +391,8 @@ export function createEndpoints(limiter: RiotRateLimiter) {
       path: string,
     ) => ({
       /* Get a match timeline by match id */
-      get({ query }: RsoMatchQuery) {
-        return limiter.execute<TimelineDto>(
-          generalRegion,
-          realPath,
-          path,
-          query,
-        )
+      get() {
+        return limiter.execute<TimelineDto>(generalRegion, realPath, path)
       },
     }),
     // #endregion
@@ -423,7 +417,7 @@ export function createEndpoints(limiter: RiotRateLimiter) {
       path: string,
     ) => ({
       /* Get a list of match ids by puuid */
-      get({ query }: MatchIdsQuery) {
+      get(query: MatchIdsQuery) {
         return limiter.execute<string[]>(generalRegion, realPath, path, query)
       },
     }),

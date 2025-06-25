@@ -40,7 +40,7 @@
 }),
 '/lol/champion-mastery/v4/champion-masteries/by-puuid/{encryptedPUUID}/top': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
   /* Get specified number of top champion mastery entries sorted by number of champion points descending. */
-  get({query}: GetTopChampionMasteriesQuery) {
+  get(query: GetTopChampionMasteriesQuery) {
     return limiter.execute<ChampionMasteryDto[]>(generalRegion, realPath, path, query)
   },
 }),
@@ -97,7 +97,7 @@
 // #region LEAGUE-EXP-V4
 '/lol/league-exp/v4/entries/{queue}/{tier}/{division}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
   /* Get all the league entries. */
-  get({query}: LeagueEntryQuery) {
+  get(query: LeagueEntryQuery) {
     return limiter.execute<LeagueEntryDTO[]>(generalRegion, realPath, path, query)
   },
 }),
@@ -124,7 +124,7 @@
 }),
 '/lol/league/v4/entries/{queue}/{tier}/{division}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
   /* Get all the league entries. */
-  get({query}: LeagueEntryQuery) {
+  get(query: LeagueEntryQuery) {
     return limiter.execute<LeagueEntryDTO[]>(generalRegion, realPath, path, query)
   },
 }),
@@ -169,7 +169,7 @@
 }),
 '/lol/challenges/v1/challenges/{challengeId}/leaderboards/by-level/{level}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
   /* Return top players for each level. Level must be MASTER, GRANDMASTER or CHALLENGER. */
-  get({query}: GetChallengeLeaderboardsQuery) {
+  get(query: GetChallengeLeaderboardsQuery) {
     return limiter.execute<ApexPlayerInfoDto[]>(generalRegion, realPath, path, query)
   },
 }),
@@ -190,20 +190,20 @@
 // #region LOL-RSO-MATCH-V1
 '/lol/rso-match/v1/matches/ids': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
   /* Get a list of match ids by player access token - Includes custom matches */
-  get({query}: RsoMatchIdsQuery) {
+  get(query: RsoMatchIdsQuery) {
     return limiter.execute<string[]>(generalRegion, realPath, path, query)
   },
 }),
 '/lol/rso-match/v1/matches/{matchId}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
   /* Get a match by match id */
-  get({query}: undefined) {
-    return limiter.execute<MatchDto>(generalRegion, realPath, path, query)
+  get() {
+    return limiter.execute<MatchDto>(generalRegion, realPath, path)
   },
 }),
 '/lol/rso-match/v1/matches/{matchId}/timeline': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
   /* Get a match timeline by match id */
-  get({query}: undefined) {
-    return limiter.execute<TimelineDto>(generalRegion, realPath, path, query)
+  get() {
+    return limiter.execute<TimelineDto>(generalRegion, realPath, path)
   },
 }),
 // #endregion
@@ -220,7 +220,7 @@
 // #region MATCH-V5
 '/lol/match/v5/matches/by-puuid/{puuid}/ids': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
   /* Get a list of match ids by puuid */
-  get({query}: MatchIdsQuery) {
+  get(query: MatchIdsQuery) {
     return limiter.execute<string[]>(generalRegion, realPath, path, query)
   },
 }),

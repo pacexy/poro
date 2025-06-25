@@ -27,7 +27,7 @@ const s = {
   ENDPOINT_DESC: '.options', // Get account by puuid
   ENDPOINT_RETURN: '.response_body:first-of-type', // Return value: AccountDTO
   ENDPOINT_DTOs: '.response_body:not(first-of-type)', // AccountDTO <table>, ...other DTOs
-  ENDPOINT_QUERY: 'form .api_block:nth-of-type(2) tbody > tr', // LeagueEntryQuery
+  ENDPOINT_QUERY: 'form .api_block h4', // LeagueEntryQuery
   DTO_NAME: 'h5', // AccountDTO
   DTO_PROPs: 'table > tbody > tr', // puuid string PUUID
   DTO_COMMENT: '', // - represents a summoner (text node, so not selectable)
@@ -65,10 +65,12 @@ function genEndpoint(el: Element, dtoMap: Record<string, string>) {
     '$1',
   )
   $$(el, s.ENDPOINT_DTOs).forEach((el) => Object.assign(dtoMap, parseDto(el)))
-  const hasQuery = $(el, s.ENDPOINT_QUERY)
+  const hasQuery = $$(el, s.ENDPOINT_QUERY).some((e) =>
+    e.textContent?.includes('Query Parameters'),
+  )
 
   const generic = returnType ? `<${transformType(returnType)}>` : ''
-  const params = hasQuery ? `{query}: ${QueryMap[path]}` : ''
+  const params = hasQuery ? `query: ${QueryMap[path]}` : ''
   const lastArg = hasQuery ? ', query' : ''
   return [
     `'${path}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({`,
