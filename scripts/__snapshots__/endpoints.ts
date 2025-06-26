@@ -23,6 +23,12 @@
     return limiter.execute<ActiveShardDto>(generalRegion, realPath, path)
   },
 }),
+'/riot/account/v1/region/by-game/{game}/by-puuid/{puuid}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
+  /* Get active region (lol and tft) */
+  get() {
+    return limiter.execute<AccountRegionDTO>(generalRegion, realPath, path)
+  },
+}),
 // #endregion
 
 // #region CHAMPION-MASTERY-V4
@@ -112,12 +118,6 @@
 }),
 '/lol/league/v4/entries/by-puuid/{encryptedPUUID}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
   /* Get league entries in all queues for a given puuid */
-  get() {
-    return limiter.execute<LeagueEntryDTO[]>(generalRegion, realPath, path)
-  },
-}),
-'/lol/league/v4/entries/by-summoner/{encryptedSummonerId}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
-  /* Get league entries in all queues for a given summoner ID. */
   get() {
     return limiter.execute<LeagueEntryDTO[]>(generalRegion, realPath, path)
   },
@@ -260,12 +260,6 @@
     return limiter.execute<SummonerDTO>(generalRegion, realPath, path)
   },
 }),
-'/lol/summoner/v4/summoners/by-account/{encryptedAccountId}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
-  /* Get a summoner by account ID. */
-  get() {
-    return limiter.execute<SummonerDTO>(generalRegion, realPath, path)
-  },
-}),
 '/lol/summoner/v4/summoners/by-puuid/{encryptedPUUID}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
   /* Get a summoner by PUUID. */
   get() {
@@ -274,12 +268,6 @@
 }),
 '/lol/summoner/v4/summoners/me': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
   /* Get a summoner by access token. */
-  get() {
-    return limiter.execute<SummonerDTO>(generalRegion, realPath, path)
-  },
-}),
-'/lol/summoner/v4/summoners/{encryptedSummonerId}': (generalRegion: GeneralRegion, realPath: string, path: string) => ({
-  /* Get a summoner by summoner ID. */
   get() {
     return limiter.execute<SummonerDTO>(generalRegion, realPath, path)
   },

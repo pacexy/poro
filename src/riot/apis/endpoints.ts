@@ -18,6 +18,7 @@ import type {
   TeamDto,
   TournamentDto,
   TimelineDto,
+  AccountRegionDTO,
 } from './dtos'
 import type {
   GetChallengeLeaderboardsQuery,
@@ -69,6 +70,16 @@ export function createEndpoints(limiter: RiotRateLimiter) {
       /* Get active shard for a player */
       get() {
         return limiter.execute<ActiveShardDto>(generalRegion, realPath, path)
+      },
+    }),
+    '/riot/account/v1/region/by-game/{game}/by-puuid/{puuid}': (
+      generalRegion: GeneralRegion,
+      realPath: string,
+      path: string,
+    ) => ({
+      /* Get active region (lol and tft) */
+      get() {
+        return limiter.execute<AccountRegionDTO>(generalRegion, realPath, path)
       },
     }),
     // #endregion
@@ -224,16 +235,6 @@ export function createEndpoints(limiter: RiotRateLimiter) {
       path: string,
     ) => ({
       /* Get league entries in all queues for a given puuid */
-      get() {
-        return limiter.execute<LeagueEntryDTO[]>(generalRegion, realPath, path)
-      },
-    }),
-    '/lol/league/v4/entries/by-summoner/{encryptedSummonerId}': (
-      generalRegion: GeneralRegion,
-      realPath: string,
-      path: string,
-    ) => ({
-      /* Get league entries in all queues for a given summoner ID. */
       get() {
         return limiter.execute<LeagueEntryDTO[]>(generalRegion, realPath, path)
       },
@@ -477,16 +478,6 @@ export function createEndpoints(limiter: RiotRateLimiter) {
         return limiter.execute<SummonerDTO>(generalRegion, realPath, path)
       },
     }),
-    '/lol/summoner/v4/summoners/by-account/{encryptedAccountId}': (
-      generalRegion: GeneralRegion,
-      realPath: string,
-      path: string,
-    ) => ({
-      /* Get a summoner by account ID. */
-      get() {
-        return limiter.execute<SummonerDTO>(generalRegion, realPath, path)
-      },
-    }),
     '/lol/summoner/v4/summoners/by-puuid/{encryptedPUUID}': (
       generalRegion: GeneralRegion,
       realPath: string,
@@ -503,16 +494,6 @@ export function createEndpoints(limiter: RiotRateLimiter) {
       path: string,
     ) => ({
       /* Get a summoner by access token. */
-      get() {
-        return limiter.execute<SummonerDTO>(generalRegion, realPath, path)
-      },
-    }),
-    '/lol/summoner/v4/summoners/{encryptedSummonerId}': (
-      generalRegion: GeneralRegion,
-      realPath: string,
-      path: string,
-    ) => ({
-      /* Get a summoner by summoner ID. */
       get() {
         return limiter.execute<SummonerDTO>(generalRegion, realPath, path)
       },

@@ -10,11 +10,22 @@ export type MatchTimelineDto = NotMentioned
 
 // #region ACCOUNT-V1
 export type AccountDto = {
+  /* Encrypted PUUID. Exact length of 78 characters. */
   puuid: string
   /* This field may be excluded from the response if the account doesn't have a gameName. */
   gameName: string
   /* This field may be excluded from the response if the account doesn't have a tagLine. */
   tagLine: string
+}
+
+/* Account region */
+export type AccountRegionDTO = {
+  /* Player Universal Unique Identifier. Exact length of 78 characters. (Encrypted) */
+  puuid: string
+  /* Game to lookup active region */
+  game: string
+  /* Player active region */
+  region: string
 }
 // #endregion
 
@@ -77,7 +88,6 @@ export type ChampionInfo = {
 
 // #region CLASH-V1
 export type PlayerDto = {
-  summonerId: string
   puuid: string
   /* (Legal values: UNSELECTED, FILL, TOP, JUNGLE, MIDDLE, BOTTOM, UTILITY) */
   position: string
@@ -167,8 +177,6 @@ export type LeagueItemDTO = {
   leaguePoints: number
   /* Losing team on Summoners Rift. */
   losses: number
-  /* Player's encrypted summonerId. */
-  summonerId: string
   /* Player's encrypted puuid. */
   puuid: string
 }
@@ -187,13 +195,13 @@ export type ChallengeConfigInfoDto = {
 }
 
 /* DISABLED - not visible and not calculated,
-  HIDDEN - not visible, but calculated,
-  ENABLED - visible and calculated,
-  ARCHIVED - visible, but not calculated */
+HIDDEN - not visible, but calculated,
+ENABLED - visible and calculated,
+ARCHIVED - visible, but not calculated */
 export type State = NotMentioned
 
 /* LIFETIME - stats are incremented without reset,
-  SEASON - stats are accumulated by season and reset at the beginning of new season */
+SEASON - stats are accumulated by season and reset at the beginning of new season */
 export type Tracking = NotMentioned
 
 export type ApexPlayerInfoDto = {
@@ -203,15 +211,15 @@ export type ApexPlayerInfoDto = {
 }
 
 /* 0 NONE,
-  1 IRON,
-  2 BRONZE,
-  3 SILVER,
-  4 GOLD,
-  5 PLATINUM,
-  6 DIAMOND,
-  7 MASTER,
-  8 GRANDMASTER,
-  9 CHALLENGER */
+1 IRON,
+2 BRONZE,
+3 SILVER,
+4 GOLD,
+5 PLATINUM,
+6 DIAMOND,
+7 MASTER,
+8 GRANDMASTER,
+9 CHALLENGER */
 export type Level = NotMentioned
 
 export type PlayerInfoDto = {
@@ -856,8 +864,6 @@ export type CurrentGameParticipant = {
   bot: boolean
   /* The team ID of this participant, indicating the participant's team */
   teamId: number
-  /* The encrypted summoner ID of this participant */
-  summonerId: string
   /* The encrypted puuid of this participant */
   puuid: string
   /* The ID of the first summoner spell used by this participant */
@@ -893,14 +899,14 @@ export type FeaturedGames = {
 
 export type FeaturedGameInfo = {
   /* The game mode
-   (Legal values: CLASSIC, ODIN, ARAM, TUTORIAL, ONEFORALL, ASCENSION, FIRSTBLOOD, KINGPORO) */
+ (Legal values: CLASSIC, ODIN, ARAM, TUTORIAL, ONEFORALL, ASCENSION, FIRSTBLOOD, KINGPORO) */
   gameMode: string
   /* The amount of time in seconds that has passed since the game started */
   gameLength: number
   /* The ID of the map */
   mapId: number
   /* The game type
-   (Legal values: CUSTOM_GAME, MATCHED_GAME, TUTORIAL_GAME) */
+ (Legal values: CUSTOM_GAME, MATCHED_GAME, TUTORIAL_GAME) */
   gameType: string
   /* Banned champion information */
   bannedChampions: BannedChampion[]
@@ -923,8 +929,6 @@ export type Participant = {
   spell2Id: number
   /* The ID of the profile icon used by this participant */
   profileIconId: number
-  /* Encrypted summoner ID of this participant */
-  summonerId: string
   /* Encrypted puuid of this participant */
   puuid: string
   /* The ID of the champion played by this participant */
@@ -939,14 +943,10 @@ export type Participant = {
 // #region SUMMONER-V4
 /* represents a summoner */
 export type SummonerDTO = {
-  /* Encrypted account ID. Max length 56 characters. */
-  accountId: string
   /* ID of the summoner icon associated with the summoner. */
   profileIconId: number
   /* Date summoner was last modified specified as epoch milliseconds. The following events will update this timestamp: profile icon change, playing the tutorial or advanced tutorial, finishing a game, summoner name change. */
   revisionDate: number
-  /* Encrypted summoner ID. Max length 63 characters. */
-  id: string
   /* Encrypted PUUID. Exact length of 78 characters. */
   puuid: string
   /* Summoner level associated with the summoner. */

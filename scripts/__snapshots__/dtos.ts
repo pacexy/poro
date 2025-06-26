@@ -1,10 +1,21 @@
 // #region ACCOUNT-V1
 export type AccountDto = {
+/* Encrypted PUUID. Exact length of 78 characters. */
 puuid: string
 /* This field may be excluded from the response if the account doesn't have a gameName. */
 gameName: string
 /* This field may be excluded from the response if the account doesn't have a tagLine. */
 tagLine: string
+}
+
+/* Account region */
+export type AccountRegionDTO = {
+/* Player Universal Unique Identifier. Exact length of 78 characters. (Encrypted) */
+puuid: string
+/* Game to lookup active region */
+game: string
+/* Player active region */
+region: string
 }
 // #endregion
 
@@ -67,7 +78,6 @@ freeChampionIds: number[]
 
 // #region CLASH-V1
 export type PlayerDto = {
-summonerId: string
 puuid: string
 /* (Legal values: UNSELECTED, FILL, TOP, JUNGLE, MIDDLE, BOTTOM, UTILITY) */
 position: string
@@ -157,8 +167,6 @@ rank: Division
 leaguePoints: number
 /* Losing team on Summoners Rift. */
 losses: number
-/* Player's encrypted summonerId. */
-summonerId: string
 /* Player's encrypted puuid. */
 puuid: string
 }
@@ -172,8 +180,6 @@ wins: number
 
 export type LeagueEntryDTO = {
 leagueId: string
-/* Player's encrypted summonerId. */
-summonerId: string
 /* Player's encrypted puuid. */
 puuid: string
 queueType: Queue
@@ -875,8 +881,6 @@ profileIconId: number
 bot: boolean
 /* The team ID of this participant, indicating the participant's team */
 teamId: number
-/* The encrypted summoner ID of this participant */
-summonerId: string
 /* The encrypted puuid of this participant */
 puuid: string
 /* The ID of the first summoner spell used by this participant */
@@ -942,8 +946,6 @@ bot: boolean
 spell2Id: number
 /* The ID of the profile icon used by this participant */
 profileIconId: number
-/* Encrypted summoner ID of this participant */
-summonerId: string
 /* Encrypted puuid of this participant */
 puuid: string
 /* The ID of the champion played by this participant */
@@ -958,14 +960,10 @@ spell1Id: number
 // #region SUMMONER-V4
 /* represents a summoner */
 export type SummonerDTO = {
-/* Encrypted account ID. Max length 56 characters. */
-accountId: string
 /* ID of the summoner icon associated with the summoner. */
 profileIconId: number
 /* Date summoner was last modified specified as epoch milliseconds. The following events will update this timestamp: profile icon change, playing the tutorial or advanced tutorial, finishing a game, summoner name change. */
 revisionDate: number
-/* Encrypted summoner ID. Max length 63 characters. */
-id: string
 /* Encrypted PUUID. Exact length of 78 characters. */
 puuid: string
 /* Summoner level associated with the summoner. */
