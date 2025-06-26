@@ -10,7 +10,6 @@ describe('riot', () => {
         "champion-mastery-v4",
         "champion-v3",
         "clash-v1",
-        "league-exp-v4",
         "league-v4",
         "lol-challenges-v1",
         "lol-rso-match-v1",

@@ -125,37 +125,6 @@ export type TournamentPhaseDto = {
 }
 // #endregion
 
-// #region LEAGUE-EXP-V4
-export type LeagueEntryDTO = {
-  leagueId: string
-  /* Player's summonerId (Encrypted) */
-  summonerId: string
-  /* Player's encrypted puuid. */
-  puuid: string
-  queueType: Queue
-  tier: Tier
-  /* The player's division within a tier. */
-  rank: Division
-  leaguePoints: number
-  /* Winning team on Summoners Rift. First placement in Teamfight Tactics. */
-  wins: number
-  /* Losing team on Summoners Rift. Second through eighth placement in Teamfight Tactics. */
-  losses: number
-  hotStreak: boolean
-  veteran: boolean
-  freshBlood: boolean
-  inactive: boolean
-  miniSeries: MiniSeriesDTO
-}
-
-export type MiniSeriesDTO = {
-  losses: number
-  progress: string
-  target: number
-  wins: number
-}
-// #endregion
-
 // #region LEAGUE-V4
 export type LeagueListDTO = {
   leagueId: string
@@ -179,6 +148,33 @@ export type LeagueItemDTO = {
   losses: number
   /* Player's encrypted puuid. */
   puuid: string
+}
+
+export type MiniSeriesDTO = {
+  losses: number
+  progress: string
+  target: number
+  wins: number
+}
+
+export type LeagueEntryDTO = {
+  leagueId: string
+  /* Player's encrypted puuid. */
+  puuid: string
+  queueType: Queue
+  tier: Tier
+  /* The player's division within a tier. */
+  rank: Division
+  leaguePoints: number
+  /* Winning team on Summoners Rift. */
+  wins: number
+  /* Losing team on Summoners Rift. */
+  losses: number
+  hotStreak: boolean
+  veteran: boolean
+  freshBlood: boolean
+  inactive: boolean
+  miniSeries: MiniSeriesDTO
 }
 // #endregion
 

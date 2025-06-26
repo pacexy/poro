@@ -200,24 +200,6 @@ export function createEndpoints(limiter: RiotRateLimiter) {
     }),
     // #endregion
 
-    // #region LEAGUE-EXP-V4
-    '/lol/league-exp/v4/entries/{queue}/{tier}/{division}': (
-      generalRegion: GeneralRegion,
-      realPath: string,
-      path: string,
-    ) => ({
-      /* Get all the league entries. */
-      get(query: LeagueEntryQuery) {
-        return limiter.execute<LeagueEntryDTO[]>(
-          generalRegion,
-          realPath,
-          path,
-          query,
-        )
-      },
-    }),
-    // #endregion
-
     // #region LEAGUE-V4
     '/lol/league/v4/challengerleagues/by-queue/{queue}': (
       generalRegion: GeneralRegion,
