@@ -60,6 +60,8 @@ function genEndpoint(el: Element, dtoMap: Record<string, string>) {
   const path = text($(el, s.ENDPOINT_PATH))
   const method = text($(el, s.ENDPOINT_METHOD))?.toLowerCase()
   const desc = text($(el, s.ENDPOINT_DESC))
+  if (desc.endsWith('- ESPORTS')) return
+
   const returnType = text($(el, s.ENDPOINT_RETURN))?.replace(
     /Return value: (\w+)/,
     '$1',
@@ -94,6 +96,7 @@ async function genEndpointsInPage(document: Document, page: string) {
   const dtoMap = {}
   const endpoints = $$(document, s.ENDPOINTs)
     .map((el) => genEndpoint(el, dtoMap))
+    .filter(Boolean)
     .join('\n')
   console.timeEnd(`gen ${page}`)
 
